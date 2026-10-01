@@ -1,0 +1,17 @@
+{
+    "name": "next-ceisa Dev",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "next",
+    "workspaceFolder": "/app",
+    "forwardPorts": [3000],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "bradlc.vscode-tailwindcss",
+                "esbenp.prettier-vscode"
+            ]
+        }
+    },
+    "remoteUser": "node"
+}
