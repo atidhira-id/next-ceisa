@@ -1,11 +1,22 @@
-export default function DashboardPage() {
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
+import { authOptions } from "@/auth";
+
+export default async function DashboardPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-4xl font-bold">Dashboard</h1>
-      <p className="mt-4 text-lg text-gray-600">
-        Welcome to your dashboard! Here you can manage your settings and view
-        your data.
+    <main className="p-6">
+      <h1 className="text-2xl font-semibold">Dashboard</h1>
+
+      <p className="mt-2 text-gray-600">
+        Selamat datang, {session.user?.name ?? session.user?.email}.
       </p>
-    </div>
+    </main>
   );
 }
