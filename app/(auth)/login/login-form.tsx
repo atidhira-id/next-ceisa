@@ -28,7 +28,7 @@ export function LoginForm() {
       setError("Email atau password salah.");
       return;
     }
-    redirect("/dashboard");
+    redirect("/dokumen-pabean");
   }
 
   return (
