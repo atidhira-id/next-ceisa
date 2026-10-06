@@ -35,8 +35,6 @@ export default function AddDocumentModal({
       nomorAju,
       entitas,
       kodeDokumen,
-
-      header: {},
       entity: {},
       document: {},
       transport: {},
