@@ -23,6 +23,7 @@ const tabOrder: DocumentTab[] = [
 
 export function DocumentForm({ nomorAju }: DocumentFormProps) {
   const { documentData, updateDocumentData } = useDocument();
+  const [isExporting, setIsExporting] = useState(false);
 
   const [activeTab, setActiveTab] = useState<DocumentTab>("header");
   const activeTabIndex = tabOrder.indexOf(activeTab);
@@ -58,6 +59,51 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
       nomorAju,
       documentData,
     });
+  }
+
+  async function handleExportExcel() {
+    if (!documentData) {
+      return;
+    }
+
+    try {
+      setIsExporting(true);
+
+      const response = await fetch("/api/documents/export", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(documentData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+
+        throw new Error(errorData?.message ?? "Gagal membuat file Excel.");
+      }
+
+      const blob = await response.blob();
+
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+      link.href = downloadUrl;
+      link.download = `dokumen-${documentData.nomorAju}.xlsx`;
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      console.error(error);
+
+      alert(error instanceof Error ? error.message : "Gagal export Excel.");
+    } finally {
+      setIsExporting(false);
+    }
   }
 
   function renderTabContent() {
@@ -157,9 +203,24 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
           </div>
 
           <div className="shrink-0">
-            <span className="rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600">
-              Draft
-            </span>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleExportExcel}
+                disabled={!documentData || isExporting}
+                className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isExporting ? "Exporting..." : "Export Excel"}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSaveDraft}
+                className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+              >
+                Simpan Draft
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -183,25 +244,15 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
             ← Sebelumnya
           </button>
 
-          <div className="flex items-center gap-3">
+          {!isLastTab && (
             <button
               type="button"
-              onClick={handleSaveDraft}
-              className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+              onClick={handleNext}
+              className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
             >
-              Simpan Draft
+              Berikutnya →
             </button>
-
-            {!isLastTab && (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
-              >
-                Berikutnya →
-              </button>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
