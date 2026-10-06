@@ -3,9 +3,23 @@
 import { createContext, useContext, useMemo, useState } from "react";
 
 export type DocumentData = {
-  nomorAju: string;
   entitas: string;
+  nomorAju: string;
   kodeDokumen: string;
+  kodeKantor?: string;
+  kodeKantorBongkar?: string;
+  kodeKantorPeriksa?: string;
+  kodeKantorTujuan?: string;
+  kodeKantorEkspor?: string;
+  kodeJenisImpor?: string;
+  kodeJenisEkspor?: string;
+  kodeJenisProsedur?: string;
+  kodeTujuanPemasukan?: string;
+  kodeTujuanPengiriman?: string;
+  kodeCaraDagang?: string;
+  kodeCaraBayar?: string;
+  kodeValuta?: string;
+  kodeIncoterm?: string;
   pelabuhanTujuan?: string;
   kantorPabean?: string;
   jenisPIB?: string;
