@@ -22,6 +22,7 @@ export async function exportDocumentToExcel(documentData: DocumentData) {
 
   // First row is for column headers, so we start filling data from the second row.
   const row = 2;
+  const headerData = documentData.header;
 
   // HEADER TAB
   // A - NOMOR AJU
@@ -31,46 +32,49 @@ export async function exportDocumentToExcel(documentData: DocumentData) {
   headerSheet.getCell(`B${row}`).value = documentData.kodeDokumen;
 
   // C - KODE KANTOR
-  setCellValue(headerSheet, `C${row}`, documentData.kodeKantor);
+  setCellValue(headerSheet, `C${row}`, headerData.kodeKantor);
 
   // D - KODE KANTOR BONGKAR
-  setCellValue(headerSheet, `D${row}`, documentData.kodeKantorBongkar);
+  setCellValue(headerSheet, `D${row}`, headerData.kodeKantorBongkar);
 
   // E - KODE KANTOR PERIKSA
-  setCellValue(headerSheet, `E${row}`, documentData.kodeKantorPeriksa);
+  setCellValue(headerSheet, `E${row}`, headerData.kodeKantorPeriksa);
 
   // F - KODE KANTOR TUJUAN
-  setCellValue(headerSheet, `F${row}`, documentData.kodeKantorTujuan);
+  setCellValue(headerSheet, `F${row}`, headerData.kodeKantorTujuan);
 
   // G - KODE KANTOR EKSPOR
-  setCellValue(headerSheet, `G${row}`, documentData.kodeKantorEkspor);
+  setCellValue(headerSheet, `G${row}`, headerData.kodeKantorEkspor);
 
   // H - KODE JENIS IMPOR
-  setCellValue(headerSheet, `H${row}`, documentData.kodeJenisImpor);
+  setCellValue(headerSheet, `H${row}`, headerData.kodeJenisImpor);
 
   // I - KODE JENIS EKSPOR
-  setCellValue(headerSheet, `I${row}`, documentData.kodeJenisEkspor);
+  setCellValue(headerSheet, `I${row}`, headerData.kodeJenisEkspor);
 
   // L - KODE JENIS PROSEDUR
-  setCellValue(headerSheet, `L${row}`, documentData.kodeJenisProsedur);
+  setCellValue(headerSheet, `L${row}`, headerData.kodeJenisProsedur);
 
   // M - KODE TUJUAN PEMASUKAN
-  setCellValue(headerSheet, `M${row}`, documentData.kodeTujuanPemasukan);
+  setCellValue(headerSheet, `M${row}`, headerData.kodeTujuanPemasukan);
 
   // N - KODE TUJUAN PENGIRIMAN
-  setCellValue(headerSheet, `N${row}`, documentData.kodeTujuanPengiriman);
+  setCellValue(headerSheet, `N${row}`, headerData.kodeTujuanPengiriman);
 
   // P - KODE CARA DAGANG
-  setCellValue(headerSheet, `P${row}`, documentData.kodeCaraDagang);
+  setCellValue(headerSheet, `P${row}`, headerData.kodeCaraDagang);
 
   // Q - KODE CARA BAYAR
-  setCellValue(headerSheet, `Q${row}`, documentData.kodeCaraBayar);
+  setCellValue(headerSheet, `Q${row}`, headerData.kodeCaraBayar);
+
+  // AR - KODE PELABUHAN TUJUAN
+  setCellValue(headerSheet, `AR${row}`, headerData.kodePelabuhanTujuan);
 
   // CI - KODE VALUTA
-  setCellValue(headerSheet, `CI${row}`, documentData.kodeValuta);
+  setCellValue(headerSheet, `CI${row}`, headerData.kodeValuta);
 
   // CJ - KODE INCOTERM
-  setCellValue(headerSheet, `CJ${row}`, documentData.kodeIncoterm);
+  setCellValue(headerSheet, `CJ${row}`, headerData.kodeIncoterm);
 
   return workbook.xlsx.writeBuffer();
 }
