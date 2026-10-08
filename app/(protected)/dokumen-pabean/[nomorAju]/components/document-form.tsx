@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import { DocumentTabs, type DocumentTab } from "./document-tabs";
-import { HeaderTab } from "./tabs/header-tab";
+import { HeaderTab } from "./tabs/header/header-tab";
+import EntitasTab from "./tabs/entitas/entitas-tab";
 
 type DocumentFormProps = {
   nomorAju: string;
@@ -118,9 +119,9 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
 
       case "entity":
         return (
-          <TabPlaceholder
-            title="Entitas"
-            description="Form data entitas akan dibuat di tahap berikutnya."
+          <EntitasTab
+            data={documentData!}
+            onChange={(data) => updateDocumentData(data)}
           />
         );
 
