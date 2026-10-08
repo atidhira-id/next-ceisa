@@ -1,31 +1,14 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState } from "react";
+import { EntityData, HeaderData } from "./types";
 
 export type DocumentData = {
   entitas: string;
   nomorAju: string;
   kodeDokumen: string;
-  kodeKantor?: string;
-  kodeKantorBongkar?: string;
-  kodeKantorPeriksa?: string;
-  kodeKantorTujuan?: string;
-  kodeKantorEkspor?: string;
-  kodeJenisImpor?: string;
-  kodeJenisEkspor?: string;
-  kodeJenisProsedur?: string;
-  kodeTujuanPemasukan?: string;
-  kodeTujuanPengiriman?: string;
-  kodeCaraDagang?: string;
-  kodeCaraBayar?: string;
-  kodeValuta?: string;
-  kodeIncoterm?: string;
-  pelabuhanTujuan?: string;
-  kantorPabean?: string;
-  jenisPIB?: string;
-  jenisImport?: string;
-  caraPembayaran?: string;
-  entity: Record<string, unknown>;
+  header: HeaderData;
+  entity: EntityData;
   document: Record<string, unknown>;
   transport: Record<string, unknown>;
   package: Record<string, unknown>;
