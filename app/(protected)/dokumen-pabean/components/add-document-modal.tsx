@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
 import { useDocument } from "@/app/providers/document-provider";
 
 function generateNomorAju() {
@@ -35,6 +34,7 @@ export default function AddDocumentModal({
       nomorAju,
       entitas,
       kodeDokumen,
+      header: {},
       entity: {},
       document: {},
       transport: {},
