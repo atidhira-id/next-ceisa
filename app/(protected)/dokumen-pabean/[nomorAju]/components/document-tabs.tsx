@@ -2,14 +2,14 @@
 
 export type DocumentTab =
   | "header"
-  | "entity"
-  | "document"
-  | "transport"
-  | "package"
-  | "transaction"
-  | "goods"
-  | "levy"
-  | "statement";
+  | "entitas"
+  | "dokumen"
+  | "pengangkut"
+  | "kemasan & peti kemas"
+  | "transaksi"
+  | "barang"
+  | "pungutan"
+  | "pernyataan";
 
 type DocumentTabsProps = {
   activeTab: DocumentTab;
@@ -25,35 +25,35 @@ const tabs: {
     label: "Header",
   },
   {
-    id: "entity",
+    id: "entitas",
     label: "Entitas",
   },
   {
-    id: "document",
+    id: "dokumen",
     label: "Dokumen",
   },
   {
-    id: "transport",
+    id: "pengangkut",
     label: "Pengangkut",
   },
   {
-    id: "package",
+    id: "kemasan & peti kemas",
     label: "Kemasan & Peti Kemas",
   },
   {
-    id: "transaction",
+    id: "transaksi",
     label: "Transaksi",
   },
   {
-    id: "goods",
+    id: "barang",
     label: "Barang",
   },
   {
-    id: "levy",
+    id: "pungutan",
     label: "Pungutan",
   },
   {
-    id: "statement",
+    id: "pernyataan",
     label: "Pernyataan",
   },
 ];
