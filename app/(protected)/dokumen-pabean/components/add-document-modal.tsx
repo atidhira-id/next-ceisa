@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
+import { entitasOptions, jenisDokumenOptions } from "@/lib/options";
 
 function generateNomorAju() {
   return Array.from({ length: 18 }, () => Math.floor(Math.random() * 10)).join(
@@ -32,17 +33,33 @@ export default function AddDocumentModal({
 
     setDocumentData({
       nomorAju,
-      entitas,
       kodeDokumen,
+      jenisEntitas: entitas,
       header: {},
-      entity: {},
-      document: {},
-      transport: {},
-      package: {},
-      transaction: {},
-      goods: {},
-      levy: {},
-      statement: {},
+      entitas1: {
+        nomorAju: nomorAju,
+        seri: "1",
+        kodeEntitas: "1",
+        kodeNegara: "ID",
+      },
+      entitas7: {
+        nomorAju: nomorAju,
+        seri: "7",
+        kodeEntitas: "7",
+        kodeNegara: "ID",
+      },
+      entitas9: { nomorAju: nomorAju, seri: "9", kodeEntitas: "9" },
+      entitas10: { nomorAju: nomorAju, seri: "10", kodeEntitas: "10" },
+      entitas11: {
+        nomorAju: nomorAju,
+        seri: "11",
+        kodeEntitas: "11",
+        kodeNegara: "ID",
+      },
+      dokumen: [],
+      pengangkut: {},
+      kemasan: [],
+      kontainer: [],
     });
 
     router.push(`/dokumen-pabean/${nomorAju}`);
@@ -78,8 +95,11 @@ export default function AddDocumentModal({
                 <option value="" disabled>
                   Pilih entitas
                 </option>
-                <option value="importir">Importir</option>
-                <option value="eksportir">Eksportir</option>
+                {entitasOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -101,8 +121,11 @@ export default function AddDocumentModal({
                 <option value="" disabled>
                   Pilih jenis dokumen
                 </option>
-                <option value="20">BC 2.0</option>
-                <option value="24">BC 2.4</option>
+                {jenisDokumenOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
