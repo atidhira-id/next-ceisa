@@ -37,7 +37,8 @@ export type HeaderData = {
   nomorBc11?: string;
   tanggalBc11?: string;
   nomorPos?: string;
-  nomorSubPos?: string;
+  nomorSubPos1?: string;
+  nomorSubPos2?: string;
   kodePelabuhanBongkar?: string;
   kodePelabuhanMuat?: string;
   kodePelabuhanMuatAkhir?: string;
@@ -109,8 +110,9 @@ export type HeaderData = {
 };
 
 export type EntityData = {
-  seri?: string;
-  kodeEntitas?: string;
+  nomorAju: string;
+  seri: string;
+  kodeEntitas: string;
   kodeJenisIdentitas?: string;
   nomorIdentitas?: string;
   namaEntitas?: string;
@@ -124,4 +126,42 @@ export type EntityData = {
   niperEntitas?: string;
   kodeKategoriKonsolidator?: string;
   kodeAfiliasi?: string;
+};
+
+export type DocumentItemData = {
+  nomorAju: string;
+  seri: number;
+  kodeDokumen: string;
+  nomorDokumen: string;
+  tanggalDokumen: string;
+  kodeFasilitas?: string;
+  kodeIjin?: string;
+};
+
+export type PengangkutData = {
+  seri?: number;
+  kodeCaraAngkut?: string;
+  namaPengangkut?: string;
+  nomorPengangkut?: string;
+  kodeBendera?: string;
+  callSign?: string;
+  flagAngkutPlb?: string;
+  caraPengangkutanLainnya?: string;
+};
+
+export type KemasanItemData = {
+  seri?: number;
+  kodeKemasan?: string;
+  jumlahKemasan?: number;
+  merek?: string;
+  nomorSegel?: string;
+};
+
+export type KontainerItemData = {
+  seri?: number;
+  nomorKontiner?: string;
+  kodeUkuranKontainer?: string;
+  kodeJenisKontainer?: string;
+  kodeTipeKontainer?: string;
+  nomorSegel?: string;
 };
