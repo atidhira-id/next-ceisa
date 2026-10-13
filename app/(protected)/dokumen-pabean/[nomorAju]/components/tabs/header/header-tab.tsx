@@ -1,24 +1,24 @@
 "use client";
-
-import { type DocumentData } from "@/app/providers/document-provider";
+import {
+  useDocument,
+  type DocumentData,
+} from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputSelect from "../../input-select";
 import {
-  pelabuhanTujuanOptions,
+  pelabuhanOptions,
   kantorPabeanOptions,
   jenisPIBOptions,
   jenisImportOptions,
   caraPembayaranOptions,
-} from "./options";
+} from "@/lib/options";
 
-type HeaderTabProps = {
-  data: DocumentData;
-  onChange: (data: DocumentData) => void;
-};
+export function HeaderTab() {
+  const { documentData, updateDocumentData } = useDocument();
+  const data = documentData!;
 
-export function HeaderTab({ data, onChange }: HeaderTabProps) {
   function updateHeader(field: keyof DocumentData["header"], value: string) {
-    onChange({
+    updateDocumentData({
       ...data,
       header: {
         ...data.header,
@@ -56,7 +56,7 @@ export function HeaderTab({ data, onChange }: HeaderTabProps) {
           <InputSelect
             label="Pelabuhan Tujuan"
             value={data.header?.kodePelabuhanTujuan ?? ""}
-            options={pelabuhanTujuanOptions}
+            options={pelabuhanOptions}
             onChange={(value) => updateHeader("kodePelabuhanTujuan", value)}
           />
           <InputSelect
