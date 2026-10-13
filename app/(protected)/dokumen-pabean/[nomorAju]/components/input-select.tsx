@@ -25,8 +25,15 @@ export default function InputSelect({
   );
 
   // State to manage the input query and whether the dropdown is open
-  const [query, setQuery] = useState(() => selectedOption?.label ?? "");
+  const [queryDraft, setQueryDraft] = useState(() => ({
+    value,
+    query: selectedOption?.label ?? "",
+  }));
   const [isOpen, setIsOpen] = useState(false);
+  const query =
+    queryDraft.value === value
+      ? queryDraft.query
+      : (selectedOption?.label ?? "");
 
   // Filter the options based on the input query
   const filteredOptions = useMemo(() => {
@@ -45,14 +52,14 @@ export default function InputSelect({
   // Handle the selection of an option
   function handleSelect(selectedValue: string, selectedLabel: string) {
     onChange(selectedValue);
-    setQuery(selectedLabel);
+    setQueryDraft({ value: selectedValue, query: selectedLabel });
     setIsOpen(false);
   }
 
   // Clear the user selection on input field
   function clearSelection() {
     onChange("");
-    setQuery("");
+    setQueryDraft({ value: "", query: "" });
     setIsOpen(false);
   }
 
@@ -75,13 +82,13 @@ export default function InputSelect({
           onFocus={() => setIsOpen(true)}
           onBlur={() => {
             window.setTimeout(() => {
-              setQuery(selectedOption?.label ?? "");
+              setQueryDraft({ value, query: selectedOption?.label ?? "" });
               setIsOpen(false);
             }, 150);
           }}
           onChange={(event) => {
             const nextQuery = event.target.value;
-            setQuery(nextQuery);
+            setQueryDraft({ value, query: nextQuery });
             setIsOpen(true);
           }}
           className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 outline-none transition focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
