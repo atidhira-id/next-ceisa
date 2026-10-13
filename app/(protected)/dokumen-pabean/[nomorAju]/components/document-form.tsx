@@ -5,6 +5,9 @@ import { useDocument } from "@/app/providers/document-provider";
 import { DocumentTabs, type DocumentTab } from "./document-tabs";
 import { HeaderTab } from "./tabs/header/header-tab";
 import EntitasTab from "./tabs/entitas/entitas-tab";
+import DokumenTab from "./tabs/dokumen/dokumen-tab";
+import PengangkutTab from "./tabs/pengangkut/pengangkut-tab";
+import KemasanKontainerTab from "./tabs/kemasan-kontainer/kemasan-kontainer-tab";
 
 type DocumentFormProps = {
   nomorAju: string;
@@ -12,18 +15,18 @@ type DocumentFormProps = {
 
 const tabOrder: DocumentTab[] = [
   "header",
-  "entity",
-  "document",
-  "transport",
-  "package",
-  "transaction",
-  "goods",
-  "levy",
-  "statement",
+  "entitas",
+  "dokumen",
+  "pengangkut",
+  "kemasan & peti kemas",
+  "transaksi",
+  "barang",
+  "pungutan",
+  "pernyataan",
 ];
 
 export function DocumentForm({ nomorAju }: DocumentFormProps) {
-  const { documentData, updateDocumentData } = useDocument();
+  const { documentData } = useDocument();
   const [isExporting, setIsExporting] = useState(false);
 
   const [activeTab, setActiveTab] = useState<DocumentTab>("header");
@@ -110,46 +113,21 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
   function renderTabContent() {
     switch (activeTab) {
       case "header":
-        return (
-          <HeaderTab
-            data={documentData!}
-            onChange={(data) => updateDocumentData(data)}
-          />
-        );
+        return <HeaderTab />;
 
-      case "entity":
-        return (
-          <EntitasTab
-            data={documentData!}
-            onChange={(data) => updateDocumentData(data)}
-          />
-        );
+      case "entitas":
+        return <EntitasTab />;
 
-      case "document":
-        return (
-          <TabPlaceholder
-            title="Dokumen"
-            description="Form data dokumen akan dibuat di tahap berikutnya."
-          />
-        );
+      case "dokumen":
+        return <DokumenTab />;
 
-      case "transport":
-        return (
-          <TabPlaceholder
-            title="Pengangkut"
-            description="Form data pengangkut akan dibuat di tahap berikutnya."
-          />
-        );
+      case "pengangkut":
+        return <PengangkutTab />;
 
-      case "package":
-        return (
-          <TabPlaceholder
-            title="Kemasan & Peti Kemas"
-            description="Form data kemasan dan peti kemas akan dibuat di tahap berikutnya."
-          />
-        );
+      case "kemasan & peti kemas":
+        return <KemasanKontainerTab />;
 
-      case "transaction":
+      case "transaksi":
         return (
           <TabPlaceholder
             title="Transaksi"
@@ -157,7 +135,7 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
           />
         );
 
-      case "goods":
+      case "barang":
         return (
           <TabPlaceholder
             title="Barang"
@@ -165,7 +143,7 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
           />
         );
 
-      case "levy":
+      case "pungutan":
         return (
           <TabPlaceholder
             title="Pungutan"
@@ -173,7 +151,7 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
           />
         );
 
-      case "statement":
+      case "pernyataan":
         return (
           <TabPlaceholder
             title="Pernyataan"
