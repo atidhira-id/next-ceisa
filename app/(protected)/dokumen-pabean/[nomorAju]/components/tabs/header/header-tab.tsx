@@ -16,6 +16,7 @@ import {
 export function HeaderTab() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
+  const header = data.header;
 
   function updateHeader(field: keyof DocumentData["header"], value: string) {
     updateDocumentData({
@@ -55,13 +56,13 @@ export function HeaderTab() {
         <InputWrapper title="Kantor Pabean">
           <InputSelect
             label="Pelabuhan Tujuan"
-            value={data.header?.kodePelabuhanTujuan ?? ""}
+            value={header?.kodePelabuhanTujuan ?? ""}
             options={pelabuhanOptions}
             onChange={(value) => updateHeader("kodePelabuhanTujuan", value)}
           />
           <InputSelect
             label="Kantor Pabean"
-            value={data.header.kodeKantor ?? ""}
+            value={header?.kodeKantor ?? ""}
             options={kantorPabeanOptions}
             onChange={(value) => updateHeader("kodeKantor", value)}
           />
@@ -71,19 +72,19 @@ export function HeaderTab() {
         <InputWrapper title="Keterangan Lain">
           <InputSelect
             label="Jenis PIB"
-            value={data.header.kodeJenisImpor ?? ""}
+            value={header?.kodeJenisImpor ?? ""}
             options={jenisPIBOptions}
             onChange={(value) => updateHeader("kodeJenisImpor", value)}
           />
           <InputSelect
             label="Jenis Import"
-            value={data.header.kodeJenisProsedur ?? ""}
+            value={header?.kodeJenisProsedur ?? ""}
             options={jenisImportOptions}
             onChange={(value) => updateHeader("kodeJenisProsedur", value)}
           />
           <InputSelect
             label="Cara Pembayaran"
-            value={data.header.kodeCaraBayar ?? ""}
+            value={header?.kodeCaraBayar ?? ""}
             options={caraPembayaranOptions}
             onChange={(value) => updateHeader("kodeCaraBayar", value)}
           />
