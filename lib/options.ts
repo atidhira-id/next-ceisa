@@ -264,3 +264,15 @@ export const tipeKontainerOptions: OptionType[] = [
   { value: "3", label: "3 - OPEN TOP STEEL" },
   { value: "4", label: "4 - FLAT PACK" },
 ];
+
+// TRANSAKSI
+
+export const jenisValutaOptions: OptionType[] = [
+  { value: "AUD", label: "AUD - AUSTRALIAN DOLLAR" },
+  { value: "EUR", label: "EUR - EURO" },
+];
+
+export const jenisTransaksiOptions: OptionType[] = [
+  { value: "IMB", label: "IMB - TRANSAKSI PERDAGANGAN" },
+  { value: "ULC", label: "ULC - PEMBAYARAN DENGAN" },
+];
