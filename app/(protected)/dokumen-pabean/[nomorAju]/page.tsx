@@ -1,4 +1,4 @@
-import { DocumentForm } from "@/app/(protected)/dokumen-pabean/[nomorAju]/components/document-form";
+import { DocumentLoader } from "./components/document-loader";
 
 type DocumentPageProps = {
   params: Promise<{
@@ -9,5 +9,5 @@ type DocumentPageProps = {
 export default async function DocumentPage({ params }: DocumentPageProps) {
   const { nomorAju } = await params;
 
-  return <DocumentForm nomorAju={nomorAju} />;
+  return <DocumentLoader nomorAju={nomorAju} />;
 }
