@@ -4,12 +4,6 @@ import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import { entitasOptions, jenisDokumenOptions } from "@/lib/options";
 
-function generateNomorAju() {
-  return Array.from({ length: 18 }, () => Math.floor(Math.random() * 10)).join(
-    "",
-  );
-}
-
 type AddDocumentModalProps = {
   onCloseModal: () => void;
 };
@@ -24,45 +18,90 @@ export default function AddDocumentModal({
   const [entitas, setEntitas] = useState("");
   const [kodeDokumen, setKodeDokumen] = useState("");
 
-  function handleContinue() {
+  async function handleContinue() {
     if (!entitas || !kodeDokumen) {
       return;
     }
 
-    const nomorAju = generateNomorAju();
+    try {
+      // Get nomorAju from server
+      const response = await fetch("/api/documents/generate-nomor-aju", {
+        method: "POST",
+      });
+      const result = await response.json();
 
-    setDocumentData({
-      nomorAju,
-      kodeDokumen,
-      jenisEntitas: entitas,
-      header: {},
-      entitas1: {
-        nomorAju: nomorAju,
-        seri: "1",
-        kodeEntitas: "1",
-        kodeNegara: "ID",
-      },
-      entitas7: {
-        nomorAju: nomorAju,
-        seri: "7",
-        kodeEntitas: "7",
-        kodeNegara: "ID",
-      },
-      entitas9: { nomorAju: nomorAju, seri: "9", kodeEntitas: "9" },
-      entitas10: { nomorAju: nomorAju, seri: "10", kodeEntitas: "10" },
-      entitas11: {
-        nomorAju: nomorAju,
-        seri: "11",
-        kodeEntitas: "11",
-        kodeNegara: "ID",
-      },
-      dokumen: [],
-      pengangkut: {},
-      kemasan: [],
-      kontainer: [],
-    });
+      if (!response.ok) {
+        throw new Error(result.message ?? "Gagal membuat nomor AJU.");
+      }
 
-    router.push(`/dokumen-pabean/${nomorAju}`);
+      const nomorAju: string = result.nomorAju;
+      if (typeof nomorAju !== "string" || nomorAju.length !== 26) {
+        throw new Error("Format nomor AJU yang diterima tidak valid.");
+      }
+
+      const initialDocumentData = {
+        nomorAju,
+        kodeDokumen,
+        jenisEntitas: entitas,
+        header: {},
+        entitas1: {
+          nomorAju: nomorAju,
+          seri: "1",
+          kodeEntitas: "1",
+          kodeNegara: "ID",
+        },
+        entitas7: {
+          nomorAju: nomorAju,
+          seri: "7",
+          kodeEntitas: "7",
+          kodeNegara: "ID",
+        },
+        entitas9: { nomorAju: nomorAju, seri: "9", kodeEntitas: "9" },
+        entitas10: { nomorAju: nomorAju, seri: "10", kodeEntitas: "10" },
+        entitas11: {
+          nomorAju: nomorAju,
+          seri: "11",
+          kodeEntitas: "11",
+          kodeNegara: "ID",
+        },
+        dokumen: [],
+        pengangkut: {},
+        kemasan: [],
+        kontainer: [],
+      };
+
+      // Save initial draft into Neon
+      const saveResponse = await fetch("/api/documents/drafts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...initialDocumentData,
+        }),
+      });
+
+      const saveResult = await saveResponse.json();
+      if (!saveResponse.ok) {
+        throw new Error(
+          saveResult.message ?? "Gagal menyimpan draft ke database.",
+        );
+      }
+
+      // Update state client
+      setDocumentData(initialDocumentData);
+
+      // Close modal and redirect to [nomorAju] page
+      onCloseModal();
+      router.push(`/dokumen-pabean/${encodeURIComponent(nomorAju)}`);
+    } catch (error) {
+      console.error(error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat membuat dokumen.",
+      );
+    }
   }
 
   return (
