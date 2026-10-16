@@ -71,7 +71,7 @@ export type HeaderData = {
   fob?: number;
   biayaTambahan?: number;
   biayaPengurang?: number;
-  vd2?: number;
+  vd?: number;
   cif?: number;
   hargaPenyerahan?: number;
   ndpbm?: number;
