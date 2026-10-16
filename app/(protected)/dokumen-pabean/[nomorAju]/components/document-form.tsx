@@ -8,6 +8,7 @@ import EntitasTab from "./tabs/entitas/entitas-tab";
 import DokumenTab from "./tabs/dokumen/dokumen-tab";
 import PengangkutTab from "./tabs/pengangkut/pengangkut-tab";
 import KemasanKontainerTab from "./tabs/kemasan-kontainer/kemasan-kontainer-tab";
+import { TransaksiTab } from "./tabs/transaksi/transaksi-tab";
 
 type DocumentFormProps = {
   nomorAju: string;
@@ -27,8 +28,9 @@ const tabOrder: DocumentTab[] = [
 
 export function DocumentForm({ nomorAju }: DocumentFormProps) {
   const { documentData } = useDocument();
-  const [isExporting, setIsExporting] = useState(false);
 
+  const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [activeTab, setActiveTab] = useState<DocumentTab>("header");
   const activeTabIndex = tabOrder.indexOf(activeTab);
   const isFirstTab = activeTabIndex === 0;
@@ -58,11 +60,39 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
     setActiveTab(tabOrder[activeTabIndex + 1]);
   }
 
-  function handleSaveDraft() {
-    console.log("Save draft:", {
-      nomorAju,
-      documentData,
-    });
+  async function handleSaveDraft() {
+    if (!documentData) {
+      alert("Data dokumen belum tersedia.");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+
+      const response = await fetch("/api/documents/drafts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(documentData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message ?? "Gagal menyimpan draft.");
+      }
+
+      alert("Draft berhasil disimpan.");
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat menyimpan draft.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   async function handleExportExcel() {
@@ -128,12 +158,7 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
         return <KemasanKontainerTab />;
 
       case "transaksi":
-        return (
-          <TabPlaceholder
-            title="Transaksi"
-            description="Form data transaksi akan dibuat di tahap berikutnya."
-          />
-        );
+        return <TransaksiTab />;
 
       case "barang":
         return (
@@ -195,9 +220,10 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
               <button
                 type="button"
                 onClick={handleSaveDraft}
-                className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+                disabled={!documentData || isSaving}
+                className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Simpan Draft
+                {isSaving ? "Menyimpan..." : "Simpan Draft"}
               </button>
             </div>
           </div>
