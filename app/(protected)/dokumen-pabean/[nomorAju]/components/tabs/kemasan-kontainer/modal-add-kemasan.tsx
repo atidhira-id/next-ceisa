@@ -1,26 +1,21 @@
 "use client";
 import { useState } from "react";
-import {
-  type DocumentData,
-  useDocument,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import { type KemasanItemData } from "@/app/providers/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import { jenisKemasanOptions } from "@/lib/options";
 
 type ModalAddKemasanItemProps = {
-  data: DocumentData;
   onCloseModal: () => void;
 };
 
 export default function ModalAddKemasanItem({
-  data,
   onCloseModal,
 }: ModalAddKemasanItemProps) {
-  const { updateDocumentData } = useDocument();
-
-  const seriNumber = data.kemasan.length + 1;
+  const { documentData, updateDocumentData } = useDocument();
+  const data = documentData!;
+  const seriNumber = data.listKemasan.length + 1;
   const [jumlah, setJumlah] = useState(0);
   const [jenis, setJenis] = useState("");
   const [merek, setMerek] = useState("");
@@ -34,7 +29,7 @@ export default function ModalAddKemasanItem({
     };
 
     updateDocumentData({
-      kemasan: [...data.kemasan, newKemasanItem],
+      listKemasan: [...data.listKemasan, newKemasanItem],
     });
 
     onCloseModal();

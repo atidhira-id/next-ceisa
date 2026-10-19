@@ -1,8 +1,5 @@
 "use client";
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputSelect from "../../input-select";
 import {
@@ -17,16 +14,6 @@ export function HeaderTab() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
   const header = data.header;
-
-  function updateHeader(field: keyof DocumentData["header"], value: string) {
-    updateDocumentData({
-      ...data,
-      header: {
-        ...data.header,
-        [field]: value,
-      },
-    });
-  }
 
   return (
     <div className="space-y-6">
@@ -56,15 +43,23 @@ export function HeaderTab() {
         <InputWrapper title="Kantor Pabean">
           <InputSelect
             label="Pelabuhan Tujuan"
-            value={header?.kodePelabuhanTujuan ?? ""}
+            value={header.kodePelabuhanTujuan ?? ""}
             options={pelabuhanOptions}
-            onChange={(value) => updateHeader("kodePelabuhanTujuan", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                header: { ...header, kodePelabuhanTujuan: value },
+              })
+            }
           />
           <InputSelect
             label="Kantor Pabean"
-            value={header?.kodeKantor ?? ""}
+            value={header.kodeKantorPabean ?? ""}
             options={kantorPabeanOptions}
-            onChange={(value) => updateHeader("kodeKantor", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                header: { ...header, kodeKantorPabean: value },
+              })
+            }
           />
         </InputWrapper>
 
@@ -72,21 +67,31 @@ export function HeaderTab() {
         <InputWrapper title="Keterangan Lain">
           <InputSelect
             label="Jenis PIB"
-            value={header?.kodeJenisImpor ?? ""}
+            value={header.kodeJenisPib ?? ""}
             options={jenisPIBOptions}
-            onChange={(value) => updateHeader("kodeJenisImpor", value)}
+            onChange={(value) =>
+              updateDocumentData({ header: { ...header, kodeJenisPib: value } })
+            }
           />
           <InputSelect
             label="Jenis Import"
-            value={header?.kodeJenisProsedur ?? ""}
+            value={header.kodeJenisImport ?? ""}
             options={jenisImportOptions}
-            onChange={(value) => updateHeader("kodeJenisProsedur", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                header: { ...header, kodeJenisImport: value },
+              })
+            }
           />
           <InputSelect
             label="Cara Pembayaran"
-            value={header?.kodeCaraBayar ?? ""}
+            value={header.kodeCaraPembayaran ?? ""}
             options={caraPembayaranOptions}
-            onChange={(value) => updateHeader("kodeCaraBayar", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                header: { ...header, kodeCaraPembayaran: value },
+              })
+            }
           />
         </InputWrapper>
       </div>

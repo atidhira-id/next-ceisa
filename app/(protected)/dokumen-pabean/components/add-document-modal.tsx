@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import { entitasOptions, jenisDokumenOptions } from "@/lib/options";
+import { FormInputs } from "@/app/providers/types";
 
 type AddDocumentModalProps = {
   onCloseModal: () => void;
@@ -39,35 +40,21 @@ export default function AddDocumentModal({
         throw new Error("Format nomor AJU yang diterima tidak valid.");
       }
 
-      const initialDocumentData = {
-        nomorAju,
-        kodeDokumen,
+      const initialDocumentData: FormInputs = {
+        nomorAju: nomorAju,
         jenisEntitas: entitas,
+        kodeDokumen: kodeDokumen,
         header: {},
-        entitas1: {
-          nomorAju: nomorAju,
-          seri: "1",
-          kodeEntitas: "1",
-          kodeNegara: "ID",
-        },
-        entitas7: {
-          nomorAju: nomorAju,
-          seri: "7",
-          kodeEntitas: "7",
-          kodeNegara: "ID",
-        },
-        entitas9: { nomorAju: nomorAju, seri: "9", kodeEntitas: "9" },
-        entitas10: { nomorAju: nomorAju, seri: "10", kodeEntitas: "10" },
-        entitas11: {
-          nomorAju: nomorAju,
-          seri: "11",
-          kodeEntitas: "11",
-          kodeNegara: "ID",
-        },
-        dokumen: [],
+        entitasImportir: {},
+        entitasPemilikBarang: {},
+        entitasNpwp: {},
+        entitasPengirim: {},
+        entitasPenjual: {},
+        listDokumen: [],
         pengangkut: {},
-        kemasan: [],
-        kontainer: [],
+        listKemasan: [],
+        listKontainer: [],
+        transaksi: {},
       };
 
       // Save initial draft into Neon

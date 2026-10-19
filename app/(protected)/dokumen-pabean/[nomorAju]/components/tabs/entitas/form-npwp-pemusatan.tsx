@@ -1,7 +1,4 @@
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -11,39 +8,30 @@ import { jenisIdentitasOptions } from "@/lib/options";
 export default function FormNpwpPemusatan() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
+  const importir = data.entitasImportir;
+  const npwp = data.entitasNpwp;
 
-  function updateEntitas11(
-    field: keyof DocumentData["entitas11"],
-    value: string,
-  ) {
-    updateDocumentData({
-      ...data,
-      entitas11: {
-        ...data.entitas11,
-        [field]: value,
-      },
-    });
-  }
-
-  const identityNumber = (data.entitas11.nomorIdentitas ?? "").slice(0, -6);
+  const identityNumber = npwp.nomorIdentitas ?? "";
 
   const updateNitku = (value: string) => {
     const nitku = value + "000000";
-    updateEntitas11("nomorIdentitas", nitku);
+    updateDocumentData({
+      entitasNpwp: { ...npwp, nomorIdentitas: value, nomorNitku: nitku },
+    });
   };
 
   function copyImportirData() {
-    const { kodeJenisIdentitas, nomorIdentitas, namaEntitas, alamatEntitas } =
-      data.entitas1;
+    const { kodeNomorIdentitas, nomorIdentitas, nomorNitku, nama, alamat } =
+      importir;
 
     updateDocumentData({
-      ...data,
-      entitas11: {
-        ...data.entitas11,
-        kodeJenisIdentitas,
+      entitasNpwp: {
+        ...npwp,
+        kodeNomorIdentitas,
         nomorIdentitas,
-        namaEntitas,
-        alamatEntitas,
+        nomorNitku,
+        nama,
+        alamat,
       },
     });
   }
@@ -69,9 +57,13 @@ export default function FormNpwpPemusatan() {
 
         <div className="flex items-center gap-2">
           <InputSelect
-            value={data.entitas11.kodeJenisIdentitas ?? ""}
+            value={npwp.kodeNomorIdentitas ?? ""}
             options={jenisIdentitasOptions}
-            onChange={(value) => updateEntitas11("kodeJenisIdentitas", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasNpwp: { ...npwp, kodeNomorIdentitas: value },
+              })
+            }
           />
           <InputNormal
             value={identityNumber ?? ""}
@@ -83,22 +75,30 @@ export default function FormNpwpPemusatan() {
       {/* Nomor NITKU */}
       <InputNormal
         title="Nomor NITKU"
-        value={identityNumber + "0".repeat(6)}
+        value={npwp.nomorNitku ?? identityNumber + "0".repeat(6)}
         disabled
       />
 
       {/* Nama */}
       <InputNormal
         title="Nama"
-        value={data.entitas11.namaEntitas ?? ""}
-        onChange={(value) => updateEntitas11("namaEntitas", value)}
+        value={npwp.nama ?? ""}
+        onChange={(value) =>
+          updateDocumentData({
+            entitasNpwp: { ...npwp, nama: value },
+          })
+        }
       />
 
       {/* Alamat */}
       <InputTextArea
         title="Alamat"
-        value={data.entitas11.alamatEntitas ?? ""}
-        onChange={(value) => updateEntitas11("alamatEntitas", value)}
+        value={npwp.alamat ?? ""}
+        onChange={(value) =>
+          updateDocumentData({
+            entitasNpwp: { ...npwp, alamat: value },
+          })
+        }
       />
     </InputWrapper>
   );

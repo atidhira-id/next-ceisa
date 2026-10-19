@@ -1,26 +1,17 @@
 "use client";
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
-import { jenisTransaksiOptions, jenisValutaOptions } from "@/lib/options";
+import {
+  jenisTransaksiOptions,
+  jenisValutaOptions,
+  kodeHargaOption,
+} from "@/lib/options";
 
 export function TransaksiTab() {
   const { documentData, updateDocumentData } = useDocument();
-  const data = documentData!;
-
-  function updateHeader(field: keyof DocumentData["header"], value: string) {
-    updateDocumentData({
-      ...data,
-      header: {
-        ...data.header,
-        [field]: value,
-      },
-    });
-  }
+  const transaksi = documentData!.transaksi;
 
   return (
     <div className="space-y-6">
@@ -30,21 +21,71 @@ export function TransaksiTab() {
         <InputWrapper title="Harga">
           <InputSelect
             label="Jenis Valuta"
-            value={data.header.kodeValuta ?? ""}
+            value={transaksi.kodeJenisValuta ?? ""}
             options={jenisValutaOptions}
-            onChange={(value) => updateHeader("kodeValuta", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                transaksi: { ...transaksi, kodeJenisValuta: value },
+              })
+            }
           />
 
-          <InputNormal title="NDPBM" value="" disabled />
+          <InputNormal
+            title="NDPBM"
+            value={transaksi.ndpbm ?? ""}
+            onChange={(value) => {
+              const normalizedValue = value.replace(",", ".");
+              const parsedNumber = Number(normalizedValue);
+              const isValidNumber =
+                !isNaN(parsedNumber) && normalizedValue.trim() !== "";
+
+              updateDocumentData({
+                transaksi: {
+                  ...transaksi,
+                  ndpbm: isValidNumber ? parsedNumber : 0,
+                },
+              });
+            }}
+          />
 
           <InputSelect
             label="Jenis Transaksi"
-            value={data.header.kodeJenisNilai ?? ""}
+            value={transaksi.kodeJenisTransaksi ?? ""}
             options={jenisTransaksiOptions}
-            onChange={(value) => updateHeader("kodeJenisNilai", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                transaksi: { ...transaksi, kodeJenisTransaksi: value },
+              })
+            }
           />
 
           <p>TODO: INFORMASI KOMPONEN BIAYA</p>
+
+          <div>
+            <p className="mb-2 block text-sm font-medium text-gray-700">
+              Harga Barang
+            </p>
+
+            <div className="flex items-center gap-2">
+              <InputSelect
+                value={transaksi.kodeHargaBarang ?? ""}
+                options={kodeHargaOption}
+                onChange={(value) =>
+                  updateDocumentData({
+                    transaksi: { ...transaksi, kodeHargaBarang: value },
+                  })
+                }
+              />
+              <InputNormal
+                value={transaksi.hargaBarang ?? ""}
+                onChange={(value) =>
+                  updateDocumentData({
+                    transaksi: { ...transaksi, hargaBarang: Number(value) },
+                  })
+                }
+              />
+            </div>
+          </div>
         </InputWrapper>
 
         {/* Biaya Lainnya */}

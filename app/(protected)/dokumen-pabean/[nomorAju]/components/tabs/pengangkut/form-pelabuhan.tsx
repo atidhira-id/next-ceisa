@@ -1,8 +1,5 @@
 "use client";
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -11,16 +8,7 @@ import { pelabuhanOptions, tempatPenimbunanOptions } from "@/lib/options";
 export default function FormPelabuhan() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
-
-  function updateHeader(field: keyof DocumentData["header"], value: string) {
-    updateDocumentData({
-      ...data,
-      header: {
-        ...data.header,
-        [field]: value,
-      },
-    });
-  }
+  const pengangkut = data.pengangkut;
 
   const getPelabuhanTujuan = () => {
     const tujuanKey = data.header.kodePelabuhanTujuan;
@@ -36,17 +24,25 @@ export default function FormPelabuhan() {
       {/* Pelabuhan Muat */}
       <InputSelect
         label="Pelabuhan Muat"
-        value={data.header.kodePelabuhanMuat ?? ""}
+        value={pengangkut.kodePelabuhanMuat ?? ""}
         options={pelabuhanOptions}
-        onChange={(value) => updateHeader("kodePelabuhanMuat", value)}
+        onChange={(value) =>
+          updateDocumentData({
+            pengangkut: { ...pengangkut, kodePelabuhanMuat: value },
+          })
+        }
       />
 
       {/* Pelabuhan Transit */}
       <InputSelect
         label="Pelabuhan Transit"
-        value={data.header.kodePelabuhanTransit ?? ""}
+        value={pengangkut.kodePelabuhanTransit ?? ""}
         options={pelabuhanOptions}
-        onChange={(value) => updateHeader("kodePelabuhanTransit", value)}
+        onChange={(value) =>
+          updateDocumentData({
+            pengangkut: { ...pengangkut, kodePelabuhanTransit: value },
+          })
+        }
       />
 
       {/* Pelabuhan Tujuan */}
@@ -59,9 +55,13 @@ export default function FormPelabuhan() {
       {/* Tempat Penimbunan */}
       <InputSelect
         label="Tempat Penimbunan"
-        value={data.header.kodeTps ?? ""}
+        value={pengangkut.kodeTempatPenimbunan ?? ""}
         options={tempatPenimbunanOptions}
-        onChange={(value) => updateHeader("kodeTps", value)}
+        onChange={(value) =>
+          updateDocumentData({
+            pengangkut: { ...pengangkut, kodeTempatPenimbunan: value },
+          })
+        }
       />
     </InputWrapper>
   );

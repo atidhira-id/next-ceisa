@@ -1,8 +1,5 @@
 "use client";
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -12,67 +9,63 @@ import { caraPengangkutanOptions, kodeNegaraOptions } from "@/lib/options";
 export default function FormPengangkut() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
-
-  function updateHeader(field: keyof DocumentData["header"], value: string) {
-    updateDocumentData({
-      ...data,
-      header: {
-        ...data.header,
-        [field]: value,
-      },
-    });
-  }
-
-  function updatePengangkut(
-    field: keyof DocumentData["pengangkut"],
-    value: string,
-  ) {
-    updateDocumentData({
-      ...data,
-      pengangkut: {
-        ...data.pengangkut,
-        [field]: value,
-      },
-    });
-  }
+  const pengangkut = data.pengangkut;
 
   return (
     <InputWrapper title="Pengangkutan">
       {/* Cara Pengangkutan */}
       <InputSelect
         label="Cara Pengangkutan"
-        value={data.pengangkut.kodeCaraAngkut ?? ""}
+        value={pengangkut.kodeCaraPengangkutan ?? ""}
         options={caraPengangkutanOptions}
-        onChange={(value) => updatePengangkut("kodeCaraAngkut", value)}
+        onChange={(value) =>
+          updateDocumentData({
+            pengangkut: { ...pengangkut, kodeCaraPengangkutan: value },
+          })
+        }
       />
 
       {/* Nama Sarana Angkut */}
       <InputNormal
         title="Nama Sarana Angkut"
-        value={data.pengangkut.namaPengangkut ?? ""}
-        onChange={(value) => updatePengangkut("namaPengangkut", value)}
+        value={pengangkut.namaSaranaPengangkutan ?? ""}
+        onChange={(value) =>
+          updateDocumentData({
+            pengangkut: { ...pengangkut, namaSaranaPengangkutan: value },
+          })
+        }
       />
 
       {/* Nomor Voy/Flight/Nopol/Lainnya */}
       <InputNormal
         title="Nomor Voy/Flight/Nopol/Lainnya"
-        value={data.pengangkut.nomorPengangkut ?? ""}
-        onChange={(value) => updatePengangkut("nomorPengangkut", value)}
+        value={pengangkut.nomorVoy ?? ""}
+        onChange={(value) =>
+          updateDocumentData({ pengangkut: { ...pengangkut, nomorVoy: value } })
+        }
       />
 
       {/* Bendera */}
       <InputSelect
         label="Bendera"
-        value={data.pengangkut.kodeBendera ?? ""}
+        value={pengangkut.kodeBendera ?? ""}
         options={kodeNegaraOptions}
-        onChange={(value) => updatePengangkut("kodeBendera", value)}
+        onChange={(value) =>
+          updateDocumentData({
+            pengangkut: { ...pengangkut, kodeBendera: value },
+          })
+        }
       />
 
       {/* Perkiraan Tanggal Tiba */}
       <InputDate
         label="Perkiraan Tanggal Tiba"
-        value={data.header.tanggalTiba ?? ""}
-        onChange={(value) => updateHeader("tanggalTiba", value)}
+        value={pengangkut.perkiraanTanggalTiba ?? ""}
+        onChange={(value) =>
+          updateDocumentData({
+            pengangkut: { ...pengangkut, perkiraanTanggalTiba: value },
+          })
+        }
       />
     </InputWrapper>
   );

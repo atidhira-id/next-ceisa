@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
@@ -88,7 +89,7 @@ export default function KemasanKontainerTab() {
                   </thead>
 
                   <tbody className="divide-y">
-                    {data.kemasan.map((item) => (
+                    {data.listKemasan.map((item) => (
                       <tr key={item.seri} className="hover:bg-gray-50">
                         <td className="px-4 py-3 font-medium">{item.seri}</td>
 
@@ -148,7 +149,7 @@ export default function KemasanKontainerTab() {
                   </thead>
 
                   <tbody className="divide-y">
-                    {data.kontainer.map((item) => (
+                    {data.listKontainer.map((item) => (
                       <tr key={item.seri} className="hover:bg-gray-50">
                         <td className="px-4 py-3 font-medium">{item.seri}</td>
 
@@ -177,7 +178,6 @@ export default function KemasanKontainerTab() {
       {/* Modal Kemasan */}
       {isKemasanModalOpen && (
         <ModalAddKemasanItem
-          data={data}
           onCloseModal={() => setIsKemasanModalOpen(false)}
         />
       )}
@@ -185,7 +185,6 @@ export default function KemasanKontainerTab() {
       {/* Modal Kontainer */}
       {isKontainerModalOpen && (
         <ModalAddKontainerItem
-          data={data}
           onCloseModal={() => setIsKontainerModalOpen(false)}
         />
       )}

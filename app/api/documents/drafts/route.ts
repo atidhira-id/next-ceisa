@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { Prisma } from "@/generated/prisma/client";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import type { DocumentData } from "@/app/providers/document-provider";
+import { FormInputs } from "@/app/providers/types";
 
 export const runtime = "nodejs";
 
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const documentData = body as DocumentData;
+    const documentData = body as FormInputs;
 
     if (
       typeof documentData.nomorAju !== "string" ||

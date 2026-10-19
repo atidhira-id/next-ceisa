@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -17,28 +14,22 @@ import {
 export default function FormImportir() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
-
-  function updateEntitas1(
-    field: keyof DocumentData["entitas1"],
-    value: string,
-  ) {
-    updateDocumentData({
-      ...data,
-      entitas1: {
-        ...data.entitas1,
-        [field]: value,
-      },
-    });
-  }
+  const importir = data.entitasImportir;
 
   const [identityNumber, setIdentityNumber] = useState(
-    data.entitas1.nomorIdentitas ?? "",
+    importir.nomorIdentitas ?? "",
   );
 
   const updateNitku = (value: string) => {
     setIdentityNumber(value);
     const nitku = value + "000000";
-    updateEntitas1("nomorIdentitas", nitku);
+    updateDocumentData({
+      entitasImportir: {
+        ...importir,
+        nomorIdentitas: value,
+        nomorNitku: nitku,
+      },
+    });
   };
 
   return (
@@ -51,9 +42,13 @@ export default function FormImportir() {
 
         <div className="flex items-center gap-2">
           <InputSelect
-            value={data.entitas1.kodeJenisIdentitas ?? ""}
+            value={importir.kodeNomorIdentitas ?? ""}
             options={jenisIdentitasOptions}
-            onChange={(value) => updateEntitas1("kodeJenisIdentitas", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasImportir: { ...importir, kodeNomorIdentitas: value },
+              })
+            }
           />
           <InputNormal
             value={identityNumber ?? ""}
@@ -65,22 +60,28 @@ export default function FormImportir() {
       {/* Nomor NITKU */}
       <InputNormal
         title="Nomor NITKU"
-        value={identityNumber + "0".repeat(6)}
+        value={importir.nomorNitku ?? identityNumber + "0".repeat(6)}
         disabled
       />
 
       {/* Nama */}
       <InputNormal
         title="Nama"
-        value={data.entitas1.namaEntitas ?? ""}
-        onChange={(value) => updateEntitas1("namaEntitas", value)}
+        value={importir.nama ?? ""}
+        onChange={(value) =>
+          updateDocumentData({ entitasImportir: { ...importir, nama: value } })
+        }
       />
 
       {/* Alamat */}
       <InputTextArea
         title="Alamat"
-        value={data.entitas1.alamatEntitas ?? ""}
-        onChange={(value) => updateEntitas1("alamatEntitas", value)}
+        value={importir.alamat ?? ""}
+        onChange={(value) =>
+          updateDocumentData({
+            entitasImportir: { ...importir, alamat: value },
+          })
+        }
       />
 
       {/* API/NIB */}
@@ -89,13 +90,21 @@ export default function FormImportir() {
 
         <div className="flex items-center gap-2">
           <InputSelect
-            value={data.entitas1.kodeJenisApi ?? ""}
+            value={importir.kodeApi ?? ""}
             options={kodeJenisApiOptions}
-            onChange={(value) => updateEntitas1("kodeJenisApi", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasImportir: { ...importir, kodeApi: value },
+              })
+            }
           />
           <InputNormal
-            value={data.entitas1.nibEntitas ?? ""}
-            onChange={(value) => updateEntitas1("nibEntitas", value)}
+            value={importir.api ?? ""}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasImportir: { ...importir, api: value },
+              })
+            }
           />
         </div>
       </div>
@@ -103,9 +112,13 @@ export default function FormImportir() {
       {/* Status */}
       <InputSelect
         label="Status"
-        value={data.entitas1.kodeStatus ?? ""}
+        value={importir.kodeStatus ?? ""}
         options={kodeStatusOptions}
-        onChange={(value) => updateEntitas1("kodeStatus", value)}
+        onChange={(value) =>
+          updateDocumentData({
+            entitasImportir: { ...importir, kodeStatus: value },
+          })
+        }
       />
     </InputWrapper>
   );

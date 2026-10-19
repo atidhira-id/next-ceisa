@@ -1,7 +1,4 @@
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -11,39 +8,34 @@ import { jenisIdentitasOptions, kodeAfiliasiOptions } from "@/lib/options";
 export default function FormPemilikBarang() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
+  const importir = data.entitasImportir;
+  const pemilikBarang = data.entitasPemilikBarang;
 
-  function updateEntitas7(
-    field: keyof DocumentData["entitas7"],
-    value: string,
-  ) {
-    updateDocumentData({
-      ...data,
-      entitas7: {
-        ...data.entitas7,
-        [field]: value,
-      },
-    });
-  }
-
-  const identityNumber = (data.entitas7.nomorIdentitas ?? "").slice(0, -6);
+  const identityNumber = pemilikBarang.nomorIdentitas ?? "";
 
   const updateNitku = (value: string) => {
     const nitku = value + "000000";
-    updateEntitas7("nomorIdentitas", nitku);
+    updateDocumentData({
+      entitasPemilikBarang: {
+        ...pemilikBarang,
+        nomorIdentitas: value,
+        nomorNitku: nitku,
+      },
+    });
   };
 
   function copyImportirData() {
-    const { kodeJenisIdentitas, nomorIdentitas, namaEntitas, alamatEntitas } =
-      data.entitas1;
+    const { kodeNomorIdentitas, nomorIdentitas, nomorNitku, nama, alamat } =
+      importir;
 
     updateDocumentData({
-      ...data,
-      entitas7: {
-        ...data.entitas7,
-        kodeJenisIdentitas,
+      entitasPemilikBarang: {
+        ...pemilikBarang,
+        kodeNomorIdentitas,
         nomorIdentitas,
-        namaEntitas,
-        alamatEntitas,
+        nomorNitku,
+        nama,
+        alamat,
       },
     });
   }
@@ -69,9 +61,16 @@ export default function FormPemilikBarang() {
 
         <div className="flex items-center gap-2">
           <InputSelect
-            value={data.entitas7.kodeJenisIdentitas ?? ""}
+            value={pemilikBarang.kodeNomorIdentitas ?? ""}
             options={jenisIdentitasOptions}
-            onChange={(value) => updateEntitas7("kodeJenisIdentitas", value)}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasPemilikBarang: {
+                  ...pemilikBarang,
+                  kodeNomorIdentitas: value,
+                },
+              })
+            }
           />
           <InputNormal
             value={identityNumber ?? ""}
@@ -83,30 +82,42 @@ export default function FormPemilikBarang() {
       {/* Nomor NITKU */}
       <InputNormal
         title="Nomor NITKU"
-        value={identityNumber + "0".repeat(6)}
+        value={pemilikBarang.nomorNitku ?? identityNumber + "0".repeat(6)}
         disabled
       />
 
       {/* Nama */}
       <InputNormal
         title="Nama"
-        value={data.entitas7.namaEntitas ?? ""}
-        onChange={(value) => updateEntitas7("namaEntitas", value)}
+        value={pemilikBarang.nama ?? ""}
+        onChange={(value) =>
+          updateDocumentData({
+            entitasPemilikBarang: { ...pemilikBarang, nama: value },
+          })
+        }
       />
 
       {/* Alamat */}
       <InputTextArea
         title="Alamat"
-        value={data.entitas7.alamatEntitas ?? ""}
-        onChange={(value) => updateEntitas7("alamatEntitas", value)}
+        value={pemilikBarang.alamat ?? ""}
+        onChange={(value) =>
+          updateDocumentData({
+            entitasPemilikBarang: { ...pemilikBarang, alamat: value },
+          })
+        }
       />
 
       {/* Afiliasi */}
       <InputSelect
         label="Afiliasi"
-        value={data.entitas7.kodeAfiliasi ?? ""}
+        value={pemilikBarang.afiliasi ?? ""}
         options={kodeAfiliasiOptions}
-        onChange={(value) => updateEntitas7("kodeAfiliasi", value)}
+        onChange={(value) =>
+          updateDocumentData({
+            entitasPemilikBarang: { ...pemilikBarang, afiliasi: value },
+          })
+        }
       />
     </InputWrapper>
   );

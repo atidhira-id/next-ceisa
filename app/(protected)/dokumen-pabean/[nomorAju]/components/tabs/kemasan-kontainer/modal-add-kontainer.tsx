@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-  type DocumentData,
-  useDocument,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import { type KontainerItemData } from "@/app/providers/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -14,17 +11,15 @@ import {
 } from "@/lib/options";
 
 type ModalAddKontainerItemProps = {
-  data: DocumentData;
   onCloseModal: () => void;
 };
 
 export default function ModalAddKontainerItem({
-  data,
   onCloseModal,
 }: ModalAddKontainerItemProps) {
-  const { updateDocumentData } = useDocument();
-
-  const seriNumber = data.kontainer.length + 1;
+  const { documentData, updateDocumentData } = useDocument();
+  const data = documentData!;
+  const seriNumber = data.listKontainer.length + 1;
   const [nomor, setNomor] = useState("");
   const [ukuran, setUkuran] = useState("");
   const [jenis, setJenis] = useState("");
@@ -36,11 +31,11 @@ export default function ModalAddKontainerItem({
       nomorKontiner: nomor,
       kodeUkuranKontainer: ukuran,
       kodeJenisKontainer: jenis,
-      kodeTipeKontainer: jenis,
+      kodeTipeKontainer: tipe,
     };
 
     updateDocumentData({
-      kontainer: [...data.kontainer, newKontainerItem],
+      listKontainer: [...data.listKontainer, newKontainerItem],
     });
 
     onCloseModal();

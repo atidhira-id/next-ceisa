@@ -1,7 +1,4 @@
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -11,30 +8,18 @@ import { kodeNegaraOptions } from "@/lib/options";
 export default function FormPenjual() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
-
-  function updateEntitas10(
-    field: keyof DocumentData["entitas10"],
-    value: string,
-  ) {
-    updateDocumentData({
-      ...data,
-      entitas10: {
-        ...data.entitas10,
-        [field]: value,
-      },
-    });
-  }
+  const pengirim = data.entitasPengirim;
+  const penjual = data.entitasPenjual;
 
   function copyPengirimData() {
-    const { namaEntitas, alamatEntitas, kodeNegara } = data.entitas9;
+    const { nama, alamat, negara } = pengirim;
 
     updateDocumentData({
-      ...data,
-      entitas10: {
-        ...data.entitas10,
-        namaEntitas,
-        alamatEntitas,
-        kodeNegara,
+      entitasPenjual: {
+        ...penjual,
+        nama,
+        alamat,
+        negara,
       },
     });
   }
@@ -55,23 +40,29 @@ export default function FormPenjual() {
       {/* Nama */}
       <InputNormal
         title="Nama"
-        value={data.entitas10.namaEntitas ?? ""}
-        onChange={(value) => updateEntitas10("namaEntitas", value)}
+        value={penjual.nama ?? ""}
+        onChange={(value) =>
+          updateDocumentData({ entitasPenjual: { ...penjual, nama: value } })
+        }
       />
 
       {/* Alamat */}
       <InputTextArea
         title="Alamat"
-        value={data.entitas10.alamatEntitas ?? ""}
-        onChange={(value) => updateEntitas10("alamatEntitas", value)}
+        value={penjual.alamat ?? ""}
+        onChange={(value) =>
+          updateDocumentData({ entitasPenjual: { ...penjual, alamat: value } })
+        }
       />
 
       {/* Negara */}
       <InputSelect
         label="Negara"
-        value={data.entitas10.kodeNegara ?? ""}
+        value={penjual.negara ?? ""}
         options={kodeNegaraOptions}
-        onChange={(value) => updateEntitas10("kodeNegara", value)}
+        onChange={(value) =>
+          updateDocumentData({ entitasPenjual: { ...penjual, negara: value } })
+        }
       />
     </InputWrapper>
   );
