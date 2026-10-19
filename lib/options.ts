@@ -276,3 +276,8 @@ export const jenisTransaksiOptions: OptionType[] = [
   { value: "IMB", label: "IMB - TRANSAKSI PERDAGANGAN" },
   { value: "ULC", label: "ULC - PEMBAYARAN DENGAN" },
 ];
+
+export const kodeHargaOption: OptionType[] = [
+  { value: "AUD", label: "AUD - AUSTRALIAN DOLLAR" },
+  { value: "EUR", label: "EUR - EURO" },
+];
