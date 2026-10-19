@@ -2,13 +2,15 @@ import { useId } from "react";
 
 type InputNormalProps = {
   title?: string;
-  value: string;
+  type?: string;
+  value: string | number;
   onChange?: (value: string) => void;
   disabled?: boolean;
 };
 
 export default function InputNormal({
   title,
+  type = "text",
   value,
   onChange,
   disabled = false,
@@ -26,7 +28,7 @@ export default function InputNormal({
       )}
       <input
         id={inputId}
-        type="text"
+        type={type}
         value={value ?? ""}
         disabled={disabled}
         className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
