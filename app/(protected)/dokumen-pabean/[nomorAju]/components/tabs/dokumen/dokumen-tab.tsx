@@ -43,10 +43,7 @@ export default function DokumenTab() {
 
       {/* Modal */}
       {isModalOpen && (
-        <ModalAddDocumentItem
-          data={data}
-          onCloseModal={() => setIsModalOpen(false)}
-        />
+        <ModalAddDocumentItem onCloseModal={() => setIsModalOpen(false)} />
       )}
 
       {/* Table */}
@@ -68,7 +65,7 @@ export default function DokumenTab() {
             </thead>
 
             <tbody className="divide-y">
-              {data.dokumen.map((document) => (
+              {data.listDokumen.map((document) => (
                 <tr key={document.seri} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium">{document.seri}</td>
 
