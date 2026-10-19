@@ -69,3 +69,69 @@ export async function GET(_request: Request, { params }: RouteContext) {
     );
   }
 }
+
+export async function DELETE(_request: Request, { params }: RouteContext) {
+  try {
+    const { nomorAju } = await params;
+
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { message: "Silakan login terlebih dahulu." },
+        { status: 401 },
+      );
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { message: "Pengguna tidak ditemukan." },
+        { status: 401 },
+      );
+    }
+
+    const draft = await prisma.documentDraft.findFirst({
+      where: {
+        nomorAju,
+        createdById: user.id,
+        status: "DRAFT",
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!draft) {
+      return NextResponse.json(
+        { message: "Draft tidak ditemukan atau sudah dihapus." },
+        { status: 404 },
+      );
+    }
+
+    // Soft delete
+    await prisma.documentDraft.update({
+      where: {
+        id: draft.id,
+      },
+      data: {
+        status: "DELETED",
+      },
+    });
+
+    return NextResponse.json({
+      message: "Draft berhasil dihapus.",
+    });
+  } catch (error) {
+    console.error("Gagal menghapus draft:", error);
+
+    return NextResponse.json(
+      { message: "Gagal menghapus draft." },
+      { status: 500 },
+    );
+  }
+}
