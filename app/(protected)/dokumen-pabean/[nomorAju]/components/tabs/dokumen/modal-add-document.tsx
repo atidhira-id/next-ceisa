@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-  type DocumentData,
-  useDocument,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 import { type DocumentItemData } from "@/app/providers/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
@@ -11,24 +8,21 @@ import InputDate from "../../input-date";
 import { jenisDokumenLampiranOptions } from "@/lib/options";
 
 type ModalAddDocumentItemProps = {
-  data: DocumentData;
   onCloseModal: () => void;
 };
 
 export default function ModalAddDocumentItem({
-  data,
   onCloseModal,
 }: ModalAddDocumentItemProps) {
-  const { updateDocumentData } = useDocument();
-
-  const seriNumber = data.dokumen.length + 1;
+  const { documentData, updateDocumentData } = useDocument();
+  const data = documentData!;
+  const seriNumber = data.listDokumen.length + 1;
   const [jenisDokumen, setJenisDokumen] = useState("");
   const [nomorDokumen, setNomorDokumen] = useState("");
   const [tanggal, setTanggal] = useState("");
 
   function handleSimpan() {
     const newDocumentItem: DocumentItemData = {
-      nomorAju: data.nomorAju,
       seri: seriNumber,
       kodeDokumen: jenisDokumen,
       nomorDokumen: nomorDokumen,
@@ -36,7 +30,7 @@ export default function ModalAddDocumentItem({
     };
 
     updateDocumentData({
-      dokumen: [...data.dokumen, newDocumentItem],
+      listDokumen: [...data.listDokumen, newDocumentItem],
     });
 
     onCloseModal();
