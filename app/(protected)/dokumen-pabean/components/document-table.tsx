@@ -184,7 +184,7 @@ export default function DocumentTable() {
                     <button
                       type="button"
                       onClick={() => handleDeleteDraft(document.nomorAju)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
                     >
                       Hapus
                     </button>
