@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import ModalAddDocumentItem from "./modal-add-document";
 import { jenisDokumenLampiranOptions } from "@/lib/options";
+import { Warning } from "../../warning";
 
 export default function DokumenTab() {
   const { documentData } = useDocument();
@@ -20,14 +21,7 @@ export default function DokumenTab() {
   return (
     <div>
       {/* Warning */}
-      <div className="w-full bg-yellow-200 rounded-sm flex gap-2 items-center p-3 mb-4">
-        <div className="w-5 h-5 rounded-full bg-yellow-500 flex justify-center items-center p-1">
-          !
-        </div>
-        <div className="text-sm text-gray-800">
-          Wajib Melampirkan Dokumen Invoice dan Dokumen B/L atau AWB
-        </div>
-      </div>
+      <Warning text="Wajib Melampirkan Dokumen Invoice dan Dokumen B/L atau AWB" />
 
       {/* Header */}
       <div className="mb-6 w-full flex items-center justify-between">
