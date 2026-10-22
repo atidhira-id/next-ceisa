@@ -4,6 +4,7 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
 import { jenisIdentitasOptions } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export default function FormNpwpPemusatan() {
   const { documentData, updateDocumentData } = useDocument();
@@ -64,10 +65,12 @@ export default function FormNpwpPemusatan() {
                 entitasNpwp: { ...npwp, kodeNomorIdentitas: value },
               })
             }
+            rules={[required()]}
           />
           <InputNormal
             value={identityNumber ?? ""}
             onChange={(value) => updateNitku(value)}
+            rules={[required()]}
           />
         </div>
       </div>
@@ -88,6 +91,7 @@ export default function FormNpwpPemusatan() {
             entitasNpwp: { ...npwp, nama: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Alamat */}
@@ -99,6 +103,7 @@ export default function FormNpwpPemusatan() {
             entitasNpwp: { ...npwp, alamat: value },
           })
         }
+        rules={[required()]}
       />
     </InputWrapper>
   );

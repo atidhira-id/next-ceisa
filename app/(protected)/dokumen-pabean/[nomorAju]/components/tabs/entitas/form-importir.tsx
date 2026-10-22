@@ -10,6 +10,7 @@ import {
   kodeJenisApiOptions,
   kodeStatusOptions,
 } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export default function FormImportir() {
   const { documentData, updateDocumentData } = useDocument();
@@ -49,10 +50,12 @@ export default function FormImportir() {
                 entitasImportir: { ...importir, kodeNomorIdentitas: value },
               })
             }
+            rules={[required()]}
           />
           <InputNormal
             value={identityNumber ?? ""}
             onChange={(value) => updateNitku(value)}
+            rules={[required()]}
           />
         </div>
       </div>
@@ -71,6 +74,7 @@ export default function FormImportir() {
         onChange={(value) =>
           updateDocumentData({ entitasImportir: { ...importir, nama: value } })
         }
+        rules={[required()]}
       />
 
       {/* Alamat */}
@@ -82,6 +86,7 @@ export default function FormImportir() {
             entitasImportir: { ...importir, alamat: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* API/NIB */}
@@ -97,6 +102,7 @@ export default function FormImportir() {
                 entitasImportir: { ...importir, kodeApi: value },
               })
             }
+            rules={[required()]}
           />
           <InputNormal
             value={importir.api ?? ""}
@@ -105,6 +111,7 @@ export default function FormImportir() {
                 entitasImportir: { ...importir, api: value },
               })
             }
+            rules={[required()]}
           />
         </div>
       </div>
@@ -119,6 +126,7 @@ export default function FormImportir() {
             entitasImportir: { ...importir, kodeStatus: value },
           })
         }
+        rules={[required()]}
       />
     </InputWrapper>
   );

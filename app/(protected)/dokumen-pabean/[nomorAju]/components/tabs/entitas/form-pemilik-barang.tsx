@@ -4,6 +4,7 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
 import { jenisIdentitasOptions, kodeAfiliasiOptions } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export default function FormPemilikBarang() {
   const { documentData, updateDocumentData } = useDocument();
@@ -71,10 +72,12 @@ export default function FormPemilikBarang() {
                 },
               })
             }
+            rules={[required()]}
           />
           <InputNormal
             value={identityNumber ?? ""}
             onChange={(value) => updateNitku(value)}
+            rules={[required()]}
           />
         </div>
       </div>
@@ -95,6 +98,7 @@ export default function FormPemilikBarang() {
             entitasPemilikBarang: { ...pemilikBarang, nama: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Alamat */}
@@ -106,6 +110,7 @@ export default function FormPemilikBarang() {
             entitasPemilikBarang: { ...pemilikBarang, alamat: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Afiliasi */}
@@ -118,6 +123,7 @@ export default function FormPemilikBarang() {
             entitasPemilikBarang: { ...pemilikBarang, afiliasi: value },
           })
         }
+        rules={[required()]}
       />
     </InputWrapper>
   );

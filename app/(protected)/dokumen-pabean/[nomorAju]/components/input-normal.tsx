@@ -1,21 +1,28 @@
+"use client";
 import { useId } from "react";
+import { Rule, useFieldError } from "@/lib/validation";
+import Error from "./error";
 
 type InputNormalProps = {
   title?: string;
-  type?: string;
-  value: string | number;
+  value: string;
   onChange?: (value: string) => void;
+  rules?: Rule<string>[];
+  error?: string;
   disabled?: boolean;
 };
 
 export default function InputNormal({
   title,
-  type = "text",
   value,
   onChange,
+  rules,
+  error,
   disabled = false,
 }: InputNormalProps) {
   const inputId = useId();
+  const { error: err, onBlur } = useFieldError(value, rules, error);
+
   return (
     <div className="w-full">
       {title && (
@@ -28,12 +35,17 @@ export default function InputNormal({
       )}
       <input
         id={inputId}
-        type={type}
+        onBlur={onBlur}
+        aria-invalid={!!err}
+        aria-describedby={err ? `${inputId}-error` : undefined}
         value={value ?? ""}
         disabled={disabled}
-        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
+        className={`w-full rounded-md border px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${
+          err ? "border-red-500" : "border-gray-300"
+        }`}
         onChange={(e) => onChange?.(e.target.value)}
       />
+      {err && <Error id={inputId} err={err} />}
     </div>
   );
 }

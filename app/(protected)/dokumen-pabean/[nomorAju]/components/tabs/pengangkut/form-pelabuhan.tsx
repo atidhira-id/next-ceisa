@@ -4,6 +4,7 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import { pelabuhanOptions, tempatPenimbunanOptions } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export default function FormPelabuhan() {
   const { documentData, updateDocumentData } = useDocument();
@@ -31,6 +32,7 @@ export default function FormPelabuhan() {
             pengangkut: { ...pengangkut, kodePelabuhanMuat: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Pelabuhan Transit */}
@@ -43,6 +45,7 @@ export default function FormPelabuhan() {
             pengangkut: { ...pengangkut, kodePelabuhanTransit: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Pelabuhan Tujuan */}
@@ -62,6 +65,7 @@ export default function FormPelabuhan() {
             pengangkut: { ...pengangkut, kodeTempatPenimbunan: value },
           })
         }
+        rules={[required()]}
       />
     </InputWrapper>
   );

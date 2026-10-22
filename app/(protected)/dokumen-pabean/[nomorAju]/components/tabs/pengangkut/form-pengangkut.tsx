@@ -5,6 +5,7 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
 import { caraPengangkutanOptions, kodeNegaraOptions } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export default function FormPengangkut() {
   const { documentData, updateDocumentData } = useDocument();
@@ -23,6 +24,7 @@ export default function FormPengangkut() {
             pengangkut: { ...pengangkut, kodeCaraPengangkutan: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Nama Sarana Angkut */}
@@ -34,6 +36,7 @@ export default function FormPengangkut() {
             pengangkut: { ...pengangkut, namaSaranaPengangkutan: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Nomor Voy/Flight/Nopol/Lainnya */}
@@ -43,6 +46,7 @@ export default function FormPengangkut() {
         onChange={(value) =>
           updateDocumentData({ pengangkut: { ...pengangkut, nomorVoy: value } })
         }
+        rules={[required()]}
       />
 
       {/* Bendera */}
@@ -55,6 +59,7 @@ export default function FormPengangkut() {
             pengangkut: { ...pengangkut, kodeBendera: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Perkiraan Tanggal Tiba */}
@@ -66,6 +71,7 @@ export default function FormPengangkut() {
             pengangkut: { ...pengangkut, perkiraanTanggalTiba: value },
           })
         }
+        rules={[required()]}
       />
     </InputWrapper>
   );

@@ -9,6 +9,7 @@ import {
   jenisImportOptions,
   caraPembayaranOptions,
 } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export function HeaderTab() {
   const { documentData, updateDocumentData } = useDocument();
@@ -50,6 +51,7 @@ export function HeaderTab() {
                 header: { ...header, kodePelabuhanTujuan: value },
               })
             }
+            rules={[required()]}
           />
           <InputSelect
             label="Kantor Pabean"
@@ -60,6 +62,7 @@ export function HeaderTab() {
                 header: { ...header, kodeKantorPabean: value },
               })
             }
+            rules={[required()]}
           />
         </InputWrapper>
 
@@ -72,6 +75,7 @@ export function HeaderTab() {
             onChange={(value) =>
               updateDocumentData({ header: { ...header, kodeJenisPib: value } })
             }
+            rules={[required()]}
           />
           <InputSelect
             label="Jenis Import"
@@ -82,6 +86,7 @@ export function HeaderTab() {
                 header: { ...header, kodeJenisImport: value },
               })
             }
+            rules={[required()]}
           />
           <InputSelect
             label="Cara Pembayaran"
@@ -92,6 +97,7 @@ export function HeaderTab() {
                 header: { ...header, kodeCaraPembayaran: value },
               })
             }
+            rules={[required()]}
           />
         </InputWrapper>
       </div>

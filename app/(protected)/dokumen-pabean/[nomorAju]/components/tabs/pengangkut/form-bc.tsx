@@ -5,6 +5,7 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
 import { nomorTutupPuOptions } from "@/lib/options";
+import { required, maxLength } from "@/lib/validation";
 
 export default function FormBc() {
   const { documentData, updateDocumentData } = useDocument();
@@ -27,6 +28,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, kodeNomorTutupPu: value },
               })
             }
+            rules={[required()]}
           />
           <InputNormal
             value={pengangkut.nomorTutupPu ?? ""}
@@ -35,6 +37,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, nomorTutupPu: value },
               })
             }
+            rules={[required()]}
           />
           <InputDate
             value={pengangkut.tanggalTutupPu ?? ""}
@@ -43,6 +46,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, tanggalTutupPu: value },
               })
             }
+            rules={[required()]}
           />
         </div>
       </div>
@@ -61,6 +65,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, nomorPos1: value },
               })
             }
+            rules={[required(), maxLength(4)]}
           />
           <InputNormal
             value={pengangkut.nomorPos2 ?? ""}
@@ -69,6 +74,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, nomorPos2: value },
               })
             }
+            rules={[required(), maxLength(4)]}
           />
           <InputNormal
             value={pengangkut.nomorPos3 ?? ""}
@@ -77,6 +83,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, nomorPos3: value },
               })
             }
+            rules={[required(), maxLength(4)]}
           />
         </div>
       </div>

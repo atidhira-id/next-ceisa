@@ -4,7 +4,9 @@ import { useDocument } from "@/app/providers/document-provider";
 import { type KemasanItemData } from "@/app/providers/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
+import InputNumber from "../../input-number";
 import { jenisKemasanOptions } from "@/lib/options";
+import { required, min } from "@/lib/validation";
 
 type ModalAddKemasanItemProps = {
   onCloseModal: () => void;
@@ -47,10 +49,11 @@ export default function ModalAddKemasanItem({
           <InputNormal title="Seri" value={seriNumber.toString()} disabled />
 
           {/* Jumlah Kemasan */}
-          <InputNormal
+          <InputNumber
             title="Jumlah"
-            value={String(jumlah)}
+            value={jumlah}
             onChange={(value) => setJumlah(Number(value))}
+            rules={[min(1)]}
           />
 
           {/* Jenis Kemasan */}
@@ -59,6 +62,7 @@ export default function ModalAddKemasanItem({
             options={jenisKemasanOptions}
             value={jenis}
             onChange={(value) => setJenis(value)}
+            rules={[required()]}
           />
 
           {/* Merek */}
@@ -66,6 +70,7 @@ export default function ModalAddKemasanItem({
             title="Merek"
             value={merek}
             onChange={(value) => setMerek(value)}
+            rules={[required()]}
           />
         </div>
 

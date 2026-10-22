@@ -1,12 +1,15 @@
 "use client";
-
 import { useId, useMemo, useState } from "react";
+import { Rule, useFieldError } from "@/lib/validation";
+import Error from "./error";
 
 type InputSelectProps = {
   label?: string;
   value: string;
   options: { value: string; label: string }[];
   onChange: (value: string) => void;
+  rules?: Rule<string>[];
+  error?: string;
 };
 
 export default function InputSelect({
@@ -14,9 +17,16 @@ export default function InputSelect({
   value,
   options,
   onChange,
+  rules,
+  error,
 }: InputSelectProps) {
   // Generate a unique ID for the input element
   const inputId = useId();
+  const { error: err, onBlur: markTouched } = useFieldError(
+    value,
+    rules,
+    error,
+  );
 
   // Find the selected option based on the current value
   const selectedOption = useMemo(
@@ -76,6 +86,8 @@ export default function InputSelect({
       <div className="relative">
         <input
           id={inputId}
+          aria-invalid={!!err}
+          aria-describedby={err ? `${inputId}-error` : undefined}
           type="text"
           value={query}
           autoComplete="off"
@@ -84,6 +96,7 @@ export default function InputSelect({
             window.setTimeout(() => {
               setQueryDraft({ value, query: selectedOption?.label ?? "" });
               setIsOpen(false);
+              markTouched();
             }, 150);
           }}
           onChange={(event) => {
@@ -91,8 +104,10 @@ export default function InputSelect({
             setQueryDraft({ value, query: nextQuery });
             setIsOpen(true);
           }}
-          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 outline-none transition focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+          className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 outline-none transition focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${err ? "border-red-500" : "border-gray-300"}`}
         />
+
+        {err && <Error id={inputId} err={err} />}
 
         {query && (
           <button

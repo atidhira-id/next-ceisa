@@ -4,6 +4,7 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
 import { kodeNegaraOptions } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export default function FormPenjual() {
   const { documentData, updateDocumentData } = useDocument();
@@ -44,6 +45,7 @@ export default function FormPenjual() {
         onChange={(value) =>
           updateDocumentData({ entitasPenjual: { ...penjual, nama: value } })
         }
+        rules={[required()]}
       />
 
       {/* Alamat */}
@@ -53,6 +55,7 @@ export default function FormPenjual() {
         onChange={(value) =>
           updateDocumentData({ entitasPenjual: { ...penjual, alamat: value } })
         }
+        rules={[required()]}
       />
 
       {/* Negara */}
@@ -63,6 +66,7 @@ export default function FormPenjual() {
         onChange={(value) =>
           updateDocumentData({ entitasPenjual: { ...penjual, negara: value } })
         }
+        rules={[required()]}
       />
     </InputWrapper>
   );

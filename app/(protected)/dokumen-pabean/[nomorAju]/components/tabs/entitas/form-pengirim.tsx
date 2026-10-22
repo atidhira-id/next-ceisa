@@ -4,6 +4,7 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
 import { kodeNegaraOptions } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 export default function FormPengirim() {
   const { documentData, updateDocumentData } = useDocument();
@@ -18,6 +19,7 @@ export default function FormPengirim() {
         onChange={(value) =>
           updateDocumentData({ entitasPengirim: { ...pengirim, nama: value } })
         }
+        rules={[required()]}
       />
 
       {/* Alamat */}
@@ -29,6 +31,7 @@ export default function FormPengirim() {
             entitasPengirim: { ...pengirim, alamat: value },
           })
         }
+        rules={[required()]}
       />
 
       {/* Negara */}
@@ -41,6 +44,7 @@ export default function FormPengirim() {
             entitasPengirim: { ...pengirim, negara: value },
           })
         }
+        rules={[required()]}
       />
     </InputWrapper>
   );

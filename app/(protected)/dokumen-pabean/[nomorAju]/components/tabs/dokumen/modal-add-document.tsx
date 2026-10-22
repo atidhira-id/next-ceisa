@@ -6,6 +6,7 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
 import { jenisDokumenLampiranOptions } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 type ModalAddDocumentItemProps = {
   onCloseModal: () => void;
@@ -53,6 +54,7 @@ export default function ModalAddDocumentItem({
             options={jenisDokumenLampiranOptions}
             value={jenisDokumen}
             onChange={(value) => setJenisDokumen(value)}
+            rules={[required()]}
           />
 
           {/* Nomor Dokumen */}
@@ -60,6 +62,7 @@ export default function ModalAddDocumentItem({
             title="Nomor Dokumen"
             value={nomorDokumen}
             onChange={(value) => setNomorDokumen(value)}
+            rules={[required()]}
           />
 
           {/* Tanggal */}
@@ -67,6 +70,7 @@ export default function ModalAddDocumentItem({
             label="Tanggal"
             value={tanggal}
             onChange={(value) => setTanggal(value)}
+            rules={[required()]}
           />
         </div>
 

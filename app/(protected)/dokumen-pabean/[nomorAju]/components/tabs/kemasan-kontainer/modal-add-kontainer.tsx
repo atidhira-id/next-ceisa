@@ -9,6 +9,7 @@ import {
   tipeKontainerOptions,
   ukuranKontainerOptions,
 } from "@/lib/options";
+import { required } from "@/lib/validation";
 
 type ModalAddKontainerItemProps = {
   onCloseModal: () => void;
@@ -57,6 +58,7 @@ export default function ModalAddKontainerItem({
             title="Nomor"
             value={nomor}
             onChange={(value) => setNomor(value)}
+            rules={[required()]}
           />
 
           {/* Ukuran Kontainer */}
@@ -65,6 +67,7 @@ export default function ModalAddKontainerItem({
             options={ukuranKontainerOptions}
             value={ukuran}
             onChange={(value) => setUkuran(value)}
+            rules={[required()]}
           />
 
           {/* Jenis Muatan */}
@@ -73,6 +76,7 @@ export default function ModalAddKontainerItem({
             options={jenisMuatanOptions}
             value={jenis}
             onChange={(value) => setJenis(value)}
+            rules={[required()]}
           />
 
           {/* Tipe Kontainer */}
@@ -81,6 +85,7 @@ export default function ModalAddKontainerItem({
             options={tipeKontainerOptions}
             value={tipe}
             onChange={(value) => setTipe(value)}
+            rules={[required()]}
           />
         </div>
 
