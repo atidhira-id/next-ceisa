@@ -9,6 +9,7 @@ import DokumenTab from "./tabs/dokumen/dokumen-tab";
 import PengangkutTab from "./tabs/pengangkut/pengangkut-tab";
 import KemasanKontainerTab from "./tabs/kemasan-kontainer/kemasan-kontainer-tab";
 import { TransaksiTab } from "./tabs/transaksi/transaksi-tab";
+import BarangTab from "./tabs/barang/barang-tab";
 
 type DocumentFormProps = {
   nomorAju: string;
@@ -161,12 +162,7 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
         return <TransaksiTab />;
 
       case "barang":
-        return (
-          <TabPlaceholder
-            title="Barang"
-            description="Form data barang akan dibuat di tahap berikutnya."
-          />
-        );
+        return <BarangTab />;
 
       case "pungutan":
         return (
