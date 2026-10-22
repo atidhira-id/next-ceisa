@@ -1,4 +1,4 @@
-type OptionType = {
+export type OptionType = {
   value: string;
   label: string;
 };
@@ -280,4 +280,9 @@ export const jenisTransaksiOptions: OptionType[] = [
 export const kodeHargaOption: OptionType[] = [
   { value: "AUD", label: "AUD - AUSTRALIAN DOLLAR" },
   { value: "EUR", label: "EUR - EURO" },
+];
+
+export const perhitunganProporsionalOption: OptionType[] = [
+  { value: "Berat", label: "Berat" },
+  { value: "Harga", label: "Harga" },
 ];
