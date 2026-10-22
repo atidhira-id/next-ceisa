@@ -85,7 +85,16 @@ export type FormInputs = {
     kodeJenisTransaksi?: string;
     kodeHargaBarang?: string;
     hargaBarang?: number;
+    komponenBiaya?: KomponenBiaya;
+    nilaiPabeanAsing?: number;
+    nilaiPabeanRupiah?: number;
+
+    beratKotor?: number;
+    perhitunganProporsional?: string;
   };
+
+  // Barang
+  barang: BarangItemData[];
 };
 
 export type HeaderData = {
@@ -223,6 +232,30 @@ export type DocumentItemData = {
   tanggalDokumen: string;
   kodeFasilitas?: string;
   kodeIjin?: string;
+};
+
+export type KomponenBiaya = {
+  kodeHargaInvoice: string;
+  hargaInvoice: number;
+  pembayaranTidakLangsung: number;
+  diskon: number;
+
+  komisiDanJasaPerantara: number;
+  pengemasan: number;
+  pengepakan: number;
+  assist: number;
+  royalti: number;
+  proceeds: number;
+  freight: number;
+  pemuatan: number;
+  asuransi: number;
+  garansi: number;
+
+  biayaKepentinganSendiri: number;
+  biayaSetelahImport: number;
+  pajakInternal: number;
+  bunga: number;
+  deviden: number;
 };
 
 export type PengangkutData = {
