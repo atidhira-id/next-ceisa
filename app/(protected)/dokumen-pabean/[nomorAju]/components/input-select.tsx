@@ -4,21 +4,25 @@ import { Rule, useFieldError } from "@/lib/validation";
 import Error from "./error";
 
 type InputSelectProps = {
+  labelPosition?: "top" | "left";
   label?: string;
   value: string;
   options: { value: string; label: string }[];
   onChange: (value: string) => void;
   rules?: Rule<string>[];
   error?: string;
+  disabled?: boolean;
 };
 
 export default function InputSelect({
+  labelPosition = "top",
   label,
   value,
   options,
   onChange,
   rules,
   error,
+  disabled = false,
 }: InputSelectProps) {
   // Generate a unique ID for the input element
   const inputId = useId();
@@ -74,16 +78,22 @@ export default function InputSelect({
   }
 
   return (
-    <div className="relative">
+    <div
+      className={`relative w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""}`}
+    >
       {label && (
         <label
           htmlFor={inputId}
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className={`block text-sm font-medium text-gray-700 ${
+            labelPosition === "left" ? "w-1/3 shrink-0 mb-0" : "mb-2"
+          }`}
         >
           {label}
         </label>
       )}
-      <div className="relative">
+      <div
+        className={`relative ${labelPosition === "left" ? "w-full" : "w-full"}`}
+      >
         <input
           id={inputId}
           aria-invalid={!!err}
@@ -104,12 +114,13 @@ export default function InputSelect({
             setQueryDraft({ value, query: nextQuery });
             setIsOpen(true);
           }}
-          className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 outline-none transition focus:border-gray-500 focus:ring-1 focus:ring-gray-500 ${err ? "border-red-500" : "border-gray-300"}`}
+          disabled={disabled}
+          className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 outline-none transition focus:border-gray-500 focus:ring-1 focus:ring-gray-500 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${err ? "border-red-500" : "border-gray-300"}`}
         />
 
         {err && <Error id={inputId} err={err} />}
 
-        {query && (
+        {query && !disabled && (
           <button
             type="button"
             aria-label={`Clear ${label}`}

@@ -4,6 +4,7 @@ import { Rule, useFieldError } from "@/lib/validation";
 import Error from "./error";
 
 type InputNormalProps = {
+  labelPosition?: "top" | "left";
   title?: string;
   value: string;
   onChange?: (value: string) => void;
@@ -13,6 +14,7 @@ type InputNormalProps = {
 };
 
 export default function InputNormal({
+  labelPosition = "top",
   title,
   value,
   onChange,
@@ -24,28 +26,35 @@ export default function InputNormal({
   const { error: err, onBlur } = useFieldError(value, rules, error);
 
   return (
-    <div className="w-full">
+    <div
+      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""}`}
+    >
       {title && (
         <label
           htmlFor={inputId}
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className={`block text-sm font-medium text-gray-700 ${
+            labelPosition === "left" ? "w-1/3 shrink-0 mb-0" : "mb-2"
+          }`}
         >
           {title}
         </label>
       )}
-      <input
-        id={inputId}
-        onBlur={onBlur}
-        aria-invalid={!!err}
-        aria-describedby={err ? `${inputId}-error` : undefined}
-        value={value ?? ""}
-        disabled={disabled}
-        className={`w-full rounded-md border px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${
-          err ? "border-red-500" : "border-gray-300"
-        }`}
-        onChange={(e) => onChange?.(e.target.value)}
-      />
-      {err && <Error id={inputId} err={err} />}
+
+      <div className={labelPosition === "left" ? "w-full" : "w-full"}>
+        <input
+          id={inputId}
+          onBlur={onBlur}
+          aria-invalid={!!err}
+          aria-describedby={err ? `${inputId}-error` : undefined}
+          value={value ?? ""}
+          disabled={disabled}
+          className={`w-full rounded-md border px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${
+            err ? "border-red-500" : "border-gray-300"
+          }`}
+          onChange={(e) => onChange?.(e.target.value)}
+        />
+        {err && <Error id={inputId} err={err} />}
+      </div>
     </div>
   );
 }
