@@ -1,11 +1,10 @@
 import ExcelJS from "exceljs";
 import path from "node:path";
 
-import type { DocumentData } from "@/app/providers/document-provider";
-import { EntityData } from "@/app/providers/types";
+import type { FormInputs, KomponenBiaya } from "@/app/providers/types";
 
 // Helper function to export document data to an Excel file using a predefined template.
-export async function exportDocumentToExcel(documentData: DocumentData) {
+export async function exportDocumentToExcel(documentData: FormInputs) {
   // Load the Excel template from the templates directory
   const templatePath = path.join(
     process.cwd(),
@@ -88,405 +87,143 @@ function normalizeExcelValue(value: unknown) {
   return String(value);
 }
 
-function setHeaderSheetData(
-  headerSheet: ExcelJS.Worksheet,
-  data: DocumentData,
-) {
+function setHeaderSheetData(headerSheet: ExcelJS.Worksheet, data: FormInputs) {
   const row = 2;
   const headerData = data.header;
+  const pengengkutData = data.pengangkut;
+  const transaksiData = data.transaksi;
 
-  // A - NOMOR AJU
-  headerSheet.getCell(`A${row}`).value = String(data.nomorAju);
-
-  // B - KODE DOKUMEN
-  headerSheet.getCell(`B${row}`).value = data.kodeDokumen;
-
-  // C - KODE KANTOR
-  setCellValue(headerSheet, `C${row}`, headerData.kodeKantor);
-
-  // D - KODE KANTOR BONGKAR
-  setCellValue(headerSheet, `D${row}`, headerData.kodeKantorBongkar);
-
-  // E - KODE KANTOR PERIKSA
-  setCellValue(headerSheet, `E${row}`, headerData.kodeKantorPeriksa);
-
-  // F - KODE KANTOR TUJUAN
-  setCellValue(headerSheet, `F${row}`, headerData.kodeKantorTujuan);
-
-  // G - KODE KANTOR EKSPOR
-  setCellValue(headerSheet, `G${row}`, headerData.kodeKantorEkspor);
-
-  // H - KODE JENIS IMPOR
-  setCellValue(headerSheet, `H${row}`, headerData.kodeJenisImpor);
-
-  // I - KODE JENIS EKSPOR
-  setCellValue(headerSheet, `I${row}`, headerData.kodeJenisEkspor);
-
-  // J - KODE JENIS TPB
-  setCellValue(headerSheet, `J${row}`, headerData.kodeJenisTpb);
-
-  // K - KODE JENIS PLB
-  setCellValue(headerSheet, `K${row}`, headerData.kodeJenisPlb);
-
-  // L - KODE JENIS PROSEDUR
-  setCellValue(headerSheet, `L${row}`, headerData.kodeJenisProsedur);
-
-  // M - KODE TUJUAN PEMASUKAN
-  setCellValue(headerSheet, `M${row}`, headerData.kodeTujuanPemasukan);
-
-  // N - KODE TUJUAN PENGIRIMAN
-  setCellValue(headerSheet, `N${row}`, headerData.kodeTujuanPengiriman);
-
-  // O - KODE TUJUAN TPB
-  setCellValue(headerSheet, `O${row}`, headerData.kodeTujuanTpb);
-
-  // P - KODE CARA DAGANG
-  setCellValue(headerSheet, `P${row}`, headerData.kodeCaraDagang);
-
-  // Q - KODE CARA BAYAR
-  setCellValue(headerSheet, `Q${row}`, headerData.kodeCaraBayar);
-
-  // R - KODE CARA BAYAR LAINNYA
-  setCellValue(headerSheet, `R${row}`, headerData.kodeCaraBayarLainnya);
-
-  // S - KODE GUDANG ASAL
-  setCellValue(headerSheet, `S${row}`, headerData.kodeGudangAsal);
-
-  // T - KODE GUDANG TUJUAN
-  setCellValue(headerSheet, `T${row}`, headerData.kodeGudangTujuan);
-
-  // U - KODE JENIS KIRIM
-  setCellValue(headerSheet, `U${row}`, headerData.kodeJenisKirim);
-
-  // V - KODE JENIS PENGIRIMAN
-  setCellValue(headerSheet, `V${row}`, headerData.kodeJenisPengiriman);
-
-  // W - KODE KATEGORI EKSPOR
-  setCellValue(headerSheet, `W${row}`, headerData.kodeKategoriEkspor);
-
-  // X - KODE KATEGORI MASUK FTZ
-  setCellValue(headerSheet, `X${row}`, headerData.kodeKategoriMasukFtz);
-
-  // Y - KODE KATEGORI KELUAR FTZ
-  setCellValue(headerSheet, `Y${row}`, headerData.kodeKategoriKeluarFtz);
-
-  // Z - KODE KATEGORI BARANG FTZ
-  setCellValue(headerSheet, `Z${row}`, headerData.kodeKategoriBarangFtz);
-
-  // AA - KODE LOKASI
-  setCellValue(headerSheet, `AA${row}`, headerData.kodeLokasi);
-
-  // AB - KODE LOKASI BAYAR
-  setCellValue(headerSheet, `AB${row}`, headerData.kodeLokasiBayar);
-
-  // AC - LOKASI ASAL
-  setCellValue(headerSheet, `AC${row}`, headerData.lokasiAsal);
-
-  // AD - LOKASI TUJUAN
-  setCellValue(headerSheet, `AD${row}`, headerData.lokasiTujuan);
-
-  // AE - KODE DAERAH ASAL
-  setCellValue(headerSheet, `AE${row}`, headerData.kodeDaerahAsal);
-
-  // AF - KODE GUDANG ASAL (Duplicate/Secondary reference)
-  setCellValue(headerSheet, `AF${row}`, headerData.kodeGudangAsal2);
-
-  // AG - KODE GUDANG TUJUAN (Duplicate/Secondary reference)
-  setCellValue(headerSheet, `AG${row}`, headerData.kodeGudangTujuan2);
-
-  // AH - KODE NEGARA TUJUAN
-  setCellValue(headerSheet, `AH${row}`, headerData.kodeNegaraTujuan);
-
-  // AI - KODE TUTUP PU
-  setCellValue(headerSheet, `AI${row}`, headerData.kodeTutupPu);
-
-  // AJ - NOMOR BC11
-  setCellValue(headerSheet, `AJ${row}`, headerData.nomorBc11);
-
-  // AK - TANGGAL BC11
-  setCellValue(headerSheet, `AK${row}`, headerData.tanggalBc11);
-
-  // AL - NOMOR POS
-  setCellValue(headerSheet, `AL${row}`, headerData.nomorPos);
-
-  // AM - NOMOR SUB POS
+  setCellValue(headerSheet, `A${row}`, String(data.nomorAju));
+  setCellValue(headerSheet, `B${row}`, data.kodeDokumen);
+  setCellValue(headerSheet, `C${row}`, headerData.kodeKantorPabean);
+  setCellValue(headerSheet, `H${row}`, headerData.kodeJenisImport);
+  setCellValue(headerSheet, `L${row}`, headerData.kodeJenisPib);
+  setCellValue(headerSheet, `Q${row}`, headerData.kodeCaraPembayaran);
+  setCellValue(headerSheet, `AI${row}`, pengengkutData.kodeNomorTutupPu);
+  setCellValue(headerSheet, `AJ${row}`, pengengkutData.nomorTutupPu);
+  setCellValue(headerSheet, `AK${row}`, pengengkutData.tanggalTutupPu);
+  setCellValue(headerSheet, `AL${row}`, pengengkutData.nomorPos1);
   setCellValue(
     headerSheet,
     `AM${row}`,
-    `${headerData.nomorSubPos1}${headerData.nomorSubPos2}`,
+    `${pengengkutData.nomorPos2}${pengengkutData.nomorPos3}`,
+  );
+  setCellValue(headerSheet, `AO${row}`, pengengkutData.kodePelabuhanMuat);
+  setCellValue(headerSheet, `AQ${row}`, pengengkutData.kodePelabuhanTransit);
+  setCellValue(headerSheet, `AR${row}`, headerData.kodePelabuhanTujuan);
+  setCellValue(headerSheet, `AT${row}`, pengengkutData.kodeTempatPenimbunan);
+  setCellValue(headerSheet, `AY${row}`, pengengkutData.perkiraanTanggalTiba);
+  setCellValue(headerSheet, `CI${row}`, transaksiData.kodeJenisValuta);
+  setCellValue(headerSheet, `BW${row}`, transaksiData.ndpbm);
+  setCellValue(headerSheet, `CN${row}`, transaksiData.kodeJenisTransaksi);
+
+  setCellValue(
+    headerSheet,
+    `BQ${row}`,
+    transaksiData.komponenBiaya?.hargaInvoice,
+  );
+  setCellValue(
+    headerSheet,
+    `CJ${row}`,
+    transaksiData.komponenBiaya?.kodeHargaInvoice,
   );
 
-  // AN - KODE PELABUHAN BONGKAR
-  setCellValue(headerSheet, `AN${row}`, headerData.kodePelabuhanBongkar);
-
-  // AO - KODE PELABUHAN MUAT
-  setCellValue(headerSheet, `AO${row}`, headerData.kodePelabuhanMuat);
-
-  // AP - KODE PELABUHAN MUAT AKHIR
-  setCellValue(headerSheet, `AP${row}`, headerData.kodePelabuhanMuatAkhir);
-
-  // AQ - KODE PELABUHAN TRANSIT
-  setCellValue(headerSheet, `AQ${row}`, headerData.kodePelabuhanTransit);
-
-  // AR - KODE PELABUHAN TUJUAN
-  setCellValue(headerSheet, `AR${row}`, headerData.kodePelabuhanTujuan);
-
-  // AS - KODE PELABUHAN EKSPOR
-  setCellValue(headerSheet, `AS${row}`, headerData.kodePelabuhanEkspor);
-
-  // AT - KODE TPS
-  setCellValue(headerSheet, `AT${row}`, headerData.kodeTps);
-
-  // AU - TANGGAL BERANGKAT
-  setCellValue(headerSheet, `AU${row}`, headerData.tanggalBerangkat);
-
-  // AV - TANGGAL EKSPOR
-  setCellValue(headerSheet, `AV${row}`, headerData.tanggalEkspor);
-
-  // AW - TANGGAL MASUK
-  setCellValue(headerSheet, `AW${row}`, headerData.tanggalMasuk);
-
-  // AX - TANGGAL MUAT
-  setCellValue(headerSheet, `AX${row}`, headerData.tanggalMuat);
-
-  // AY - TANGGAL TIBA
-  setCellValue(headerSheet, `AY${row}`, headerData.tanggalTiba);
-
-  // AZ - TANGGAL PERIKSA
-  setCellValue(headerSheet, `AZ${row}`, headerData.tanggalPeriksa);
-
-  // BA - TEMPAT STUFFING
-  setCellValue(headerSheet, `BA${row}`, headerData.tempatStuffing);
-
-  // BB - TANGGAL STUFFING
-  setCellValue(headerSheet, `BB${row}`, headerData.tanggalStuffing);
-
-  // BC - KODE TANDA PENGAMAN
-  setCellValue(headerSheet, `BC${row}`, headerData.kodeTandaPengaman);
-
-  // BD - JUMLAH TANDA PENGAMAN
-  setCellValue(headerSheet, `BD${row}`, headerData.jumlahTandaPengaman);
-
-  // BE - FLAG CURAH
-  setCellValue(headerSheet, `BE${row}`, headerData.flagCurah);
-
-  // BF - FLAG SDA
-  setCellValue(headerSheet, `BF${row}`, headerData.flagSda);
-
-  // BG - FLAG VD
-  setCellValue(headerSheet, `BG${row}`, headerData.flagVd);
-
-  // BH - FLAG AP BK
-  setCellValue(headerSheet, `BH${row}`, headerData.flagApBk);
-
-  // BI - FLAG MIGAS
-  setCellValue(headerSheet, `BI${row}`, headerData.flagMigas);
-
-  // BJ - KODE ASURANSI
-  setCellValue(headerSheet, `BJ${row}`, headerData.kodeAsuransi);
-
-  // BK - ASURANSI
-  setCellValue(headerSheet, `BK${row}`, headerData.asuransi);
-
-  // BL - NILAI BARANG
-  setCellValue(headerSheet, `BL${row}`, headerData.nilaiBarang);
-
-  // BM - NILAI INCOTERM
-  setCellValue(headerSheet, `BM${row}`, headerData.nilaiIncoterm);
-
-  // BN - NILAI MAKLON
-  setCellValue(headerSheet, `BN${row}`, headerData.nilaiMaklon);
-
-  // BO - ASURANSI
-  setCellValue(headerSheet, `BO${row}`, headerData.asuransi2);
-
-  // BP - FREIGHT
-  setCellValue(headerSheet, `BP${row}`, headerData.freight);
-
-  // BQ - FOB
-  setCellValue(headerSheet, `BQ${row}`, headerData.fob);
-
-  // BR - BIAYA TAMBAHAN
-  setCellValue(headerSheet, `BR${row}`, headerData.biayaTambahan);
-
-  // BS - BIAYA PENGURANG
-  setCellValue(headerSheet, `BS${row}`, headerData.biayaPengurang);
-
-  // BT - VD
-  setCellValue(headerSheet, `BT${row}`, headerData.vd);
-
-  // BU - CIF
-  setCellValue(headerSheet, `BU${row}`, headerData.cif);
-
-  // BV - HARGA_PENYERAHAN
-  setCellValue(headerSheet, `BV${row}`, headerData.hargaPenyerahan);
-
-  // BW - NDPBM
-  setCellValue(headerSheet, `BW${row}`, headerData.ndpbm);
-
-  // BX - TOTAL DANA SAWIT
-  setCellValue(headerSheet, `BX${row}`, headerData.totalDanaSawit);
-
-  // BY - DASAR PENGENAAN PAJAK
-  setCellValue(headerSheet, `BY${row}`, headerData.dasarPengenaanPajak);
-
-  // BZ - NILAI JASA
-  setCellValue(headerSheet, `BZ${row}`, headerData.nilaiJasa);
-
-  // CA - UANG MUKA
-  setCellValue(headerSheet, `CA${row}`, headerData.uangMuka);
-
-  // CB - BRUTO
-  setCellValue(headerSheet, `CB${row}`, headerData.bruto);
-
-  // CC - NETTO
-  setCellValue(headerSheet, `CC${row}`, headerData.netto);
-
-  // CD - VOLUME
-  setCellValue(headerSheet, `CD${row}`, headerData.volume);
-
-  // CE - KOTA PERNYATAAN
-  setCellValue(headerSheet, `CE${row}`, headerData.kotaPernyataan);
-
-  // CF - TANGGAL PERNYATAAN
-  setCellValue(headerSheet, `CF${row}`, headerData.tanggalPernyataan);
-
-  // CG - NAMA PERNYATAAN
-  setCellValue(headerSheet, `CG${row}`, headerData.namaPernyataan);
-
-  // CH - JABATAN PERNYATAAN
-  setCellValue(headerSheet, `CH${row}`, headerData.jabatanPernyataan);
-
-  // CI - KODE VALUTA
-  setCellValue(headerSheet, `CI${row}`, headerData.kodeValuta);
-
-  // CJ - KODE INCOTERM
-  setCellValue(headerSheet, `CJ${row}`, headerData.kodeIncoterm);
-
-  // CK - KODE JASA KENA PAJAK
-  setCellValue(headerSheet, `CK${row}`, headerData.kodeJasaKenaPajak);
-
-  // CL - NOMOR BUKTI BAYAR
-  setCellValue(headerSheet, `CL${row}`, headerData.nomorBuktiBayar);
-
-  // CM - TANGGAL BUKTI BAYAR
-  setCellValue(headerSheet, `CM${row}`, headerData.tanggalBuktiBayar);
-
-  // CN - KODE JENIS NILAI
-  setCellValue(headerSheet, `CN${row}`, headerData.kodeJenisNilai);
-
-  // CO - KODE KANTOR MUAT
-  setCellValue(headerSheet, `CO${row}`, headerData.kodeKantorMuat);
-
-  // CP - NOMOR DAFTAR
-  setCellValue(headerSheet, `CP${row}`, headerData.nomorDaftar);
-
-  // CQ - TANGGAL DAFTAR
-  setCellValue(headerSheet, `CQ${row}`, headerData.tanggalDaftar);
-
-  // CR - KODE ASAL BARANG FTZ
-  setCellValue(headerSheet, `CR${row}`, headerData.kodeAsalBarangFtz);
-
-  // CS - KODE TUJUAN PENGELUARAN
-  setCellValue(headerSheet, `CS${row}`, headerData.kodeTujuanPengeluaran);
-
-  // CT - PPN PAJAK
-  setCellValue(headerSheet, `CT${row}`, headerData.ppnPajak);
-
-  // CU - PPNBM PAJAK
-  setCellValue(headerSheet, `CU${row}`, headerData.ppnbmPajak);
-
-  // CV - TARIF PPN PAJAK
-  setCellValue(headerSheet, `CV${row}`, headerData.tarifPpnPajak);
-
-  // CW - TARIF PPNBM PAJAK
-  setCellValue(headerSheet, `CW${row}`, headerData.tarifPpnbmPajak);
-
-  // CX - BARANG TIDAK BERWUJUD
-  setCellValue(headerSheet, `CX${row}`, headerData.barangTidakBerwujud);
-
-  // CY - KODE JENIS PENGELUARAN
-  setCellValue(headerSheet, `CY${row}`, headerData.kodeJenisPengeluaran);
-
-  // CZ - BARANG KIRIMAN
-  setCellValue(headerSheet, `CZ${row}`, headerData.barangKiriman);
-
-  // DA - FLAG KONSOL
-  setCellValue(headerSheet, `DA${row}`, headerData.flagKonsol);
-
-  // DB - KODE JENIS PENGANGKUTAN
-  setCellValue(headerSheet, `DB${row}`, headerData.kodeJenisPengangkutan);
-
-  // DC - FLAG PROPORSIONAL NETTO
-  setCellValue(headerSheet, `DC${row}`, headerData.flagProporsionalNetto);
+  const biayaTambahanKeys: Array<keyof KomponenBiaya> = [
+    "komisiDanJasaPerantara",
+    "pengemasan",
+    "pengepakan",
+    "assist",
+    "royalti",
+    "proceeds",
+    "freight",
+    "pemuatan",
+    "asuransi",
+    "garansi",
+  ];
+  const biayaTambahan = biayaTambahanKeys.reduce(
+    (total, key) => total + Number(transaksiData.komponenBiaya?.[key] || 0),
+    0,
+  );
+  setCellValue(headerSheet, `BR${row}`, biayaTambahan);
+
+  setCellValue(headerSheet, `BP${row}`, transaksiData.komponenBiaya?.freight);
+  setCellValue(
+    headerSheet,
+    `BJ${row}`,
+    transaksiData.komponenBiaya?.kodeAsuransi,
+  );
+  setCellValue(headerSheet, `BK${row}`, transaksiData.komponenBiaya?.asuransi);
+
+  setCellValue(headerSheet, `CB${row}`, transaksiData.beratKotor);
+  setCellValue(headerSheet, `CC${row}`, transaksiData.beratBersih);
+  setCellValue(headerSheet, `DC${row}`, "T");
 }
 
 function setEntitasSheetData(
   entitasSheet: ExcelJS.Worksheet,
-  data: DocumentData,
+  data: FormInputs,
 ) {
-  const setEntitasRow = (row: number, entitasData: EntityData) => {
-    // A - NOMOR AJU
-    entitasSheet.getCell(`A${row}`).value = String(data.nomorAju);
+  // ROW 2 ENTITAS IMPORTIR
+  const entitasImportir = data.entitasImportir;
+  setCellValue(entitasSheet, `A${2}`, String(data.nomorAju));
+  setCellValue(entitasSheet, `B${2}`, 1);
+  setCellValue(entitasSheet, `C${2}`, 1);
+  setCellValue(entitasSheet, `D${2}`, entitasImportir.kodeNomorIdentitas);
+  setCellValue(entitasSheet, `E${2}`, entitasImportir.nomorNitku);
+  setCellValue(entitasSheet, `F${2}`, entitasImportir.nama);
+  setCellValue(entitasSheet, `G${2}`, entitasImportir.alamat);
+  setCellValue(entitasSheet, `H${2}`, entitasImportir.api);
+  setCellValue(entitasSheet, `I${2}`, entitasImportir.kodeApi);
+  setCellValue(entitasSheet, `J${2}`, entitasImportir.kodeStatus);
+  setCellValue(entitasSheet, `M${2}`, "ID");
 
-    // B - SERI
-    entitasSheet.getCell(`B${row}`).value = entitasData.seri;
+  // ROW 3 ENTITAS PEMILIK BARANG
+  const entitasPemilikBarang = data.entitasPemilikBarang;
+  setCellValue(entitasSheet, `A${3}`, String(data.nomorAju));
+  setCellValue(entitasSheet, `B${3}`, 7);
+  setCellValue(entitasSheet, `C${3}`, 7);
+  setCellValue(entitasSheet, `D${3}`, entitasPemilikBarang.kodeNomorIdentitas);
+  setCellValue(entitasSheet, `E${3}`, entitasPemilikBarang.nomorNitku);
+  setCellValue(entitasSheet, `F${3}`, entitasPemilikBarang.nama);
+  setCellValue(entitasSheet, `G${3}`, entitasPemilikBarang.alamat);
+  setCellValue(entitasSheet, `M${3}`, "ID");
+  setCellValue(entitasSheet, `P${3}`, entitasPemilikBarang.afiliasi);
 
-    // C - KODE ENTITAS
-    setCellValue(entitasSheet, `C${row}`, entitasData.kodeEntitas);
+  // ROW 4 ENTITAS PENGIRIM
+  const entitasPengirim = data.entitasPengirim;
+  setCellValue(entitasSheet, `A${4}`, String(data.nomorAju));
+  setCellValue(entitasSheet, `B${4}`, 9);
+  setCellValue(entitasSheet, `C${4}`, 9);
+  setCellValue(entitasSheet, `F${4}`, entitasPengirim.nama);
+  setCellValue(entitasSheet, `G${4}`, entitasPengirim.alamat);
+  setCellValue(entitasSheet, `M${4}`, entitasPengirim.negara);
 
-    // D - KODE JENIS IDENTITAS
-    setCellValue(entitasSheet, `D${row}`, entitasData.kodeJenisIdentitas);
+  // ROW 5 ENTITAS PENJUAL
+  const entitasPenjual = data.entitasPenjual;
+  setCellValue(entitasSheet, `A${5}`, String(data.nomorAju));
+  setCellValue(entitasSheet, `B${5}`, 10);
+  setCellValue(entitasSheet, `C${5}`, 10);
+  setCellValue(entitasSheet, `F${5}`, entitasPenjual.nama);
+  setCellValue(entitasSheet, `G${5}`, entitasPenjual.alamat);
+  setCellValue(entitasSheet, `M${5}`, entitasPenjual.negara);
 
-    // E - NOMOR IDENTITAS
-    setCellValue(entitasSheet, `E${row}`, entitasData.nomorIdentitas);
-
-    // F - NAMA ENTITAS
-    setCellValue(entitasSheet, `F${row}`, entitasData.namaEntitas);
-
-    // G - ALAMAT ENTITAS
-    setCellValue(entitasSheet, `G${row}`, entitasData.alamatEntitas);
-
-    // H - NIB ENTITAS
-    setCellValue(entitasSheet, `H${row}`, entitasData.nibEntitas);
-
-    // I - KODE JENIS API
-    setCellValue(entitasSheet, `I${row}`, entitasData.kodeJenisApi);
-
-    // J - KODE STATUS
-    setCellValue(entitasSheet, `J${row}`, entitasData.kodeStatus);
-
-    // K - NOMOR IJIN ENTITAS
-    setCellValue(entitasSheet, `K${row}`, entitasData.nomorIjinEntitas);
-
-    // L - TANGGAL IJIN ENTITAS
-    setCellValue(entitasSheet, `L${row}`, entitasData.tanggalIjinEntitas);
-
-    // M - KODE NEGARA
-    setCellValue(entitasSheet, `M${row}`, entitasData.kodeNegara);
-
-    // N - NIPER ENTITAS
-    setCellValue(entitasSheet, `N${row}`, entitasData.niperEntitas);
-
-    // O - KODE KATEGORI KONSOLIDATOR
-    setCellValue(entitasSheet, `O${row}`, entitasData.kodeKategoriKonsolidator);
-
-    // P - KODE AFILIASI
-    setCellValue(entitasSheet, `P${row}`, entitasData.kodeAfiliasi);
-  };
-
-  setEntitasRow(2, data.entitas1);
-  setEntitasRow(3, data.entitas7);
-  setEntitasRow(4, data.entitas9);
-  setEntitasRow(5, data.entitas10);
-  setEntitasRow(6, data.entitas11);
+  // ROW 6 ENTITAS NPWP
+  const entitasNpwp = data.entitasNpwp;
+  setCellValue(entitasSheet, `A${6}`, String(data.nomorAju));
+  setCellValue(entitasSheet, `B${6}`, 11);
+  setCellValue(entitasSheet, `C${6}`, 11);
+  setCellValue(entitasSheet, `D${6}`, entitasNpwp.kodeNomorIdentitas);
+  setCellValue(entitasSheet, `E${6}`, entitasNpwp.nomorNitku);
+  setCellValue(entitasSheet, `F${6}`, entitasNpwp.nama);
+  setCellValue(entitasSheet, `G${6}`, entitasNpwp.alamat);
+  setCellValue(entitasSheet, `M${6}`, "ID");
 }
 
 function setDokumenSheetData(
   dokumenSheet: ExcelJS.Worksheet,
-  data: DocumentData,
+  data: FormInputs,
 ) {
-  const dokumenDataArr = data.dokumen;
+  const dokumenDataArr = data.listDokumen;
 
   for (let i = 0; i < dokumenDataArr.length; i++) {
     const dokumenData = dokumenDataArr[i];
@@ -517,7 +254,7 @@ function setDokumenSheetData(
 
 function setPengangkutSheetData(
   pengangkutSheet: ExcelJS.Worksheet,
-  data: DocumentData,
+  data: FormInputs,
 ) {
   const row = 2;
   const pengangkutData = data.pengangkut;
@@ -525,39 +262,30 @@ function setPengangkutSheetData(
   pengangkutSheet.getCell(`A${row}`).value = String(data.nomorAju);
 
   // B - SERI
-  pengangkutSheet.getCell(`B${row}`).value = pengangkutData.seri;
+  pengangkutSheet.getCell(`B${row}`).value = 1;
 
   // C - KODE CARA ANGKUT
-  setCellValue(pengangkutSheet, `C${row}`, pengangkutData.kodeCaraAngkut);
+  setCellValue(pengangkutSheet, `C${row}`, pengangkutData.kodeCaraPengangkutan);
 
   // D - NAMA PENGANGKUT
-  setCellValue(pengangkutSheet, `D${row}`, pengangkutData.namaPengangkut);
+  setCellValue(
+    pengangkutSheet,
+    `D${row}`,
+    pengangkutData.namaSaranaPengangkutan,
+  );
 
   // E - NOMOR PENGANGKUT
-  setCellValue(pengangkutSheet, `E${row}`, pengangkutData.nomorPengangkut);
+  setCellValue(pengangkutSheet, `E${row}`, pengangkutData.nomorVoy);
 
   // F - KODE BENDERA
   setCellValue(pengangkutSheet, `F${row}`, pengangkutData.kodeBendera);
-
-  // G - CALL SIGN
-  setCellValue(pengangkutSheet, `G${row}`, pengangkutData.callSign);
-
-  // H - FLAG ANGKUT PLB
-  setCellValue(pengangkutSheet, `H${row}`, pengangkutData.flagAngkutPlb);
-
-  // I - CARA PENGANGKUTAN LAINNYA
-  setCellValue(
-    pengangkutSheet,
-    `I${row}`,
-    pengangkutData.caraPengangkutanLainnya,
-  );
 }
 
 function setKemasanSheetData(
   kemasanSheet: ExcelJS.Worksheet,
-  data: DocumentData,
+  data: FormInputs,
 ) {
-  const kemasanDataArr = data.kemasan;
+  const kemasanDataArr = data.listKemasan;
 
   for (let i = 0; i < kemasanDataArr.length; i++) {
     const kemasanData = kemasanDataArr[i];
@@ -585,9 +313,9 @@ function setKemasanSheetData(
 
 function setKontainerSheetData(
   kontainerSheet: ExcelJS.Worksheet,
-  data: DocumentData,
+  data: FormInputs,
 ) {
-  const kontainerDataArr = data.kontainer;
+  const kontainerDataArr = data.listKontainer;
 
   for (let i = 0; i < kontainerDataArr.length; i++) {
     const kontainerData = kontainerDataArr[i];
