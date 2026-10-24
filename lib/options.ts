@@ -291,3 +291,8 @@ export const perhitunganProporsionalOption: OptionType[] = [
   { value: "Berat", label: "Berat" },
   { value: "Harga", label: "Harga" },
 ];
+
+// BARANG
+export const kodeHSOption: OptionType[] = [
+  { value: "87046094", label: "87046094 - G.V.W MELEBIHI 45 T" },
+];
