@@ -282,6 +282,11 @@ export const kodeHargaOption: OptionType[] = [
   { value: "EUR", label: "EUR - EURO" },
 ];
 
+export const kodeAsuransiOption: OptionType[] = [
+  { value: "LN", label: "LN - Luar Negeri" },
+  { value: "DN", label: "DN - Dalam Negeri" },
+];
+
 export const perhitunganProporsionalOption: OptionType[] = [
   { value: "Berat", label: "Berat" },
   { value: "Harga", label: "Harga" },

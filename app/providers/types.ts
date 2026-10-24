@@ -90,6 +90,7 @@ export type FormInputs = {
     nilaiPabeanRupiah?: number;
 
     beratKotor?: number;
+    beratBersih?: number;
     perhitunganProporsional?: string;
   };
 
@@ -248,6 +249,7 @@ export type KomponenBiaya = {
   proceeds: number;
   freight: number;
   pemuatan: number;
+  kodeAsuransi: string;
   asuransi: number;
   garansi: number;
 
