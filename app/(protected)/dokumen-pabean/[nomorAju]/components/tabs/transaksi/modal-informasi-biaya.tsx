@@ -8,7 +8,7 @@ import {
   initialKomponenBiaya,
 } from "./table-data";
 import InputSelect from "../../input-select";
-import { kodeHargaOption } from "@/lib/options";
+import { kodeAsuransiOption, kodeHargaOption } from "@/lib/options";
 import InputNumber from "../../input-number";
 
 type ModalInformasiBiayaProps = {
@@ -130,16 +130,40 @@ export default function ModalInformasiBiaya({
 
               {/* GRUP B */}
               <CellTitle label="Biaya-biaya yang ditambahkan yang belum termasuk ke dalam harga barang" />
-              {inputsTwo.map((item) => (
-                <CellInput
-                  key={item.field}
-                  label={item.label}
-                  value={localKomponenBiaya[item.field]}
-                  onChange={(value) => {
-                    updateData(item.field, Number(value));
-                  }}
-                />
-              ))}
+              {inputsTwo.map((item) => {
+                if (item.field == "asuransi") {
+                  return (
+                    <CellInput
+                      key={item.field}
+                      label={item.label}
+                      value={localKomponenBiaya[item.field]}
+                      onChange={(value) => {
+                        updateData(item.field, Number(value));
+                      }}
+                      child={
+                        <InputSelect
+                          value={localKomponenBiaya.kodeAsuransi ?? ""}
+                          options={kodeAsuransiOption}
+                          onChange={(value) =>
+                            updateData("kodeAsuransi", value)
+                          }
+                        />
+                      }
+                    />
+                  );
+                } else {
+                  return (
+                    <CellInput
+                      key={item.field}
+                      label={item.label}
+                      value={localKomponenBiaya[item.field]}
+                      onChange={(value) => {
+                        updateData(item.field, Number(value));
+                      }}
+                    />
+                  );
+                }
+              })}
 
               <CellResult
                 label="D. Jumlah biaya penambah (jumlah 1 s/d 10)"
@@ -221,7 +245,7 @@ function CellInput({
     <tr>
       <td className="p-2 border border-gray-500">
         <div className="flex justify-between items-center">
-          <p>{label}</p>
+          <p className="grow">{label}</p>
           {child}
         </div>
       </td>
