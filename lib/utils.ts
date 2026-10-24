@@ -1,24 +1,38 @@
-export function formatToIDR(value: number | string | undefined | null): string {
-  if (value === undefined || value === null || value === "") return "";
+import type { KomponenBiaya, TransaksiData } from "@/app/providers/types";
 
-  const str = String(value).replace(".", ",");
-  const parts = str.split(",");
+export function getBiayaPenambah(transaksiData: TransaksiData): number {
+  const biayaTambahanKeys: Array<keyof KomponenBiaya> = [
+    "komisiDanJasaPerantara",
+    "pengemasan",
+    "pengepakan",
+    "assist",
+    "royalti",
+    "proceeds",
+    "freight",
+    "pemuatan",
+    "asuransi",
+    "garansi",
+  ];
+  const biayaTambahan = biayaTambahanKeys.reduce(
+    (total, key) => total + Number(transaksiData.komponenBiaya?.[key] || 0),
+    0,
+  );
 
-  let integerPart = parts[0].replace(/\D/g, "");
-  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-  if (parts.length > 1) {
-    const decimalPart = parts[1].replace(/\D/g, ""); // Hanya ambil angka desimal
-    return `${integerPart},${decimalPart}`;
-  }
-
-  return integerPart;
+  return biayaTambahan;
 }
 
-export function parseToFloat(value: string): number {
-  if (!value) return 0;
+export function getBiayaPengurang(transaksiData: TransaksiData): number {
+  const biayaPengurangKeys: Array<keyof KomponenBiaya> = [
+    "biayaKepentinganSendiri",
+    "biayaSetelahImport",
+    "pajakInternal",
+    "bunga",
+    "deviden",
+  ];
+  const biayaTambahan = biayaPengurangKeys.reduce(
+    (total, key) => total + Number(transaksiData.komponenBiaya?.[key] || 0),
+    0,
+  );
 
-  const cleanStr = value.replace(/\./g, "").replace(",", ".");
-  const num = parseFloat(cleanStr);
-  return isNaN(num) ? 0 : num;
+  return biayaTambahan;
 }

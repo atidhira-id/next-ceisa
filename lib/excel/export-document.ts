@@ -1,7 +1,8 @@
 import ExcelJS from "exceljs";
 import path from "node:path";
 
-import type { FormInputs, KomponenBiaya } from "@/app/providers/types";
+import type { FormInputs } from "@/app/providers/types";
+import { getBiayaPenambah, getBiayaPengurang } from "../utils";
 
 // Helper function to export document data to an Excel file using a predefined template.
 export async function exportDocumentToExcel(documentData: FormInputs) {
@@ -128,23 +129,11 @@ function setHeaderSheetData(headerSheet: ExcelJS.Worksheet, data: FormInputs) {
     transaksiData.komponenBiaya?.kodeHargaInvoice,
   );
 
-  const biayaTambahanKeys: Array<keyof KomponenBiaya> = [
-    "komisiDanJasaPerantara",
-    "pengemasan",
-    "pengepakan",
-    "assist",
-    "royalti",
-    "proceeds",
-    "freight",
-    "pemuatan",
-    "asuransi",
-    "garansi",
-  ];
-  const biayaTambahan = biayaTambahanKeys.reduce(
-    (total, key) => total + Number(transaksiData.komponenBiaya?.[key] || 0),
-    0,
-  );
+  const biayaTambahan = getBiayaPenambah(transaksiData);
   setCellValue(headerSheet, `BR${row}`, biayaTambahan);
+
+  const biayaPengurang = getBiayaPengurang(transaksiData);
+  setCellValue(headerSheet, `BS${row}`, biayaPengurang);
 
   setCellValue(headerSheet, `BP${row}`, transaksiData.komponenBiaya?.freight);
   setCellValue(
