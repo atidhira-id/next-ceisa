@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import {
-  useDocument,
-  type DocumentData,
-} from "@/app/providers/document-provider";
+import { useDocument } from "@/app/providers/document-provider";
 
 import { DocumentForm } from "./document-form";
+import { FormInputs } from "@/app/providers/types";
 
 type Props = {
   nomorAju: string;
@@ -16,7 +14,7 @@ type Props = {
 type DraftResponse = {
   draft: {
     nomorAju: string;
-    data: DocumentData;
+    data: FormInputs;
   };
 };
 

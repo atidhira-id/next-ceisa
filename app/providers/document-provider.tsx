@@ -1,11 +1,11 @@
 "use client";
 import { createContext, useContext, useMemo, useState } from "react";
-import { type FormInputs as DocumentData } from "./types";
+import { type FormInputs } from "./types";
 
 type DocumentContextType = {
-  documentData: DocumentData | null;
-  setDocumentData: React.Dispatch<React.SetStateAction<DocumentData | null>>;
-  updateDocumentData: (data: Partial<DocumentData>) => void;
+  documentData: FormInputs | null;
+  setDocumentData: React.Dispatch<React.SetStateAction<FormInputs | null>>;
+  updateDocumentData: (data: Partial<FormInputs>) => void;
   resetDocumentData: () => void;
 };
 
@@ -14,9 +14,9 @@ const DocumentContext = createContext<DocumentContextType | undefined>(
 );
 
 export function DocumentProvider({ children }: { children: React.ReactNode }) {
-  const [documentData, setDocumentData] = useState<DocumentData | null>(null);
+  const [documentData, setDocumentData] = useState<FormInputs | null>(null);
 
-  function updateDocumentData(data: Partial<DocumentData>) {
+  function updateDocumentData(data: Partial<FormInputs>) {
     setDocumentData((current) => {
       if (!current) {
         return current;
