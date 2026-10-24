@@ -7,6 +7,7 @@ import InputSelect from "../../input-select";
 import {
   jenisTransaksiOptions,
   jenisValutaOptions,
+  kodeAsuransiOption,
   kodeHargaOption,
   perhitunganProporsionalOption,
 } from "@/lib/options";
@@ -14,6 +15,7 @@ import ModalInformasiBiaya from "./modal-informasi-biaya";
 import InputNumber from "../../input-number";
 import InputRadio from "../../input-radio";
 import { required } from "@/lib/validation";
+import { getBiayaPenambah, getBiayaPengurang } from "@/lib/utils";
 
 export function TransaksiTab() {
   const { documentData, updateDocumentData } = useDocument();
@@ -132,10 +134,40 @@ export function TransaksiTab() {
 
         {/* Biaya Lainnya */}
         <InputWrapper title="Biaya Lainnya">
-          <InputNormal title="Biaya Penambah" value="0.00" disabled />
-          <InputNormal title="Biaya Pengurang" value="0.00" disabled />
-          <InputNormal title="Freight" value="0.00" disabled />
-          <p>TODO: ASURANSI</p>
+          <InputNumber
+            title="Biaya Penambah"
+            value={getBiayaPenambah(transaksi)}
+            disabled
+          />
+          <InputNumber
+            title="Biaya Pengurang"
+            value={getBiayaPengurang(transaksi)}
+            disabled
+          />
+          <InputNumber
+            title="Freight"
+            value={transaksi.komponenBiaya?.freight || 0}
+            disabled
+          />
+          <div>
+            <p className="mb-2 block text-sm font-medium text-gray-700">
+              Asuransi
+            </p>
+
+            <div className="flex items-center gap-2">
+              <InputSelect
+                value={transaksi.komponenBiaya?.kodeAsuransi ?? ""}
+                options={kodeAsuransiOption}
+                onChange={() => {}}
+                disabled
+              />
+              <InputNumber
+                value={transaksi.komponenBiaya?.asuransi ?? 0}
+                disabled
+              />
+            </div>
+          </div>
+
           <InputNormal title="Voluntary Declaration" value="0.00" disabled />
         </InputWrapper>
 
