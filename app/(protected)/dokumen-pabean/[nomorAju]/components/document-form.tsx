@@ -10,6 +10,8 @@ import PengangkutTab from "./tabs/pengangkut/pengangkut-tab";
 import KemasanKontainerTab from "./tabs/kemasan-kontainer/kemasan-kontainer-tab";
 import { TransaksiTab } from "./tabs/transaksi/transaksi-tab";
 import BarangTab from "./tabs/barang/barang-tab";
+import PernyataanTab from "./tabs/pernyataan/pernyataan-tab";
+import PungutanTab from "./tabs/pungutan/pungutan-tab";
 
 type DocumentFormProps = {
   nomorAju: string;
@@ -165,20 +167,10 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
         return <BarangTab />;
 
       case "pungutan":
-        return (
-          <TabPlaceholder
-            title="Pungutan"
-            description="Form data pungutan akan dibuat di tahap berikutnya."
-          />
-        );
+        return <PungutanTab />;
 
       case "pernyataan":
-        return (
-          <TabPlaceholder
-            title="Pernyataan"
-            description="Form pernyataan akan dibuat di tahap berikutnya."
-          />
-        );
+        return <PernyataanTab />;
 
       default:
         return null;
@@ -255,27 +247,6 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
             </button>
           )}
         </div>
-      </div>
-    </div>
-  );
-}
-
-type TabPlaceholderProps = {
-  title: string;
-  description: string;
-};
-
-function TabPlaceholder({ title, description }: TabPlaceholderProps) {
-  return (
-    <div>
-      <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-
-      <p className="mt-1 text-sm text-gray-500">{description}</p>
-
-      <div className="mt-6 rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
-        <p className="text-sm text-gray-500">
-          Form {title} akan dibuat setelah struktur field dokumen ditentukan.
-        </p>
       </div>
     </div>
   );
