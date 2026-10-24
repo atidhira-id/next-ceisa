@@ -55,7 +55,8 @@ export default function AddDocumentModal({
         listKemasan: [],
         listKontainer: [],
         transaksi: {},
-        barang: [],
+        listBarang: [],
+        pernyataan: {},
       };
 
       // Save initial draft into Neon
