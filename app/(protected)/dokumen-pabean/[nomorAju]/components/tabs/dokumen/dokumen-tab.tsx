@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import ModalAddDocumentItem from "./modal-add-document";
