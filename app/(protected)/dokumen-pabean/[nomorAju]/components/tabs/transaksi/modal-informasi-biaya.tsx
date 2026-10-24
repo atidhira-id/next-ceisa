@@ -10,6 +10,7 @@ import {
 import InputSelect from "../../input-select";
 import { kodeAsuransiOption, kodeHargaOption } from "@/lib/options";
 import InputNumber from "../../input-number";
+import { KomponenBiaya } from "@/app/providers/types";
 
 type ModalInformasiBiayaProps = {
   onCloseModal: () => void;
@@ -26,7 +27,7 @@ export default function ModalInformasiBiaya({
     komponenBiaya ?? initialKomponenBiaya,
   );
 
-  function updateData(field: string, value: number | string) {
+  function updateData(field: keyof KomponenBiaya, value: number | string) {
     setLocalKomponenBiaya({ ...localKomponenBiaya, [field]: value });
   }
 
