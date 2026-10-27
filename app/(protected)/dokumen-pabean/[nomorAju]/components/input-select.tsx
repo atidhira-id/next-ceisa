@@ -79,7 +79,7 @@ export default function InputSelect({
 
   return (
     <div
-      className={`relative w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""}`}
+      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""} ${err && "mb-8"}`}
     >
       {label && (
         <label
@@ -118,7 +118,11 @@ export default function InputSelect({
           className={`w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 outline-none transition focus:border-gray-500 focus:ring-1 focus:ring-gray-500 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${err ? "border-red-500" : "border-gray-300"}`}
         />
 
-        {err && <Error id={inputId} err={err} />}
+        {err && (
+          <div className="absolute -bottom-5 left-0">
+            <Error id={inputId} err={`${label} ${err}`} />
+          </div>
+        )}
 
         {query && !disabled && (
           <button

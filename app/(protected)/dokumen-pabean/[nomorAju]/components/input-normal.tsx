@@ -27,7 +27,7 @@ export default function InputNormal({
 
   return (
     <div
-      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""}`}
+      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""} ${err && "mb-8"}`}
     >
       {title && (
         <label
@@ -40,7 +40,7 @@ export default function InputNormal({
         </label>
       )}
 
-      <div className={labelPosition === "left" ? "w-full" : "w-full"}>
+      <div className={`w-full relative`}>
         <input
           id={inputId}
           onBlur={onBlur}
@@ -53,7 +53,11 @@ export default function InputNormal({
           }`}
           onChange={(e) => onChange?.(e.target.value)}
         />
-        {err && <Error id={inputId} err={err} />}
+        {err && (
+          <div className="absolute -bottom-5 left-0">
+            <Error id={inputId} err={`${title} ${err}`} />
+          </div>
+        )}
       </div>
     </div>
   );

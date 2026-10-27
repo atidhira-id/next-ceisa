@@ -4,6 +4,7 @@ import { Rule, useFieldError } from "@/lib/validation";
 import Error from "./error";
 
 type InputNumberProps = {
+  labelPosition?: "top" | "left";
   title?: string;
   value: number;
   onChange?: (value: number) => void;
@@ -30,6 +31,7 @@ function fromNumber(n: number) {
 }
 
 export default function InputNumber({
+  labelPosition = "top",
   title,
   value,
   onChange,
@@ -77,33 +79,43 @@ export default function InputNumber({
   };
 
   return (
-    <div className="w-full">
+    <div
+      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""} ${err && "mb-8"}`}
+    >
       {title && (
         <label
           htmlFor={inputId}
-          className="mb-2 block text-sm font-medium text-gray-700"
+          className={`block text-sm font-medium text-gray-700 ${
+            labelPosition === "left" ? "w-1/3 shrink-0 mb-0" : "mb-2"
+          }`}
         >
           {title}
         </label>
       )}
-      <input
-        ref={ref}
-        id={inputId}
-        onBlur={onBlur}
-        aria-invalid={!!err}
-        aria-describedby={err ? `${inputId}-error` : undefined}
-        type="text"
-        inputMode="decimal"
-        placeholder="0.0"
-        value={text}
-        disabled={disabled}
-        className={`w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${
-          err ? "border-red-500" : "border-gray-300"
-        }`}
-        onChange={handleChange}
-      />
+      <div className={`w-full relative`}>
+        <input
+          ref={ref}
+          id={inputId}
+          onBlur={onBlur}
+          aria-invalid={!!err}
+          aria-describedby={err ? `${inputId}-error` : undefined}
+          type="text"
+          inputMode="decimal"
+          placeholder="0.0"
+          value={text}
+          disabled={disabled}
+          className={`w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${
+            err ? "border-red-500" : "border-gray-300"
+          }`}
+          onChange={handleChange}
+        />
 
-      {err && <Error id={inputId} err={err} />}
+        {err && (
+          <div className="absolute -bottom-5 left-0">
+            <Error id={inputId} err={`${title || "Nilai"} ${err}`} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
