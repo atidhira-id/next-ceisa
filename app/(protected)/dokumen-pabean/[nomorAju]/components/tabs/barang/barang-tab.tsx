@@ -60,13 +60,15 @@ export default function BarangTab() {
             </thead>
 
             <tbody className="divide-y">
-              {data.listDokumen.map((document) => (
-                <tr key={document.seri} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium">{document.seri}</td>
+              {data.listBarang.map((barang) => (
+                <tr key={barang.seri} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 font-medium">{barang.seri}</td>
 
-                  <td className="px-4 py-3">{document.nomorDokumen}</td>
+                  <td className="px-4 py-3">{barang.hs}</td>
 
-                  <td className="px-4 py-3">{document.tanggalDokumen}</td>
+                  <td className="px-4 py-3">
+                    {barang.spesifikasi?.jenisKendaraan}
+                  </td>
                 </tr>
               ))}
             </tbody>
