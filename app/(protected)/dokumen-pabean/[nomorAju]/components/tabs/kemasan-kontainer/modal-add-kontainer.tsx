@@ -12,31 +12,42 @@ import {
 import { required } from "@/lib/validation";
 
 type ModalAddKontainerItemProps = {
+  kontainer?: KontainerItemData;
   onCloseModal: () => void;
 };
 
 export default function ModalAddKontainerItem({
+  kontainer,
   onCloseModal,
 }: ModalAddKontainerItemProps) {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
-  const seriNumber = data.listKontainer.length + 1;
-  const [nomor, setNomor] = useState("");
-  const [ukuran, setUkuran] = useState("");
-  const [jenis, setJenis] = useState("");
-  const [tipe, setTipe] = useState("");
+
+  const seri =
+    kontainer?.seri ??
+    Math.max(0, ...data.listKontainer.map((item) => item.seri)) + 1;
+  const [nomor, setNomor] = useState(kontainer?.nomorKontiner ?? "");
+  const [ukuran, setUkuran] = useState(kontainer?.kodeUkuranKontainer ?? "");
+  const [jenis, setJenis] = useState(kontainer?.kodeJenisKontainer ?? "");
+  const [tipe, setTipe] = useState(kontainer?.kodeTipeKontainer ?? "");
 
   function handleSimpan() {
     const newKontainerItem: KontainerItemData = {
-      seri: seriNumber,
+      seri: seri,
       nomorKontiner: nomor,
       kodeUkuranKontainer: ukuran,
       kodeJenisKontainer: jenis,
       kodeTipeKontainer: tipe,
     };
 
+    const listKontainer = kontainer
+      ? data.listKontainer.map((item) =>
+          item.seri === kontainer.seri ? newKontainerItem : item,
+        )
+      : [...data.listKontainer, newKontainerItem];
+
     updateDocumentData({
-      listKontainer: [...data.listKontainer, newKontainerItem],
+      listKontainer,
     });
 
     onCloseModal();
@@ -51,7 +62,7 @@ export default function ModalAddKontainerItem({
 
         <div className="space-y-5 px-6 py-5">
           {/* Seri */}
-          <InputNormal title="Seri" value={seriNumber.toString()} disabled />
+          <InputNormal title="Seri" value={seri.toString()} disabled />
 
           {/* Nomor Kontainer */}
           <InputNormal

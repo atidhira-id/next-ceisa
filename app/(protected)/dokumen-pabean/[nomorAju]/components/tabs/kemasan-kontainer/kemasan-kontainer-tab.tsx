@@ -4,38 +4,61 @@ import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import ModalAddKemasanItem from "./modal-add-kemasan";
 import ModalAddKontainerItem from "./modal-add-kontainer";
+import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modal-user-confirmation";
 import {
   jenisKemasanOptions,
   jenisMuatanOptions,
   tipeKontainerOptions,
   ukuranKontainerOptions,
 } from "@/lib/options";
+import { getLabel } from "@/lib/utils";
+import { KemasanItemData, KontainerItemData } from "@/app/providers/types";
 
 export default function KemasanKontainerTab() {
-  const { documentData } = useDocument();
+  const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
 
   const [isKemasanModalOpen, setIsKemasanModalOpen] = useState(false);
+  const [kemasanToEdit, setKemasanToEdit] = useState<KemasanItemData | null>(
+    null,
+  );
+  const [kemasanToDelete, setKemasanToDelete] =
+    useState<KemasanItemData | null>(null);
+  const handleEditKemasan = (kemasan: KemasanItemData) => {
+    setKemasanToEdit(kemasan);
+    setIsKemasanModalOpen(true);
+  };
+  const handleDeleteKemasan = () => {
+    if (!kemasanToDelete) return;
+    const kemasanList = data.listKemasan.filter(
+      (kemasan) => kemasan.seri !== kemasanToDelete.seri,
+    );
+    updateDocumentData({
+      listKemasan: kemasanList,
+    });
+    setKemasanToDelete(null);
+  };
+
   const [isKontainerModalOpen, setIsKontainerModalOpen] = useState(false);
+  const [kontainerToEdit, setKontainerToEdit] =
+    useState<KontainerItemData | null>(null);
+  const [kontainerToDelete, setKontainerToDelete] =
+    useState<KontainerItemData | null>(null);
 
-  const getJenisKemasan = (code: string) => {
-    const option = jenisKemasanOptions.find((item) => item.value === code);
-    return option?.label;
+  const handleEditKontainer = (kontainer: KontainerItemData) => {
+    setKontainerToEdit(kontainer);
+    setIsKontainerModalOpen(true);
   };
 
-  const getUkuranKontainer = (code: string) => {
-    const option = ukuranKontainerOptions.find((item) => item.value === code);
-    return option?.label;
-  };
-
-  const getJenisMuatan = (code: string) => {
-    const option = jenisMuatanOptions.find((item) => item.value === code);
-    return option?.label;
-  };
-
-  const getTipeKontainer = (code: string) => {
-    const option = tipeKontainerOptions.find((item) => item.value === code);
-    return option?.label;
+  const handleDeleteKontainer = () => {
+    if (!kontainerToDelete) return;
+    const kontainerList = data.listKontainer.filter(
+      (kontainer) => kontainer.seri !== kontainerToDelete.seri,
+    );
+    updateDocumentData({
+      listKontainer: kontainerList,
+    });
+    setKontainerToDelete(null);
   };
 
   return (
@@ -85,6 +108,7 @@ export default function KemasanKontainerTab() {
                       <th className="px-4 py-3 font-medium text-gray-600">
                         Merek
                       </th>
+                      <th className="px-4 py-3 font-medium text-gray-600"></th>
                     </tr>
                   </thead>
 
@@ -96,10 +120,26 @@ export default function KemasanKontainerTab() {
                         <td className="px-4 py-3">{item.jumlahKemasan}</td>
 
                         <td className="px-4 py-3">
-                          {getJenisKemasan(item.kodeKemasan!)}
+                          {getLabel(jenisKemasanOptions, item.kodeKemasan)}
                         </td>
 
                         <td className="px-4 py-3">{item.merek}</td>
+                        <td>
+                          <button
+                            type="button"
+                            onClick={() => handleEditKemasan(item)}
+                            className="mr-4 text-blue-600 hover:text-blue-800 hover:underline hover:cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setKemasanToDelete(item)}
+                            className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
+                          >
+                            Hapus
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -145,6 +185,7 @@ export default function KemasanKontainerTab() {
                       <th className="px-4 py-3 font-medium text-gray-600">
                         Tipe
                       </th>
+                      <th className="px-4 py-3 font-medium text-gray-600"></th>
                     </tr>
                   </thead>
 
@@ -156,14 +197,39 @@ export default function KemasanKontainerTab() {
                         <td className="px-4 py-3">{item.nomorKontiner}</td>
 
                         <td className="px-4 py-3">
-                          {getUkuranKontainer(item.kodeUkuranKontainer!)}
+                          {getLabel(
+                            ukuranKontainerOptions,
+                            item.kodeUkuranKontainer,
+                          )}
                         </td>
 
                         <td className="px-4 py-3">
-                          {getJenisMuatan(item.kodeJenisKontainer!)}
+                          {getLabel(
+                            jenisMuatanOptions,
+                            item.kodeJenisKontainer,
+                          )}
                         </td>
                         <td className="px-4 py-3">
-                          {getTipeKontainer(item.kodeTipeKontainer!)}
+                          {getLabel(
+                            tipeKontainerOptions,
+                            item.kodeTipeKontainer!,
+                          )}
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            onClick={() => handleEditKontainer(item)}
+                            className="mr-4 text-blue-600 hover:text-blue-800 hover:underline hover:cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setKontainerToDelete(item)}
+                            className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
+                          >
+                            Hapus
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -178,6 +244,7 @@ export default function KemasanKontainerTab() {
       {/* Modal Kemasan */}
       {isKemasanModalOpen && (
         <ModalAddKemasanItem
+          kemasan={kemasanToEdit ?? undefined}
           onCloseModal={() => setIsKemasanModalOpen(false)}
         />
       )}
@@ -185,7 +252,23 @@ export default function KemasanKontainerTab() {
       {/* Modal Kontainer */}
       {isKontainerModalOpen && (
         <ModalAddKontainerItem
+          kontainer={kontainerToEdit ?? undefined}
           onCloseModal={() => setIsKontainerModalOpen(false)}
+        />
+      )}
+
+      {/* Modal Delete Kemasan */}
+      {kemasanToDelete && (
+        <ModalUserConfirmation
+          handleYes={handleDeleteKemasan}
+          handleNo={() => setKemasanToDelete(null)}
+        />
+      )}
+      {/* Modal Delete Kontainer */}
+      {kontainerToDelete && (
+        <ModalUserConfirmation
+          handleYes={handleDeleteKontainer}
+          handleNo={() => setKontainerToDelete(null)}
         />
       )}
     </div>

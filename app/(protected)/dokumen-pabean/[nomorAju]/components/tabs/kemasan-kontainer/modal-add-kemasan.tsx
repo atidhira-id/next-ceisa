@@ -9,30 +9,39 @@ import { jenisKemasanOptions } from "@/lib/options";
 import { required, min } from "@/lib/validation";
 
 type ModalAddKemasanItemProps = {
+  kemasan?: KemasanItemData;
   onCloseModal: () => void;
 };
 
 export default function ModalAddKemasanItem({
+  kemasan,
   onCloseModal,
 }: ModalAddKemasanItemProps) {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
-  const seriNumber = data.listKemasan.length + 1;
-  const [jumlah, setJumlah] = useState(0);
-  const [jenis, setJenis] = useState("");
-  const [merek, setMerek] = useState("");
+
+  const seri =
+    kemasan?.seri ??
+    Math.max(0, ...data.listKemasan.map((item) => item.seri)) + 1;
+  const [jumlah, setJumlah] = useState(kemasan?.jumlahKemasan ?? 0);
+  const [jenis, setJenis] = useState(kemasan?.kodeKemasan ?? "");
+  const [merek, setMerek] = useState(kemasan?.merek ?? "");
 
   function handleSimpan() {
     const newKemasanItem: KemasanItemData = {
-      seri: seriNumber,
+      seri: seri,
       jumlahKemasan: jumlah,
       kodeKemasan: jenis,
       merek: merek,
     };
 
-    updateDocumentData({
-      listKemasan: [...data.listKemasan, newKemasanItem],
-    });
+    const listKemasan = kemasan
+      ? data.listKemasan.map((item) =>
+          item.seri === kemasan.seri ? newKemasanItem : item,
+        )
+      : [...data.listKemasan, newKemasanItem];
+
+    updateDocumentData({ listKemasan });
 
     onCloseModal();
   }
@@ -46,7 +55,7 @@ export default function ModalAddKemasanItem({
 
         <div className="space-y-5 px-6 py-5">
           {/* Seri */}
-          <InputNormal title="Seri" value={seriNumber.toString()} disabled />
+          <InputNormal title="Seri" value={seri.toString()} disabled />
 
           {/* Jumlah Kemasan */}
           <InputNumber

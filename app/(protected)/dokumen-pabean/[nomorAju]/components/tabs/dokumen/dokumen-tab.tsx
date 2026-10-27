@@ -2,21 +2,40 @@
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import ModalAddDocumentItem from "./modal-add-document";
-import { jenisDokumenLampiranOptions } from "@/lib/options";
 import { Warning } from "../../warning";
+import {
+  fasilitasDokumenOptions,
+  jenisDokumenLampiranOptions,
+} from "@/lib/options";
+import { getLabel } from "@/lib/utils";
+import type { DocumentItemData } from "@/app/providers/types";
+import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modal-user-confirmation";
 
 export default function DokumenTab() {
-  const { documentData } = useDocument();
+  const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [documentToEdit, setDocumentToEdit] = useState<DocumentItemData | null>(
+    null,
+  );
+  const [documentToDelete, setDocumentToDelete] =
+    useState<DocumentItemData | null>(null);
 
-  const getDocumentCode = (code: string) => {
-    const option = jenisDokumenLampiranOptions.find(
-      (item) => item.value === code,
+  const handleEdit = (document: DocumentItemData) => {
+    setDocumentToEdit(document);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = () => {
+    if (!documentToDelete) return;
+    const documentList = data.listDokumen.filter(
+      (doc) => doc.seri !== documentToDelete.seri,
     );
-
-    return option?.label;
+    updateDocumentData({
+      listDokumen: documentList,
+    });
+    setDocumentToDelete(null);
   };
 
   return (
@@ -38,7 +57,20 @@ export default function DokumenTab() {
 
       {/* Modal */}
       {isModalOpen && (
-        <ModalAddDocumentItem onCloseModal={() => setIsModalOpen(false)} />
+        <ModalAddDocumentItem
+          document={documentToEdit ?? undefined}
+          onCloseModal={() => {
+            setIsModalOpen(false);
+            setDocumentToEdit(null);
+          }}
+        />
+      )}
+
+      {documentToDelete && (
+        <ModalUserConfirmation
+          handleYes={handleDelete}
+          handleNo={() => setDocumentToDelete(null)}
+        />
       )}
 
       {/* Table */}
@@ -56,6 +88,13 @@ export default function DokumenTab() {
                 <th className="px-4 py-3 font-medium text-gray-600">Nomor</th>
 
                 <th className="px-4 py-3 font-medium text-gray-600">Tanggal</th>
+                <th className="px-4 py-3 font-medium text-gray-600">
+                  Fasilits Dokumen
+                </th>
+                <th className="px-4 py-3 font-medium text-gray-600">
+                  Ijin Dokumen
+                </th>
+                <th className="px-4 py-3 font-medium text-gray-600"></th>
               </tr>
             </thead>
 
@@ -65,12 +104,43 @@ export default function DokumenTab() {
                   <td className="px-4 py-3 font-medium">{document.seri}</td>
 
                   <td className="px-4 py-3">
-                    {getDocumentCode(document.kodeDokumen)}
+                    {getLabel(
+                      jenisDokumenLampiranOptions,
+                      document.kodeDokumen,
+                    )}
                   </td>
 
                   <td className="px-4 py-3">{document.nomorDokumen}</td>
 
                   <td className="px-4 py-3">{document.tanggalDokumen}</td>
+                  <td className="px-4 py-3">
+                    {getLabel(
+                      fasilitasDokumenOptions,
+                      document.kodeFasilitas ?? "",
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {getLabel(
+                      fasilitasDokumenOptions,
+                      document.kodeFasilitas ?? "",
+                    )}
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleEdit(document)}
+                      className="mr-4 text-blue-600 hover:text-blue-800 hover:underline hover:cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDocumentToDelete(document)}
+                      className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
+                    >
+                      Hapus
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
