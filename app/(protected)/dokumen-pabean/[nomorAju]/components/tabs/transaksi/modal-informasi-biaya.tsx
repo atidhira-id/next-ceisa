@@ -8,7 +8,7 @@ import {
   initialKomponenBiaya,
 } from "./table-data";
 import InputSelect from "../../input-select";
-import { kodeAsuransiOption, kodeHargaOption } from "@/lib/options";
+import { kodeAsuransiOption, kodeIncoterm } from "@/lib/options";
 import InputNumber from "../../input-number";
 import { KomponenBiaya } from "@/app/providers/types";
 
@@ -99,7 +99,7 @@ export default function ModalInformasiBiaya({
                 child={
                   <InputSelect
                     value={localKomponenBiaya.kodeHargaInvoice ?? ""}
-                    options={kodeHargaOption}
+                    options={kodeIncoterm}
                     onChange={(value) => updateData("kodeHargaInvoice", value)}
                   />
                 }
