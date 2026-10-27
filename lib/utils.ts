@@ -1,4 +1,11 @@
 import type { KomponenBiaya, TransaksiData } from "@/app/providers/types";
+import type { OptionType } from "./options";
+
+export function getLabel(options: OptionType[], code: string) {
+  const option = options.find((item) => item.value === code);
+
+  return option?.label;
+}
 
 export function getBiayaPenambah(transaksiData: TransaksiData): number {
   const biayaTambahanKeys: Array<keyof KomponenBiaya> = [
