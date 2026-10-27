@@ -6,10 +6,10 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import {
   jenisTransaksiOptions,
-  jenisValutaOptions,
+  kodeValutaOptions,
   kodeAsuransiOption,
-  kodeHargaOption,
   perhitunganProporsionalOption,
+  kodeIncoterm,
 } from "@/lib/options";
 import ModalInformasiBiaya from "./modal-informasi-biaya";
 import InputNumber from "../../input-number";
@@ -23,6 +23,9 @@ export function TransaksiTab() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const pabeanRupiah =
+    (transaksi.ndpbm ?? 0) * (transaksi.komponenBiaya?.hargaInvoice ?? 0);
+
   return (
     <div className="space-y-6">
       {/* Form */}
@@ -32,7 +35,7 @@ export function TransaksiTab() {
           <InputSelect
             label="Jenis Valuta"
             value={transaksi.kodeJenisValuta ?? ""}
-            options={jenisValutaOptions}
+            options={kodeValutaOptions}
             onChange={(value) =>
               updateDocumentData({
                 transaksi: { ...transaksi, kodeJenisValuta: value },
@@ -70,7 +73,7 @@ export function TransaksiTab() {
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="text-left font-bold hover:cursor-pointer"
+            className="w-fit text-left font-bold p-2 border rounded-md border-gray-300 hover:cursor-pointer hover:bg-gray-200"
           >
             Informasi Komponen Biaya
           </button>
@@ -82,53 +85,31 @@ export function TransaksiTab() {
 
             <div className="flex items-center gap-2">
               <InputSelect
-                value={transaksi.kodeHargaBarang ?? ""}
-                options={kodeHargaOption}
-                onChange={(value) =>
-                  updateDocumentData({
-                    transaksi: { ...transaksi, kodeHargaBarang: value },
-                  })
-                }
-                rules={[required()]}
+                value={transaksi.komponenBiaya?.kodeHargaInvoice ?? ""}
+                options={kodeIncoterm}
+                onChange={() => {}}
+                disabled
               />
               <InputNumber
-                value={transaksi.hargaBarang ?? 0}
-                onChange={(value) =>
-                  updateDocumentData({
-                    transaksi: { ...transaksi, hargaBarang: value },
-                  })
-                }
-                rules={[required()]}
+                value={transaksi.komponenBiaya?.hargaInvoice ?? 0}
+                onChange={() => {}}
+                disabled
               />
             </div>
           </div>
 
           <InputNumber
             title="Nilai Pabean Valuta Asing"
-            value={transaksi.nilaiPabeanAsing ?? 0}
-            onChange={(value) =>
-              updateDocumentData({
-                transaksi: {
-                  ...transaksi,
-                  nilaiPabeanAsing: value,
-                },
-              })
-            }
-            rules={[required()]}
+            value={transaksi.komponenBiaya?.hargaInvoice ?? 0}
+            onChange={() => {}}
+            disabled
           />
 
           <InputNumber
             title="Nilai Pabean dalam Rupiah"
-            value={transaksi.nilaiPabeanRupiah ?? 0}
-            onChange={(value) =>
-              updateDocumentData({
-                transaksi: {
-                  ...transaksi,
-                  nilaiPabeanRupiah: value,
-                },
-              })
-            }
-            rules={[required()]}
+            value={pabeanRupiah}
+            onChange={() => {}}
+            disabled
           />
         </InputWrapper>
 
