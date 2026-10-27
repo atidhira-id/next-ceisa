@@ -2,8 +2,24 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import { entitasOptions, jenisDokumenOptions } from "@/lib/options";
-import { FormInputs } from "@/app/providers/types";
+import {
+  entitasOptions,
+  jenisDokumenOptions,
+  kodeJenisApiOptions,
+  kodeStatusOptions,
+} from "@/lib/options";
+import { EntitasImportirData, FormInputs } from "@/app/providers/types";
+
+export const initialImportir: EntitasImportirData = {
+  kodeNomorIdentitas: "6",
+  nomorIdentitas: "0010606028007000",
+  nomorNitku: "0010606028007000000000",
+  nama: "PT United Tractors Pandu Engineering",
+  alamat: "KAWASAN INDUSTRI JABABEKA\nJL. JABABEKA XI BLOK H30-40\n000/000",
+  kodeApi: kodeJenisApiOptions[1].value,
+  api: "9120105931425",
+  kodeStatus: kodeStatusOptions[0].value,
+};
 
 type AddDocumentModalProps = {
   onCloseModal: () => void;
@@ -45,7 +61,7 @@ export default function AddDocumentModal({
         jenisEntitas: entitas,
         kodeDokumen: kodeDokumen,
         header: {},
-        entitasImportir: {},
+        entitasImportir: initialImportir,
         entitasPemilikBarang: {},
         entitasNpwp: {},
         entitasPengirim: {},
