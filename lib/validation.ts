@@ -38,6 +38,13 @@ export const maxLength =
   (v) =>
     v.length > n ? (msg ?? `Maksimal ${n} karakter`) : undefined;
 
+export const kontainerName =
+  (msg = "Format 4 huruf 7 angka (Contoh: ABCD1234567)"): Rule<string> =>
+  (v) => {
+    const regex = /^[A-Za-z]{4}\d{7}$/;
+    return !regex.test(String(v)) ? msg : undefined;
+  };
+
 // external `error` wins; rule errors show only after first blur
 export function useFieldError<T>(
   value: T,
