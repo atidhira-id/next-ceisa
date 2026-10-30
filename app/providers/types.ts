@@ -1,3 +1,8 @@
+export type OptionType = {
+  value: string;
+  label: string;
+};
+
 export type FormInputs = {
   nomorAju: string;
   jenisEntitas: string;
@@ -53,7 +58,6 @@ export type HeaderData = {
 export type EntitasImportirData = {
   kodeNomorIdentitas?: string;
   nomorIdentitas?: string;
-  nomorNitku?: string;
   nama?: string;
   alamat?: string;
   kodeApi?: string;
@@ -64,7 +68,6 @@ export type EntitasImportirData = {
 export type EntitasPemilikBarangData = {
   kodeNomorIdentitas?: string;
   nomorIdentitas?: string;
-  nomorNitku?: string;
   nama?: string;
   alamat?: string;
   afiliasi?: string;
@@ -73,7 +76,6 @@ export type EntitasPemilikBarangData = {
 export type EntitasNpwpData = {
   kodeNomorIdentitas?: string;
   nomorIdentitas?: string;
-  nomorNitku?: string;
   nama?: string;
   alamat?: string;
 };
@@ -175,7 +177,7 @@ export type KontainerItemData = {
 
 export type BarangItemData = {
   seri?: number;
-  hs?: string;
+  hs?: HsType;
   spesifikasi?: Record<string, string | null>;
   kodeBarang?: string;
   uraianJenisBarang?: string;
@@ -192,6 +194,15 @@ export type BarangItemData = {
   kemasan?: number;
   kodeJenisKemasan?: string;
   hargaInvoice?: number;
+  metodePenentuanNilai?: string;
+  alasan?: string;
+  statementPerbedaan?: string;
+
+  bmJenisTarif?: string;
+  bmPembayaran?: string;
+  ppnPembayaran?: string;
+  pphPembayaran?: string;
+  isCukai?: boolean;
 };
 
 export type PernyataanData = {
@@ -199,4 +210,13 @@ export type PernyataanData = {
   tanggal?: string;
   nama?: string;
   jabatan?: string;
+};
+
+export type HsType = {
+  kode: string;
+  bm: number;
+  pph: number;
+  ppn: number;
+  lartasBorder?: string;
+  lartasPostBorder?: string;
 };

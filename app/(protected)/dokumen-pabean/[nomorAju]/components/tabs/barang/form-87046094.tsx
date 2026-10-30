@@ -2,7 +2,7 @@
 import type { BarangItemData } from "@/app/providers/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
-import { kodeHSOption } from "@/lib/options";
+import { hsOption } from "@/app/constants/barang-options";
 import { required } from "@/lib/validation";
 
 type FormProps = {
@@ -16,7 +16,7 @@ export default function Form_87046094({ barang, updateSpecs }: FormProps) {
       <InputSelect
         labelPosition="left"
         label="CBU"
-        options={kodeHSOption}
+        options={hsOption}
         value={barang.spesifikasi?.cbu ?? ""}
         onChange={(value) => updateSpecs("cbu", value)}
         rules={[required()]}

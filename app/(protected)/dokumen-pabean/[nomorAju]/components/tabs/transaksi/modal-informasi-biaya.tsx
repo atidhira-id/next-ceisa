@@ -8,7 +8,10 @@ import {
   initialKomponenBiaya,
 } from "./table-data";
 import InputSelect from "../../input-select";
-import { kodeAsuransiOption, kodeIncoterm } from "@/lib/options";
+import {
+  kodeAsuransiOption,
+  kodeIncoterm,
+} from "@/app/constants/transaksi-options";
 import InputNumber from "../../input-number";
 import { KomponenBiaya } from "@/app/providers/types";
 
@@ -141,9 +144,10 @@ export default function ModalInformasiBiaya({
                       onChange={(value) => {
                         updateData(item.field, Number(value));
                       }}
+                      disabled={localKomponenBiaya.kodeAsuransi == "DN"}
                       child={
                         <InputSelect
-                          value={localKomponenBiaya.kodeAsuransi ?? ""}
+                          value={localKomponenBiaya.kodeAsuransi ?? "DN"}
                           options={kodeAsuransiOption}
                           onChange={(value) =>
                             updateData("kodeAsuransi", value)
@@ -223,6 +227,7 @@ type CellInputProps = {
   onChange?: (value: number | string) => void;
   resultValue?: string | number;
   child?: React.ReactNode;
+  disabled?: boolean;
 };
 
 type CellResultProps = {
@@ -241,6 +246,7 @@ function CellInput({
   onChange,
   resultValue = "0.0",
   child,
+  disabled,
 }: CellInputProps) {
   return (
     <tr>
@@ -252,7 +258,11 @@ function CellInput({
       </td>
       <td className="p-2 border border-gray-500">
         {typeof value === "number" && (
-          <InputNumber value={value ?? 0} onChange={onChange} />
+          <InputNumber
+            value={value ?? 0}
+            onChange={onChange}
+            disabled={disabled}
+          />
         )}
       </td>
       <td className="p-2 border border-gray-500 bg-gray-300">{resultValue}</td>

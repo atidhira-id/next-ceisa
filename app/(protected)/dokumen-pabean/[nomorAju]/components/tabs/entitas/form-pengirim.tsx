@@ -3,7 +3,7 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
-import { kodeNegaraOptions } from "@/lib/options";
+import { kodeNegaraOptions } from "@/app/constants/entitas-options";
 import { required } from "@/lib/validation";
 
 export default function FormPengirim() {

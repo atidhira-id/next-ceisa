@@ -8,8 +8,8 @@ import {
   jenisMuatanOptions,
   tipeKontainerOptions,
   ukuranKontainerOptions,
-} from "@/lib/options";
-import { required } from "@/lib/validation";
+} from "@/app/constants/kemas-kontainer-options";
+import { kontainerName, required } from "@/lib/validation";
 
 type ModalAddKontainerItemProps = {
   kontainer?: KontainerItemData;
@@ -69,7 +69,7 @@ export default function ModalAddKontainerItem({
             title="Nomor"
             value={nomor}
             onChange={(value) => setNomor(value)}
-            rules={[required()]}
+            rules={[required(), kontainerName()]}
           />
 
           {/* Ukuran Kontainer */}

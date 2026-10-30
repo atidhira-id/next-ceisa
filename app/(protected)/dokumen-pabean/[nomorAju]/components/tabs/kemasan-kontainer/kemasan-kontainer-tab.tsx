@@ -10,7 +10,7 @@ import {
   jenisMuatanOptions,
   tipeKontainerOptions,
   ukuranKontainerOptions,
-} from "@/lib/options";
+} from "@/app/constants/kemas-kontainer-options";
 import { getLabel } from "@/lib/utils";
 import { KemasanItemData, KontainerItemData } from "@/app/providers/types";
 
@@ -30,9 +30,14 @@ export default function KemasanKontainerTab() {
   };
   const handleDeleteKemasan = () => {
     if (!kemasanToDelete) return;
-    const kemasanList = data.listKemasan.filter(
+    let kemasanList = data.listKemasan.filter(
       (kemasan) => kemasan.seri !== kemasanToDelete.seri,
     );
+    kemasanList = kemasanList.map((item, index) => ({
+      ...item,
+      seri: index + 1,
+    }));
+
     updateDocumentData({
       listKemasan: kemasanList,
     });
@@ -52,9 +57,14 @@ export default function KemasanKontainerTab() {
 
   const handleDeleteKontainer = () => {
     if (!kontainerToDelete) return;
-    const kontainerList = data.listKontainer.filter(
+    let kontainerList = data.listKontainer.filter(
       (kontainer) => kontainer.seri !== kontainerToDelete.seri,
     );
+    kontainerList = kontainerList.map((item, index) => ({
+      ...item,
+      seri: index + 1,
+    }));
+
     updateDocumentData({
       listKontainer: kontainerList,
     });
@@ -114,7 +124,10 @@ export default function KemasanKontainerTab() {
 
                   <tbody className="divide-y">
                     {data.listKemasan.map((item) => (
-                      <tr key={item.seri} className="hover:bg-gray-50">
+                      <tr
+                        key={`${item.seri}-${item.merek}`}
+                        className="hover:bg-gray-50"
+                      >
                         <td className="px-4 py-3 font-medium">{item.seri}</td>
 
                         <td className="px-4 py-3">{item.jumlahKemasan}</td>
@@ -124,7 +137,7 @@ export default function KemasanKontainerTab() {
                         </td>
 
                         <td className="px-4 py-3">{item.merek}</td>
-                        <td>
+                        <td className="flex justify-end pr-4 py-3">
                           <button
                             type="button"
                             onClick={() => handleEditKemasan(item)}
@@ -215,7 +228,7 @@ export default function KemasanKontainerTab() {
                             item.kodeTipeKontainer!,
                           )}
                         </td>
-                        <td>
+                        <td className="flex justify-end pr-4 py-3">
                           <button
                             type="button"
                             onClick={() => handleEditKontainer(item)}
@@ -245,7 +258,10 @@ export default function KemasanKontainerTab() {
       {isKemasanModalOpen && (
         <ModalAddKemasanItem
           kemasan={kemasanToEdit ?? undefined}
-          onCloseModal={() => setIsKemasanModalOpen(false)}
+          onCloseModal={() => {
+            setKemasanToEdit(null);
+            setIsKemasanModalOpen(false);
+          }}
         />
       )}
 
@@ -253,7 +269,10 @@ export default function KemasanKontainerTab() {
       {isKontainerModalOpen && (
         <ModalAddKontainerItem
           kontainer={kontainerToEdit ?? undefined}
-          onCloseModal={() => setIsKontainerModalOpen(false)}
+          onCloseModal={() => {
+            setKontainerToEdit(null);
+            setIsKontainerModalOpen(false);
+          }}
         />
       )}
 

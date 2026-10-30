@@ -3,8 +3,8 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
-import { jenisIdentitasOptions } from "@/lib/options";
-import { required } from "@/lib/validation";
+import { kodeNomorIdentitasOptions } from "@/app/constants/entitas-options";
+import { maxLength, minLength, required } from "@/lib/validation";
 
 export default function FormNpwpPemusatan() {
   const { documentData, updateDocumentData } = useDocument();
@@ -12,25 +12,14 @@ export default function FormNpwpPemusatan() {
   const importir = data.entitasImportir;
   const npwp = data.entitasNpwp;
 
-  const identityNumber = npwp.nomorIdentitas ?? "";
-
-  const updateNitku = (value: string) => {
-    const nitku = value + "000000";
-    updateDocumentData({
-      entitasNpwp: { ...npwp, nomorIdentitas: value, nomorNitku: nitku },
-    });
-  };
-
   function copyImportirData() {
-    const { kodeNomorIdentitas, nomorIdentitas, nomorNitku, nama, alamat } =
-      importir;
+    const { kodeNomorIdentitas, nomorIdentitas, nama, alamat } = importir;
 
     updateDocumentData({
       entitasNpwp: {
         ...npwp,
         kodeNomorIdentitas,
         nomorIdentitas,
-        nomorNitku,
         nama,
         alamat,
       },
@@ -59,7 +48,7 @@ export default function FormNpwpPemusatan() {
         <div className="flex items-center gap-2">
           <InputSelect
             value={npwp.kodeNomorIdentitas ?? ""}
-            options={jenisIdentitasOptions}
+            options={kodeNomorIdentitasOptions}
             onChange={(value) =>
               updateDocumentData({
                 entitasNpwp: { ...npwp, kodeNomorIdentitas: value },
@@ -68,9 +57,13 @@ export default function FormNpwpPemusatan() {
             rules={[required()]}
           />
           <InputNormal
-            value={identityNumber ?? ""}
-            onChange={(value) => updateNitku(value)}
-            rules={[required()]}
+            value={npwp.nomorIdentitas ?? ""}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasNpwp: { ...npwp, nomorIdentitas: value },
+              })
+            }
+            rules={[required(), minLength(16), maxLength(16)]}
           />
         </div>
       </div>
@@ -78,7 +71,7 @@ export default function FormNpwpPemusatan() {
       {/* Nomor NITKU */}
       <InputNormal
         title="Nomor NITKU"
-        value={npwp.nomorNitku ?? identityNumber + "0".repeat(6)}
+        value={npwp.nomorIdentitas ? npwp.nomorIdentitas + "0".repeat(6) : ""}
         disabled
       />
 

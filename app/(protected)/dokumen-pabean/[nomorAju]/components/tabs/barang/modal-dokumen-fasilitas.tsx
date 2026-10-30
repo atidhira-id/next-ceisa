@@ -1,7 +1,8 @@
 import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
-import { jenisDokumenLampiranOptions } from "@/lib/options";
+import { kodeJenisOptions } from "@/app/constants/dokumen-options";
 import InputNumber from "../../input-number";
+import { getLabel } from "@/lib/utils";
 
 type ModalDokumenFasilitasProps = {
   onCloseModal: () => void;
@@ -12,14 +13,6 @@ export default function ModalDokumenFasilitas({
 }: ModalDokumenFasilitasProps) {
   const { documentData } = useDocument();
   const data = documentData!;
-
-  const getDocumentCode = (code: string) => {
-    const option = jenisDokumenLampiranOptions.find(
-      (item) => item.value === code,
-    );
-
-    return option?.label;
-  };
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/40 p-4">
@@ -74,7 +67,7 @@ export default function ModalDokumenFasilitas({
                       <td className="px-4 py-3 font-medium">{document.seri}</td>
 
                       <td className="px-4 py-3">
-                        {getDocumentCode(document.kodeDokumen)}
+                        {getLabel(kodeJenisOptions, document.kodeDokumen)}
                       </td>
 
                       <td className="px-4 py-3">{document.nomorDokumen}</td>

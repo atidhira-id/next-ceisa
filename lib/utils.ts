@@ -1,5 +1,5 @@
 import type { KomponenBiaya, TransaksiData } from "@/app/providers/types";
-import type { OptionType } from "./options";
+import type { OptionType } from "@/app/providers/types";
 
 export function getLabel(options: OptionType[], code: string) {
   const option = options.find((item) => item.value === code);

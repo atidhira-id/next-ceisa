@@ -3,8 +3,11 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
-import { jenisIdentitasOptions, kodeAfiliasiOptions } from "@/lib/options";
-import { required } from "@/lib/validation";
+import {
+  kodeNomorIdentitasOptions,
+  kodeAfiliasiOptions,
+} from "@/app/constants/entitas-options";
+import { maxLength, minLength, required } from "@/lib/validation";
 
 export default function FormPemilikBarang() {
   const { documentData, updateDocumentData } = useDocument();
@@ -12,29 +15,14 @@ export default function FormPemilikBarang() {
   const importir = data.entitasImportir;
   const pemilikBarang = data.entitasPemilikBarang;
 
-  const identityNumber = pemilikBarang.nomorIdentitas ?? "";
-
-  const updateNitku = (value: string) => {
-    const nitku = value + "000000";
-    updateDocumentData({
-      entitasPemilikBarang: {
-        ...pemilikBarang,
-        nomorIdentitas: value,
-        nomorNitku: nitku,
-      },
-    });
-  };
-
   function copyImportirData() {
-    const { kodeNomorIdentitas, nomorIdentitas, nomorNitku, nama, alamat } =
-      importir;
+    const { kodeNomorIdentitas, nomorIdentitas, nama, alamat } = importir;
 
     updateDocumentData({
       entitasPemilikBarang: {
         ...pemilikBarang,
         kodeNomorIdentitas,
         nomorIdentitas,
-        nomorNitku,
         nama,
         alamat,
       },
@@ -63,7 +51,7 @@ export default function FormPemilikBarang() {
         <div className="flex items-center gap-2">
           <InputSelect
             value={pemilikBarang.kodeNomorIdentitas ?? ""}
-            options={jenisIdentitasOptions}
+            options={kodeNomorIdentitasOptions}
             onChange={(value) =>
               updateDocumentData({
                 entitasPemilikBarang: {
@@ -75,9 +63,16 @@ export default function FormPemilikBarang() {
             rules={[required()]}
           />
           <InputNormal
-            value={identityNumber ?? ""}
-            onChange={(value) => updateNitku(value)}
-            rules={[required()]}
+            value={pemilikBarang.nomorIdentitas ?? ""}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasPemilikBarang: {
+                  ...pemilikBarang,
+                  nomorIdentitas: value,
+                },
+              })
+            }
+            rules={[required(), minLength(16), maxLength(16)]}
           />
         </div>
       </div>
@@ -85,7 +80,11 @@ export default function FormPemilikBarang() {
       {/* Nomor NITKU */}
       <InputNormal
         title="Nomor NITKU"
-        value={pemilikBarang.nomorNitku ?? identityNumber + "0".repeat(6)}
+        value={
+          pemilikBarang.nomorIdentitas
+            ? pemilikBarang.nomorIdentitas + "0".repeat(6)
+            : ""
+        }
         disabled
       />
 

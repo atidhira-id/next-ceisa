@@ -5,7 +5,7 @@ import { type KemasanItemData } from "@/app/providers/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputNumber from "../../input-number";
-import { jenisKemasanOptions } from "@/lib/options";
+import { jenisKemasanOptions } from "@/app/constants/kemas-kontainer-options";
 import { required, min } from "@/lib/validation";
 
 type ModalAddKemasanItemProps = {

@@ -4,8 +4,8 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
-import { nomorTutupPuOptions } from "@/lib/options";
-import { required, maxLength } from "@/lib/validation";
+import { nomorTutupPuOptions } from "@/app/constants/pengangkut-options";
+import { required, maxLength, minLength } from "@/lib/validation";
 
 export default function FormBc() {
   const { documentData, updateDocumentData } = useDocument();
@@ -37,7 +37,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, nomorTutupPu: value },
               })
             }
-            rules={[required()]}
+            rules={[required(), minLength(4), maxLength(4)]}
           />
           <InputDate
             value={pengangkut.tanggalTutupPu ?? ""}

@@ -6,11 +6,11 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import {
   jenisTransaksiOptions,
-  kodeValutaOptions,
+  jenisValutaOptions,
   kodeAsuransiOption,
   perhitunganProporsionalOption,
   kodeIncoterm,
-} from "@/lib/options";
+} from "@/app/constants/transaksi-options";
 import ModalInformasiBiaya from "./modal-informasi-biaya";
 import InputNumber from "../../input-number";
 import InputRadio from "../../input-radio";
@@ -35,7 +35,7 @@ export function TransaksiTab() {
           <InputSelect
             label="Jenis Valuta"
             value={transaksi.kodeJenisValuta ?? ""}
-            options={kodeValutaOptions}
+            options={jenisValutaOptions}
             onChange={(value) =>
               updateDocumentData({
                 transaksi: { ...transaksi, kodeJenisValuta: value },
@@ -155,7 +155,7 @@ export function TransaksiTab() {
         {/* Berat */}
         <InputWrapper title="Berat">
           <InputNumber
-            title="Biaya Kotor (KGM)"
+            title="Berat Kotor (KGM)"
             value={transaksi.beratKotor ?? 0}
             onChange={(value) =>
               updateDocumentData({
@@ -168,10 +168,10 @@ export function TransaksiTab() {
             rules={[required()]}
           />
           <InputRadio
-            title="Perhitunga Proporsional"
+            title="Perhitungan Proporsional"
             value={
               transaksi.perhitunganProporsional ??
-              perhitunganProporsionalOption[0].value
+              perhitunganProporsionalOption[1].value
             }
             options={perhitunganProporsionalOption}
             onChange={(value) =>
@@ -183,7 +183,7 @@ export function TransaksiTab() {
               })
             }
           />
-          <InputNormal title="Biaya Bersih (KGM)" value="0.00" disabled />
+          <InputNormal title="Berat Bersih (KGM)" value="0.00" disabled />
         </InputWrapper>
       </div>
 

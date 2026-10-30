@@ -8,7 +8,7 @@ import {
   jenisPIBOptions,
   jenisImportOptions,
   caraPembayaranOptions,
-} from "@/lib/options";
+} from "@/app/constants/header-options";
 import { required } from "@/lib/validation";
 
 export function HeaderTab() {

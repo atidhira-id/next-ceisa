@@ -1,37 +1,20 @@
 "use client";
-import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
 import {
-  jenisIdentitasOptions,
-  kodeJenisApiOptions,
+  kodeNomorIdentitasOptions,
+  kodeApiNibOptions,
   kodeStatusOptions,
-} from "@/lib/options";
-import { required } from "@/lib/validation";
+} from "@/app/constants/entitas-options";
+import { maxLength, minLength, required } from "@/lib/validation";
 
 export default function FormImportir() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
   const importir = data.entitasImportir;
-
-  const [identityNumber, setIdentityNumber] = useState(
-    importir.nomorIdentitas ?? "",
-  );
-
-  const updateNitku = (value: string) => {
-    setIdentityNumber(value);
-    const nitku = value + "000000";
-    updateDocumentData({
-      entitasImportir: {
-        ...importir,
-        nomorIdentitas: value,
-        nomorNitku: nitku,
-      },
-    });
-  };
 
   return (
     <InputWrapper title="Importir">
@@ -44,7 +27,7 @@ export default function FormImportir() {
         <div className="flex items-center gap-2">
           <InputSelect
             value={importir.kodeNomorIdentitas ?? ""}
-            options={jenisIdentitasOptions}
+            options={kodeNomorIdentitasOptions}
             onChange={(value) =>
               updateDocumentData({
                 entitasImportir: { ...importir, kodeNomorIdentitas: value },
@@ -53,9 +36,13 @@ export default function FormImportir() {
             rules={[required()]}
           />
           <InputNormal
-            value={identityNumber ?? ""}
-            onChange={(value) => updateNitku(value)}
-            rules={[required()]}
+            value={importir.nomorIdentitas ?? ""}
+            onChange={(value) =>
+              updateDocumentData({
+                entitasImportir: { ...importir, nomorIdentitas: value },
+              })
+            }
+            rules={[required(), minLength(16), maxLength(16)]}
           />
         </div>
       </div>
@@ -63,7 +50,9 @@ export default function FormImportir() {
       {/* Nomor NITKU */}
       <InputNormal
         title="Nomor NITKU"
-        value={importir.nomorNitku ?? identityNumber + "0".repeat(6)}
+        value={
+          importir.nomorIdentitas ? importir.nomorIdentitas + "0".repeat(6) : ""
+        }
         disabled
       />
 
@@ -96,7 +85,7 @@ export default function FormImportir() {
         <div className="flex items-center gap-2">
           <InputSelect
             value={importir.kodeApi ?? ""}
-            options={kodeJenisApiOptions}
+            options={kodeApiNibOptions}
             onChange={(value) =>
               updateDocumentData({
                 entitasImportir: { ...importir, kodeApi: value },
