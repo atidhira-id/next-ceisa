@@ -158,7 +158,11 @@ function setEntitasSheetData(
   setCellValue(entitasSheet, `B${2}`, 1);
   setCellValue(entitasSheet, `C${2}`, 1);
   setCellValue(entitasSheet, `D${2}`, entitasImportir.kodeNomorIdentitas);
-  setCellValue(entitasSheet, `E${2}`, entitasImportir.nomorNitku);
+  setCellValue(
+    entitasSheet,
+    `E${2}`,
+    entitasImportir.nomorIdentitas + "0".repeat(6),
+  );
   setCellValue(entitasSheet, `F${2}`, entitasImportir.nama);
   setCellValue(entitasSheet, `G${2}`, entitasImportir.alamat);
   setCellValue(entitasSheet, `H${2}`, entitasImportir.api);
@@ -172,7 +176,11 @@ function setEntitasSheetData(
   setCellValue(entitasSheet, `B${3}`, 7);
   setCellValue(entitasSheet, `C${3}`, 7);
   setCellValue(entitasSheet, `D${3}`, entitasPemilikBarang.kodeNomorIdentitas);
-  setCellValue(entitasSheet, `E${3}`, entitasPemilikBarang.nomorNitku);
+  setCellValue(
+    entitasSheet,
+    `E${3}`,
+    entitasPemilikBarang.nomorIdentitas + "0".repeat(6),
+  );
   setCellValue(entitasSheet, `F${3}`, entitasPemilikBarang.nama);
   setCellValue(entitasSheet, `G${3}`, entitasPemilikBarang.alamat);
   setCellValue(entitasSheet, `M${3}`, "ID");
@@ -202,7 +210,11 @@ function setEntitasSheetData(
   setCellValue(entitasSheet, `B${6}`, 11);
   setCellValue(entitasSheet, `C${6}`, 11);
   setCellValue(entitasSheet, `D${6}`, entitasNpwp.kodeNomorIdentitas);
-  setCellValue(entitasSheet, `E${6}`, entitasNpwp.nomorNitku);
+  setCellValue(
+    entitasSheet,
+    `E${6}`,
+    entitasNpwp.nomorIdentitas + "0".repeat(6),
+  );
   setCellValue(entitasSheet, `F${6}`, entitasNpwp.nama);
   setCellValue(entitasSheet, `G${6}`, entitasNpwp.alamat);
   setCellValue(entitasSheet, `M${6}`, "ID");

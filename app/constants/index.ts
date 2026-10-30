@@ -14,7 +14,6 @@ export const jenisDokumenOptions: OptionType[] = [
 export const initialImportir: EntitasImportirData = {
   kodeNomorIdentitas: "6",
   nomorIdentitas: "0010606028007000",
-  nomorNitku: "0010606028007000000000",
   nama: "PT United Tractors Pandu Engineering",
   alamat: "KAWASAN INDUSTRI JABABEKA\nJL. JABABEKA XI BLOK H30-40\n000/000",
   kodeApi: kodeApiNibOptions[1].value,
