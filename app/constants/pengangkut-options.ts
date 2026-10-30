@@ -1,0 +1,95 @@
+import type { OptionType } from "@/app/providers/types";
+
+export const nomorTutupPuOptions: OptionType[] = [
+  { value: "0", label: "BC 1.0" },
+  { value: "1", label: "BC 1.1" },
+  { value: "2", label: "BC 1.2" },
+  { value: "3", label: "BC 1.3" },
+  { value: "4", label: "BC 1.4" },
+];
+
+export const caraPengangkutanOptions: OptionType[] = [
+  { value: "1", label: "1 - LAUT" },
+  { value: "2", label: "2 - KERETA API" },
+  { value: "3", label: "3 - DARAT / JALAN RAYA" },
+  { value: "4", label: "4 - UDARA" },
+  { value: "5", label: "5 - POS" },
+  { value: "6", label: "6 - MULTIMODA" },
+  { value: "7", label: "7 - INSTALASI / PIPA" },
+  { value: "8", label: "8 - PERAIRAN / ANGKUTAN SUNGAI" },
+  { value: "9", label: "9 - LAINNYA" },
+  { value: "10", label: "10 - INSTALASI" },
+  { value: "11", label: "11 - PIPA" },
+  { value: "12", label: "12 - TRANSMISI" },
+];
+
+export const tempatPenimbunanOptions: OptionType[] = [
+  { value: "207X", label: "207X - GD & LAP 207X - ADI CARAKA" },
+  { value: "RAYA", label: "RAYA - GD & LAP JL BANGKA - AGUNG RAYA" },
+  { value: "ARN1", label: "ARN1 - GD & LAP (UTARA) - AIRIN" },
+  { value: "ARN2", label: "ARN2 - LAP (SELATAN) - AIRIN" },
+  { value: "BERD", label: "BERD - GD & LAP - BERDIKARI" },
+  { value: "ISM1", label: "ISM1 - GD - INDOFOOD SUKSES MAKMUR" },
+  { value: "101X", label: "101X - LAP 101X - BUANA AMANAH KARYA" },
+  { value: "208X", label: "208X - LAP 208X - DHARMA BANDAR MANDALA" },
+  { value: "TIKA", label: "TIKA - GD & LAP - DHARMA KARTIKA BHAKTI" },
+  { value: "DHAR", label: "DHAR - TANGKI - DHARMA KARYA PERDANA" },
+  { value: "DMK1", label: "DMK1 - GD & LAP - DWIPA MANUNGGAL KONTENA" },
+  { value: "27XS", label: "27XS - LAP 207X SELATAN - GEMAR LAUT BIRU" },
+  { value: "GSRA", label: "GSRA - LAP GRAHA SEGARA - GRAHA SEGARA" },
+  { value: "TPK1", label: "TPK1 - UTPK I - JICT" },
+  { value: "TPK2", label: "TPK2 - UTPK II - JICT" },
+  { value: "KOJA", label: "KOJA - LAP KOJA - KSO TERMINAL PETIKEMAS KOJA" },
+  { value: "TRMA", label: "TRMA - GD & LAP - LAUTAN TIRTA TRANSPORTAMA" },
+  { value: "MKT1", label: "MKT1 - GD & LAP POS 9 - MASAJI KARGOSENTRA TAMA" },
+  {
+    value: "MKT2",
+    label: "MKT2 - GD & LAP KALIBARU - MASAJI KARGOSENTRA TAMA",
+  },
+  {
+    value: "BAND",
+    label: "BAND - GD & LAP CDC BANDA - MULTI TERMINAL INDONESIA",
+  },
+  { value: "215X", label: "215X - LAP 215X - MULTI TERMINAL INDONESIA" },
+  { value: "T009", label: "T009 - LAP 009 - MULTI TERMINAL INDONESIA" },
+  {
+    value: "GCFS",
+    label: "GCFS - GD CFS NUSANTARA - MULTI TERMINAL INDONESIA",
+  },
+  { value: "G114", label: "G114 - GD 114 - MULTI TERMINAL INDONESIA" },
+  { value: "T107", label: "T107 - GD & LAP 107 - MULTI TERMINAL INDONESIA" },
+  { value: "TMAL", label: "TMAL - LAP 212 & 300 - MUSTIKA ALAM LESTARI" },
+  { value: "CART", label: "CART - CAR TERMINAL - PELINDO" },
+  { value: "214X", label: "214X - LAP 214X - PELINDO" },
+  { value: "27XT", label: "27XT - LAP 207X TIMUR - PELINDO" },
+  { value: "106X", label: "106X - LAP 106X - PELINDO" },
+  { value: "T208", label: "T208 - GD 208 & 209 - PRIMA NUR PANURJWAN" },
+  { value: "106B", label: "106B - LAP 106B - PRIMANATA JASA PERSADA" },
+  { value: "GPRI", label: "GPRI - GD JL PULOPAYUNG - PRIMANATA JASA PERSADA" },
+  { value: "RAMA", label: "RAMA - GD & LAP - RAMA AGUNG" },
+  { value: "T005", label: "T005 - GD & LAP 005 - SRIKREASI UNGGUL PERSADA" },
+  { value: "T303", label: "T303 - LAP 303,304,305 - TANGGUH SAMUDERA JAYA" },
+  { value: "TJE1", label: "TJE1 - GD & LAP JL PENJALAI - TJETOT" },
+  { value: "TJE2", label: "TJE2 - GD & LAP JL PULAU PAYUNG - TJETOT" },
+  { value: "213X", label: "213X - LAP 213X - TRANSPORINDO LIMA PERKASA" },
+  {
+    value: "16XS",
+    label: "16XS - LAP 106X SELATAN - TRANSPORINDO LIMA PERKASA",
+  },
+  {
+    value: "TNDO",
+    label: "TNDO - GD & LAP JL SINDANG LAUT - TRANSPORINDO LIMA PERKASA",
+  },
+  {
+    value: "TRAN",
+    label: "TRAN - GD JL RE MARTADINATA - TRANSPORTAMA SELATAN INDONESIA",
+  },
+  {
+    value: "MONA",
+    label: "MONA - GD JL RE MARTADINATA - MONANG SIANIPAR ABADI",
+  },
+  {
+    value: "XTBB",
+    label: "XTBB - EX TERMINAL BESI BEKAS PUTRI KEMBAR GEMILANG",
+  },
+];
