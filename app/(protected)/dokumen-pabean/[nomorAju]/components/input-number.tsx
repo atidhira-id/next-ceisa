@@ -80,7 +80,7 @@ export default function InputNumber({
 
   return (
     <div
-      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""} ${err && "mb-8"}`}
+      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""}`}
     >
       {title && (
         <label

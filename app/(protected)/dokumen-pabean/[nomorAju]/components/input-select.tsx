@@ -2,12 +2,13 @@
 import { useId, useMemo, useState } from "react";
 import { Rule, useFieldError } from "@/lib/validation";
 import Error from "./error";
+import { OptionType } from "@/app/providers/types";
 
 type InputSelectProps = {
   labelPosition?: "top" | "left";
   label?: string;
   value: string;
-  options: { value: string; label: string }[];
+  options: OptionType[];
   onChange: (value: string) => void;
   rules?: Rule<string>[];
   error?: string;
@@ -24,7 +25,6 @@ export default function InputSelect({
   error,
   disabled = false,
 }: InputSelectProps) {
-  // Generate a unique ID for the input element
   const inputId = useId();
   const { error: err, onBlur: markTouched } = useFieldError(
     value,
@@ -79,7 +79,7 @@ export default function InputSelect({
 
   return (
     <div
-      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""} ${err && "mb-8"}`}
+      className={`w-full ${labelPosition === "left" ? "flex items-center gap-4 mb-4" : ""}`}
     >
       {label && (
         <label
@@ -120,7 +120,7 @@ export default function InputSelect({
 
         {err && (
           <div className="absolute -bottom-5 left-0">
-            <Error id={inputId} err={`${label} ${err}`} />
+            <Error id={inputId} err={label ? `${label} ${err}` : `${err}`} />
           </div>
         )}
 
