@@ -6,10 +6,19 @@ import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
 import {
-  fasilitasDokumenOptions,
-  jenisDokumenLampiranOptions,
-} from "@/lib/options";
+  kodeJenisOptions,
+  kodeFasilitasOptions,
+} from "@/app/constants/dokumen-options";
 import { required } from "@/lib/validation";
+
+const initialDocument: DocumentItemData = {
+  seri: 0,
+  kodeDokumen: "",
+  nomorDokumen: "",
+  tanggalDokumen: "",
+  kodeFasilitas: "",
+  kodeIjin: "",
+};
 
 type ModalAddDocumentItemProps = {
   document?: DocumentItemData;
@@ -23,32 +32,17 @@ export default function ModalAddDocumentItem({
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
 
-  const seri =
-    document?.seri ??
-    Math.max(0, ...data.listDokumen.map((item) => item.seri)) + 1;
-  const [kodeDokumen, setKodeDokumen] = useState(document?.kodeDokumen ?? "");
-  const [nomorDokumen, setNomorDokumen] = useState(
-    document?.nomorDokumen ?? "",
-  );
-  const [tanggal, setTanggal] = useState(document?.tanggalDokumen ?? "");
-  const [fasilitasDokumen, setFasilitasDokumen] = useState(
-    document?.kodeFasilitas ?? "",
+  const seri = document?.seri ?? data.listDokumen.length + 1;
+  const [newDocument, setNewDocument] = useState<DocumentItemData>(
+    document ?? { ...initialDocument, seri },
   );
 
   function handleSimpan() {
-    const newDocumentItem: DocumentItemData = {
-      seri,
-      kodeDokumen: kodeDokumen,
-      nomorDokumen: nomorDokumen,
-      tanggalDokumen: tanggal,
-      ...(kodeDokumen === "861" && { kodeFasilitas: fasilitasDokumen }),
-    };
-
     const listDokumen = document
       ? data.listDokumen.map((item) =>
-          item.seri === document.seri ? newDocumentItem : item,
+          item.seri === seri ? newDocument : item,
         )
-      : [...data.listDokumen, newDocumentItem];
+      : [...data.listDokumen, newDocument];
     updateDocumentData({ listDokumen });
 
     onCloseModal();
@@ -70,35 +64,55 @@ export default function ModalAddDocumentItem({
           {/* Jenis Dokumen */}
           <InputSelect
             label="Jenis Dokumen"
-            options={jenisDokumenLampiranOptions}
-            value={kodeDokumen}
-            onChange={(value) => setKodeDokumen(value)}
+            options={kodeJenisOptions}
+            value={newDocument.kodeDokumen}
+            onChange={(value) =>
+              setNewDocument({ ...newDocument, kodeDokumen: value })
+            }
             rules={[required()]}
           />
 
           {/* Nomor Dokumen */}
           <InputNormal
             title="Nomor Dokumen"
-            value={nomorDokumen}
-            onChange={(value) => setNomorDokumen(value)}
+            value={newDocument.nomorDokumen}
+            onChange={(value) =>
+              setNewDocument({ ...newDocument, nomorDokumen: value })
+            }
             rules={[required()]}
           />
 
           {/* Tanggal */}
           <InputDate
             label="Tanggal"
-            value={tanggal}
-            onChange={(value) => setTanggal(value)}
+            value={newDocument.tanggalDokumen}
+            onChange={(value) =>
+              setNewDocument({ ...newDocument, tanggalDokumen: value })
+            }
             rules={[required()]}
           />
 
           {/* Fasilitas Dokumen */}
-          {kodeDokumen == "861" && (
+          {newDocument.kodeDokumen == "861" && (
             <InputSelect
               label="Fasilitas Dokumen"
-              options={fasilitasDokumenOptions}
-              value={fasilitasDokumen}
-              onChange={(value) => setFasilitasDokumen(value)}
+              options={kodeFasilitasOptions}
+              value={newDocument.kodeFasilitas ?? ""}
+              onChange={(value) =>
+                setNewDocument({ ...newDocument, kodeFasilitas: value })
+              }
+              rules={[required()]}
+            />
+          )}
+
+          {/* Kode Izin */}
+          {newDocument.kodeDokumen == "888" && (
+            <InputNormal
+              title="Kode Izin"
+              value={newDocument.kodeIjin ?? ""}
+              onChange={(value) =>
+                setNewDocument({ ...newDocument, kodeIjin: value })
+              }
               rules={[required()]}
             />
           )}
@@ -117,10 +131,12 @@ export default function ModalAddDocumentItem({
             type="button"
             onClick={handleSimpan}
             disabled={
-              !kodeDokumen ||
-              !nomorDokumen ||
-              !tanggal ||
-              (kodeDokumen === "861" && !fasilitasDokumen)
+              !newDocument.kodeDokumen ||
+              !newDocument.nomorDokumen ||
+              !newDocument.tanggalDokumen ||
+              (newDocument.kodeDokumen === "861" &&
+                !newDocument.kodeFasilitas) ||
+              (newDocument.kodeDokumen === "888" && !newDocument.kodeIjin)
             }
             className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800  disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
           >
