@@ -20,11 +20,16 @@ import { getBiayaPenambah, getBiayaPengurang } from "@/lib/utils";
 export function TransaksiTab() {
   const { documentData, updateDocumentData } = useDocument();
   const transaksi = documentData!.transaksi;
+  const listBarang = documentData!.listBarang;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const pabeanRupiah =
     (transaksi.ndpbm ?? 0) * (transaksi.komponenBiaya?.hargaInvoice ?? 0);
+  const totalBeratBersih = listBarang.reduce(
+    (total, barang) => total + (barang.beratBersih ?? 0),
+    0,
+  );
 
   return (
     <div className="space-y-6">
@@ -155,7 +160,7 @@ export function TransaksiTab() {
         {/* Berat */}
         <InputWrapper title="Berat">
           <InputNumber
-            title="Berat Kotor (KGM)"
+            title="Berat Kotor (Kg)"
             value={transaksi.beratKotor ?? 0}
             onChange={(value) =>
               updateDocumentData({
@@ -183,7 +188,11 @@ export function TransaksiTab() {
               })
             }
           />
-          <InputNormal title="Berat Bersih (KGM)" value="0.00" disabled />
+          <InputNormal
+            title="Berat Bersih (Kg)"
+            value={String(totalBeratBersih.toFixed(2))}
+            disabled
+          />
         </InputWrapper>
       </div>
 
