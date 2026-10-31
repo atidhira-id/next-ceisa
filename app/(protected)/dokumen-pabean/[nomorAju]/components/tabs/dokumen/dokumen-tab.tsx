@@ -11,6 +11,7 @@ import { getLabel } from "@/lib/utils";
 import type { DocumentItemData } from "@/app/providers/types";
 import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modal-user-confirmation";
 import InputWrapper from "../../input-wrapper";
+import { Trash, SquareArrowOutUpRight } from "lucide-react";
 
 export default function DokumenTab() {
   const { documentData, updateDocumentData } = useDocument();
@@ -125,14 +126,14 @@ export default function DokumenTab() {
                         onClick={() => handleEdit(document)}
                         className="mr-4 text-blue-600 hover:text-blue-800 hover:underline hover:cursor-pointer"
                       >
-                        Edit
+                        <SquareArrowOutUpRight size={16} />
                       </button>
                       <button
                         type="button"
                         onClick={() => setDocumentToDelete(document)}
                         className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
                       >
-                        Hapus
+                        <Trash size={16} />
                       </button>
                     </td>
                   </tr>

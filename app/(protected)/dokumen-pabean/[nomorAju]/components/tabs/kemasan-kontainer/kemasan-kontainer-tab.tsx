@@ -13,6 +13,7 @@ import {
 } from "@/app/constants/kemas-kontainer-options";
 import { getLabel } from "@/lib/utils";
 import { KemasanItemData, KontainerItemData } from "@/app/providers/types";
+import { Trash, SquareArrowOutUpRight } from "lucide-react";
 
 export default function KemasanKontainerTab() {
   const { documentData, updateDocumentData } = useDocument();
@@ -143,14 +144,14 @@ export default function KemasanKontainerTab() {
                             onClick={() => handleEditKemasan(item)}
                             className="mr-4 text-blue-600 hover:text-blue-800 hover:underline hover:cursor-pointer"
                           >
-                            Edit
+                            <SquareArrowOutUpRight size={16} />
                           </button>
                           <button
                             type="button"
                             onClick={() => setKemasanToDelete(item)}
                             className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
                           >
-                            Hapus
+                            <Trash size={16} />
                           </button>
                         </td>
                       </tr>
@@ -234,14 +235,14 @@ export default function KemasanKontainerTab() {
                             onClick={() => handleEditKontainer(item)}
                             className="mr-4 text-blue-600 hover:text-blue-800 hover:underline hover:cursor-pointer"
                           >
-                            Edit
+                            <SquareArrowOutUpRight size={16} />
                           </button>
                           <button
                             type="button"
                             onClick={() => setKontainerToDelete(item)}
                             className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
                           >
-                            Hapus
+                            <Trash size={16} />
                           </button>
                         </td>
                       </tr>
