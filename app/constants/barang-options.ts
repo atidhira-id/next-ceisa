@@ -1166,8 +1166,24 @@ export const metodePenentuanNilaiOptions: OptionType[] = [
     label: "METODE 1 - METODE NILAI TRANSAKSI BARANG YANG BERSANGKUTAN",
   },
   {
-    value: "TIDAK ADA",
-    label: "TIDAK ADA",
+    value: "METODE 2",
+    label: "METODE 2 - METODE NILAI TRANSAKSI BARANG IDENTIK",
+  },
+  {
+    value: "METODE 3",
+    label: "METODE 3 - METODE NILAI TRANSAKSI BARANG SERUPA",
+  },
+  {
+    value: "METODE 4",
+    label: "METODE 4 - METODE DEDUKSI",
+  },
+  {
+    value: "METODE 5",
+    label: "METODE 5 - METODE KOMPUTASI",
+  },
+  {
+    value: "METODE 6",
+    label: "METODE 6 - METODE FALLBACK",
   },
 ];
 
