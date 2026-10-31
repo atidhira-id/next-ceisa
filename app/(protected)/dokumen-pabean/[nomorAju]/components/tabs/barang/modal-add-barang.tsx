@@ -22,10 +22,12 @@ import Form_87046094 from "./form-87046094";
 import InputTextArea from "../../input-textarea";
 import InputNumber from "../../input-number";
 import InputRadio from "../../input-radio";
-import { getBiayaPenambah, getBiayaPengurang } from "@/lib/utils";
+import { getBiayaPenambah, getBiayaPengurang, getLabel } from "@/lib/utils";
 import ModalDokumenFasilitas from "./modal-dokumen-fasilitas";
 import { hsData } from "@/app/constants/hs";
 import { jenisKemasanOptions } from "@/app/constants/kemas-kontainer-options";
+import { kodeJenisOptions } from "@/app/constants/dokumen-options";
+import { Trash } from "lucide-react";
 
 const initialBarangData: BarangItemData = {
   statementPerbedaan: statementPerbedaanOption[1].value,
@@ -33,14 +35,30 @@ const initialBarangData: BarangItemData = {
 
 type ModalAddBarangProps = {
   onCloseModal: () => void;
+  barangToEdit?: BarangItemData | null;
 };
 
-export default function ModalAddBarang({ onCloseModal }: ModalAddBarangProps) {
+export default function ModalAddBarang({
+  onCloseModal,
+  barangToEdit,
+}: ModalAddBarangProps) {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
 
   const seriNumber = data.listBarang.length + 1;
-  const [newBarang, setNewBarang] = useState(initialBarangData);
+  const existingBarangHargaInvoice = data.listBarang
+    .filter((barang) => barang.seri !== barangToEdit?.seri)
+    .reduce((total, barang) => total + (barang.hargaInvoice ?? 0), 0);
+  const defaultHargaInvoice = Math.max(
+    0,
+    (data.transaksi.komponenBiaya?.hargaInvoice ?? 0) -
+      existingBarangHargaInvoice,
+  );
+  const [newBarang, setNewBarang] = useState<BarangItemData>(() => ({
+    ...initialBarangData,
+    ...(barangToEdit ?? {}),
+    hargaInvoice: barangToEdit?.hargaInvoice ?? defaultHargaInvoice,
+  }));
 
   const [isDokumenModalOpen, setIsDokumenModalOpen] = useState(false);
 
@@ -58,17 +76,37 @@ export default function ModalAddBarang({ onCloseModal }: ModalAddBarangProps) {
     });
   }
 
+  function removeDocument(documentNumber: string) {
+    setNewBarang((current) => ({
+      ...current,
+      listDokumen: current.listDokumen?.filter(
+        (document) => document.nomorDokumen !== documentNumber,
+      ),
+    }));
+  }
+
   function handleCancel() {
-    updateDocumentData({
-      listBarang: [],
-    });
     onCloseModal();
   }
 
   function handleSimpan() {
-    updateDocumentData({
-      listBarang: [...data.listBarang, { ...newBarang, seri: seriNumber }],
-    });
+    const nextBarang = {
+      ...newBarang,
+      seri: barangToEdit?.seri ?? seriNumber,
+      hargaInvoice: newBarang.hargaInvoice ?? defaultHargaInvoice,
+    };
+
+    if (barangToEdit) {
+      updateDocumentData({
+        listBarang: data.listBarang.map((barang) =>
+          barang.seri === barangToEdit.seri ? nextBarang : barang,
+        ),
+      });
+    } else {
+      updateDocumentData({
+        listBarang: [...data.listBarang, nextBarang],
+      });
+    }
 
     onCloseModal();
   }
@@ -110,7 +148,7 @@ export default function ModalAddBarang({ onCloseModal }: ModalAddBarangProps) {
               <InputNormal
                 labelPosition="left"
                 title="Seri"
-                value={seriNumber.toString()}
+                value={(barangToEdit?.seri ?? seriNumber).toString()}
                 disabled
               />
               {/* Pos Tarif/HS */}
@@ -275,7 +313,7 @@ export default function ModalAddBarang({ onCloseModal }: ModalAddBarangProps) {
 
               <div className="w-full flex items-center gap-4 mb-4">
                 <p className="block text-sm font-medium text-gray-700 w-1/3 shrink-0 mb-0">
-                  Jumlah dan Satuan Barang
+                  Kemasan
                 </p>
                 <div className="w-full flex gap-2">
                   <InputNumber
@@ -295,11 +333,7 @@ export default function ModalAddBarang({ onCloseModal }: ModalAddBarangProps) {
               <InputNumber
                 labelPosition="left"
                 title="Harga Invoice"
-                value={
-                  newBarang.hargaInvoice ??
-                  data.transaksi.komponenBiaya?.hargaInvoice ??
-                  0
-                }
+                value={newBarang.hargaInvoice ?? defaultHargaInvoice ?? 0}
                 onChange={(value) => updateData("hargaInvoice", value)}
                 rules={[required()]}
               />
@@ -405,7 +439,124 @@ export default function ModalAddBarang({ onCloseModal }: ModalAddBarangProps) {
               {isDokumenModalOpen && (
                 <ModalDokumenFasilitas
                   onCloseModal={() => setIsDokumenModalOpen(false)}
+                  selectedDocuments={newBarang.listDokumen ?? []}
+                  onSaveDocuments={(documents) =>
+                    setNewBarang((current) => ({
+                      ...current,
+                      listDokumen: documents,
+                    }))
+                  }
                 />
+              )}
+
+              {newBarang.listDokumen && (
+                <div className="overflow-hidden rounded-lg border bg-white">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                      <thead className="border-b bg-gray-50">
+                        <tr>
+                          <th className="w-16 px-4 py-3 font-medium text-gray-600">
+                            Seri
+                          </th>
+
+                          <th className="px-4 py-3 font-medium text-gray-600">
+                            Jenis
+                          </th>
+
+                          <th className="px-4 py-3 font-medium text-gray-600">
+                            Nomor
+                          </th>
+
+                          <th className="px-4 py-3 font-medium text-gray-600">
+                            Tanggal
+                          </th>
+                          <th className="px-4 py-3 font-medium text-gray-600">
+                            Fasilitas
+                          </th>
+                          <th className="px-4 py-3 font-medium text-gray-600">
+                            Kode Izin
+                          </th>
+                          <th className="px-4 py-3 font-medium text-gray-600">
+                            Nomor Urut di Izin
+                          </th>
+                          <th className="px-4 py-3 font-medium text-gray-600">
+                            File
+                          </th>
+                          <th className="px-4 py-3 font-medium text-gray-600"></th>
+                        </tr>
+                      </thead>
+
+                      <tbody className="divide-y">
+                        {newBarang.listDokumen.map((barangDokumen) => {
+                          const document = data.listDokumen.find(
+                            (item) =>
+                              item.nomorDokumen === barangDokumen.nomorDokumen,
+                          );
+
+                          return document ? (
+                            <tr
+                              key={document?.nomorDokumen}
+                              className="hover:bg-gray-50"
+                            >
+                              <td className="px-4 py-3 font-medium">
+                                {document.seri}
+                              </td>
+
+                              <td className="px-4 py-3">
+                                {getLabel(
+                                  kodeJenisOptions,
+                                  document.kodeDokumen,
+                                )}
+                              </td>
+
+                              <td className="px-4 py-3">
+                                {document.nomorDokumen}
+                              </td>
+
+                              <td className="px-4 py-3">
+                                {document.tanggalDokumen}
+                              </td>
+                              <td className="px-4 py-3">
+                                {document.kodeFasilitas}
+                              </td>
+                              <td className="px-4 py-3">{document.kodeIjin}</td>
+                              <td className="px-4 py-3">
+                                {barangDokumen.nomorUrut ? (
+                                  <InputNumber
+                                    value={barangDokumen.nomorUrut}
+                                    disabled
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </td>
+                              <td className="px-4 py-3"></td>
+                              <td className="px-4 py-3">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    removeDocument(document.nomorDokumen)
+                                  }
+                                  aria-label={`Hapus dokumen ${document.nomorDokumen}`}
+                                  title="Hapus dokumen"
+                                  className="rounded-md p-2 text-red-600 hover:bg-red-50 hover:text-red-700 hover:cursor-pointer"
+                                >
+                                  <Trash size={16} />
+                                </button>
+                              </td>
+                            </tr>
+                          ) : (
+                            <tr key={barangDokumen.nomorDokumen}>
+                              <td
+                                rowSpan={8}
+                              >{`Gagal menampilkan dokumen ${barangDokumen.nomorDokumen}`}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               )}
             </InputWrapper>
           </div>
