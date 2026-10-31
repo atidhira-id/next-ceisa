@@ -1,12 +1,21 @@
 type ModalUserConfirmationProps = {
   handleYes: () => void;
   handleNo: () => void;
+  title?: string;
+  description?: string;
+  confirmLabel?: string;
 };
 
 export default function ModalUserConfirmation({
   handleYes,
   handleNo,
+  title = "Hapus Dokumen",
+  description = "Apakah Anda yakin ingin menghapus dokumen ini?",
+  confirmLabel = "Hapus",
 }: ModalUserConfirmationProps) {
+  const titleId = `${title.toLowerCase().replace(/\s+/g, "-")}-title`;
+  const descriptionId = `${title.toLowerCase().replace(/\s+/g, "-")}-description`;
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
@@ -16,17 +25,14 @@ export default function ModalUserConfirmation({
         className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
         role="alertdialog"
         aria-modal="true"
-        aria-labelledby="delete-document-title"
-        aria-describedby="delete-document-description"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
       >
-        <h2 id="delete-document-title" className="text-lg font-semibold">
-          Hapus Dokumen
+        <h2 id={titleId} className="text-lg font-semibold">
+          {title}
         </h2>
-        <p
-          id="delete-document-description"
-          className="mt-2 text-sm text-gray-600"
-        >
-          Apakah Anda yakin ingin menghapus dokumen ini?
+        <p id={descriptionId} className="mt-2 text-sm text-gray-600">
+          {description}
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <button
@@ -41,7 +47,7 @@ export default function ModalUserConfirmation({
             onClick={handleYes}
             className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
           >
-            Hapus
+            {confirmLabel}
           </button>
         </div>
       </div>
