@@ -113,11 +113,7 @@ export type TransaksiData = {
   kodeJenisValuta?: string;
   ndpbm?: number;
   kodeJenisTransaksi?: string;
-  kodeHargaBarang?: string;
-  hargaBarang?: number;
   komponenBiaya?: KomponenBiaya;
-  nilaiPabeanAsing?: number;
-  nilaiPabeanRupiah?: number;
 
   beratKotor?: number;
   beratBersih?: number;
@@ -198,11 +194,18 @@ export type BarangItemData = {
   alasan?: string;
   statementPerbedaan?: string;
 
+  listDokumen?: BarangDokumenData[];
+
   bmJenisTarif?: string;
   bmPembayaran?: string;
   ppnPembayaran?: string;
   pphPembayaran?: string;
   isCukai?: boolean;
+};
+
+export type BarangDokumenData = {
+  nomorDokumen: string;
+  nomorUrut: number;
 };
 
 export type PernyataanData = {
