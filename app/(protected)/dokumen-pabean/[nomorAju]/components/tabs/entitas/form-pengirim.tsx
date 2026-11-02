@@ -1,25 +1,43 @@
 import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
-import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
-import { kodeNegaraOptions } from "@/app/constants/entitas-options";
+import {
+  kodeNegaraOptions,
+  supplierNameOptions,
+} from "@/app/constants/entitas-options";
+import { supplierData } from "@/app/constants/supplier";
 import { required } from "@/lib/validation";
 
 export default function FormPengirim() {
   const { documentData, updateDocumentData } = useDocument();
   const pengirim = documentData!.entitasPengirim;
 
+  function updateNamaPengirim(nama: string) {
+    const supplier = supplierData.find((item) => item.nama === nama);
+
+    updateDocumentData({
+      entitasPengirim: {
+        ...pengirim,
+        nama,
+        alamat:
+          supplier?.alamat ?? (nama === pengirim.nama ? pengirim.alamat : ""),
+        negara:
+          supplier?.kodeNegara ?? (nama === pengirim.nama ? pengirim.negara : ""),
+      },
+    });
+  }
+
   return (
     <InputWrapper title="Pengirim">
       {/* Nama */}
-      <InputNormal
-        title="Nama"
+      <InputSelect
+        label="Nama"
         value={pengirim.nama ?? ""}
-        onChange={(value) =>
-          updateDocumentData({ entitasPengirim: { ...pengirim, nama: value } })
-        }
+        options={supplierNameOptions}
+        onChange={updateNamaPengirim}
         rules={[required()]}
+        allowCustom
       />
 
       {/* Alamat */}

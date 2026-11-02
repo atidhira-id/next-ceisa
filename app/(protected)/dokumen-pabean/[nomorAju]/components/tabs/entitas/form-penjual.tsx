@@ -1,10 +1,13 @@
 import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
-import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
-import { kodeNegaraOptions } from "@/app/constants/entitas-options";
+import {
+  kodeNegaraOptions,
+  supplierNameOptions,
+} from "@/app/constants/entitas-options";
 import { required } from "@/lib/validation";
+import { supplierData } from "@/app/constants/supplier";
 
 export default function FormPenjual() {
   const { documentData, updateDocumentData } = useDocument();
@@ -25,6 +28,21 @@ export default function FormPenjual() {
     });
   }
 
+  function updateNamaPenjual(nama: string) {
+    const supplier = supplierData.find((item) => item.nama === nama);
+
+    updateDocumentData({
+      entitasPenjual: {
+        ...penjual,
+        nama,
+        alamat:
+          supplier?.alamat ?? (nama === penjual.nama ? penjual.alamat : ""),
+        negara:
+          supplier?.kodeNegara ?? (nama === penjual.nama ? penjual.negara : ""),
+      },
+    });
+  }
+
   return (
     <InputWrapper
       title="Penjual"
@@ -39,13 +57,13 @@ export default function FormPenjual() {
       }
     >
       {/* Nama */}
-      <InputNormal
-        title="Nama"
+      <InputSelect
+        label="Nama"
         value={penjual.nama ?? ""}
-        onChange={(value) =>
-          updateDocumentData({ entitasPenjual: { ...penjual, nama: value } })
-        }
+        options={supplierNameOptions}
+        onChange={updateNamaPenjual}
         rules={[required()]}
+        allowCustom
       />
 
       {/* Alamat */}
