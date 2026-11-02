@@ -173,7 +173,7 @@ export type KontainerItemData = {
 
 export type BarangItemData = {
   seri?: number;
-  hs?: HsType;
+  hs?: string;
   spesifikasi?: Record<string, string | null>;
   kodeBarang?: string;
   uraianJenisBarang?: string;
@@ -197,8 +197,11 @@ export type BarangItemData = {
   listDokumen?: BarangDokumenData[];
 
   bmJenisTarif?: string;
+  bmPercentage?: number;
   bmPembayaran?: string;
+  ppnPercentage?: number;
   ppnPembayaran?: string;
+  pphPercentage?: number;
   pphPembayaran?: string;
   isCukai?: boolean;
 };
