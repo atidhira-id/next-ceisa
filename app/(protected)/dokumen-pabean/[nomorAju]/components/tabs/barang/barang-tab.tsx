@@ -5,7 +5,7 @@ import { Warning } from "../../warning";
 import ModalAddBarang from "./modal-add-barang";
 import InputWrapper from "../../input-wrapper";
 import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modal-user-confirmation";
-import { Trash, SquareArrowOutUpRight } from "lucide-react";
+import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("id-ID", {
@@ -87,9 +87,9 @@ export default function BarangTab() {
           <button
             type="button"
             onClick={() => handleOpenBarangModal()}
-            className="rounded-md bg-gray-900 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-gray-800"
+            className="flex items-center gap-1 rounded-md bg-gray-900 px-4 py-2 m-2 text-sm font-medium text-white hover:bg-gray-800"
           >
-            + Tambah
+            <Plus size={16} /> Tambah
           </button>
         }
       >
@@ -138,7 +138,7 @@ export default function BarangTab() {
                   <tr key={barang.seri} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-medium">{barang.seri}</td>
 
-                    <td className="px-4 py-3">{barang.hs?.kode}</td>
+                    <td className="px-4 py-3">{barang.hs}</td>
                     <td className="px-4 py-3 whitespace-pre-line">
                       {barang.uraianJenisBarang}
                     </td>
