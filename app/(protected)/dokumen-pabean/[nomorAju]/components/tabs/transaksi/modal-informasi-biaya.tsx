@@ -14,6 +14,7 @@ import {
 } from "@/app/constants/transaksi-options";
 import InputNumber from "../../input-number";
 import { KomponenBiaya } from "@/app/providers/types";
+import { formatRupiah } from "@/lib/utils";
 
 type ModalInformasiBiayaProps = {
   onCloseModal: () => void;
@@ -119,7 +120,7 @@ export default function ModalInformasiBiaya({
 
               <CellResult
                 label="A. Jumlah harga sebenarnya atau seharusnya dibayar (1 + 2)"
-                nilaiPasti={valueA}
+                nilaiPasti={formatRupiah(valueA)}
               />
               <SpaceCell />
               <CellInput
@@ -129,7 +130,10 @@ export default function ModalInformasiBiaya({
                   updateData("diskon", Number(value));
                 }}
               />
-              <CellResult label="C. Jumlah A dikurangi B" nilaiPasti={valueC} />
+              <CellResult
+                label="C. Jumlah A dikurangi B"
+                nilaiPasti={formatRupiah(valueC)}
+              />
               <SpaceCell />
 
               {/* GRUP B */}
@@ -172,10 +176,13 @@ export default function ModalInformasiBiaya({
 
               <CellResult
                 label="D. Jumlah biaya penambah (jumlah 1 s/d 10)"
-                nilaiPasti={valueD}
+                nilaiPasti={formatRupiah(valueE)}
               />
               <SpaceCell />
-              <CellResult label="E. Jumlah C ditambah D" nilaiPasti={valueE} />
+              <CellResult
+                label="E. Jumlah C ditambah D"
+                nilaiPasti={formatRupiah(valueE)}
+              />
               <SpaceCell />
 
               {/* GRUP C */}
@@ -192,9 +199,12 @@ export default function ModalInformasiBiaya({
               ))}
               <CellResult
                 label="F. Jumlah biaya yang tidak ditambahkan (jumlah 1 s/d 5)"
-                nilaiPasti={valueF}
+                nilaiPasti={formatRupiah(valueF)}
               />
-              <CellResult label="G. Jumlah E dikurangi F" nilaiPasti={valueG} />
+              <CellResult
+                label="G. Jumlah E dikurangi F"
+                nilaiPasti={formatRupiah(valueG)}
+              />
             </tbody>
           </table>
         </div>
@@ -232,8 +242,8 @@ type CellInputProps = {
 
 type CellResultProps = {
   label?: string;
-  nilaiPasti?: number;
-  nilai?: number;
+  nilaiPasti?: string;
+  nilai?: string;
 };
 
 type CellTitleProps = {
@@ -270,7 +280,7 @@ function CellInput({
   );
 }
 
-function CellResult({ label, nilaiPasti, nilai = 0 }: CellResultProps) {
+function CellResult({ label, nilaiPasti, nilai = "0" }: CellResultProps) {
   return (
     <tr className="bg-gray-300 ">
       <td className="p-2 border border-gray-500 font-bold">{label}</td>
