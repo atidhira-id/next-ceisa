@@ -1,8 +1,13 @@
 import ExcelJS from "exceljs";
 import path from "node:path";
 
-import type { FormInputs } from "@/app/providers/types";
-import { getBiayaPenambah, getBiayaPengurang } from "../utils";
+import type { FormInputs, PungutanType } from "@/app/providers/types";
+import {
+  getBeratBersih,
+  getBiayaPenambah,
+  getBiayaPengurang,
+  getPungutan,
+} from "../utils";
 
 // Helper function to export document data to an Excel file using a predefined template.
 export async function exportDocumentToExcel(documentData: FormInputs) {
@@ -59,6 +64,41 @@ export async function exportDocumentToExcel(documentData: FormInputs) {
   }
   setKontainerSheetData(kontainerSheet, documentData);
 
+  // KOMPONEN BIAYA SHEET
+  const komponenBiayaSheet = workbook.getWorksheet("KOMPONENBIAYA");
+  if (!komponenBiayaSheet) {
+    throw new Error("Sheet KOMPONENBIAYA tidak ditemukan di template Excel.");
+  }
+  setKomponenBiayaSheetData(komponenBiayaSheet, documentData);
+
+  // BARANG SHEET
+  const listBarangSheet = workbook.getWorksheet("BARANG");
+  if (!listBarangSheet) {
+    throw new Error("Sheet BARANG tidak ditemukan di template Excel.");
+  }
+  setBarangSheetData(listBarangSheet, documentData);
+
+  // TARIF SHEET
+  const tarifSheet = workbook.getWorksheet("BARANGTARIF");
+  if (!tarifSheet) {
+    throw new Error("Sheet BARANGTARIF tidak ditemukan di template Excel.");
+  }
+  setBarangTarifSheetData(tarifSheet, documentData);
+
+  // BARANG DOKUMEN SHEET
+  const barangDokumenSheet = workbook.getWorksheet("BARANGDOKUMEN");
+  if (!barangDokumenSheet) {
+    throw new Error("Sheet BARANGDOKUMEN tidak ditemukan di template Excel.");
+  }
+  setBarangDokumenSheetData(barangDokumenSheet, documentData);
+
+  // PUNGUTAN SHEET
+  const pungutanSheet = workbook.getWorksheet("PUNGUTAN");
+  if (!pungutanSheet) {
+    throw new Error("Sheet PUNGUTAN tidak ditemukan di template Excel.");
+  }
+  setPungutanDokumenSheetData(pungutanSheet, documentData);
+
   return workbook.xlsx.writeBuffer();
 }
 
@@ -100,6 +140,7 @@ function setHeaderSheetData(headerSheet: ExcelJS.Worksheet, data: FormInputs) {
   setCellValue(headerSheet, `H${row}`, headerData.kodeJenisImport);
   setCellValue(headerSheet, `L${row}`, headerData.kodeJenisPib);
   setCellValue(headerSheet, `Q${row}`, headerData.kodeCaraPembayaran);
+
   setCellValue(headerSheet, `AI${row}`, pengengkutData.kodeNomorTutupPu);
   setCellValue(headerSheet, `AJ${row}`, pengengkutData.nomorTutupPu);
   setCellValue(headerSheet, `AK${row}`, pengengkutData.tanggalTutupPu);
@@ -114,37 +155,55 @@ function setHeaderSheetData(headerSheet: ExcelJS.Worksheet, data: FormInputs) {
   setCellValue(headerSheet, `AR${row}`, headerData.kodePelabuhanTujuan);
   setCellValue(headerSheet, `AT${row}`, pengengkutData.kodeTempatPenimbunan);
   setCellValue(headerSheet, `AY${row}`, pengengkutData.perkiraanTanggalTiba);
-  setCellValue(headerSheet, `CI${row}`, transaksiData.kodeJenisValuta);
-  setCellValue(headerSheet, `BW${row}`, transaksiData.ndpbm);
-  setCellValue(headerSheet, `CN${row}`, transaksiData.kodeJenisTransaksi);
 
-  setCellValue(
-    headerSheet,
-    `BQ${row}`,
-    transaksiData.komponenBiaya?.hargaInvoice,
-  );
-  setCellValue(
-    headerSheet,
-    `CJ${row}`,
-    transaksiData.komponenBiaya?.kodeHargaInvoice,
-  );
-
-  const biayaTambahan = getBiayaPenambah(transaksiData);
-  setCellValue(headerSheet, `BR${row}`, biayaTambahan);
-
-  const biayaPengurang = getBiayaPengurang(transaksiData);
-  setCellValue(headerSheet, `BS${row}`, biayaPengurang);
-
-  setCellValue(headerSheet, `BP${row}`, transaksiData.komponenBiaya?.freight);
+  // setCellValue(headerSheet, `BD${row}`, JUMLAH TANDA PENGAMAN);
   setCellValue(
     headerSheet,
     `BJ${row}`,
     transaksiData.komponenBiaya?.kodeAsuransi,
   );
   setCellValue(headerSheet, `BK${row}`, transaksiData.komponenBiaya?.asuransi);
-
+  // setCellValue(headerSheet, `BL${row}`, NILAI BARANG);
+  // setCellValue(headerSheet, `BM${row}`, NILAI INCOTERM);
+  // setCellValue(headerSheet, `BN${row}`, NILAI MAKLON);
+  // setCellValue(headerSheet, `BO${row}`, ASURANSI);
+  setCellValue(headerSheet, `BP${row}`, transaksiData.komponenBiaya?.freight);
+  setCellValue(
+    headerSheet,
+    `BQ${row}`,
+    transaksiData.komponenBiaya?.hargaInvoice,
+  );
+  setCellValue(headerSheet, `BR${row}`, getBiayaPenambah(transaksiData));
+  setCellValue(headerSheet, `BS${row}`, getBiayaPengurang(transaksiData));
+  // setCellValue(headerSheet, `BT${row}`, VD);
+  // setCellValue(headerSheet, `BU${row}`, CIF);
+  // setCellValue(headerSheet, `BV${row}`, HARGA_PENYERAHAN);
+  setCellValue(headerSheet, `BW${row}`, transaksiData.ndpbm);
+  // setCellValue(headerSheet, `BX${row}`, TOTAL DANA SAWIT);
+  // setCellValue(headerSheet, `BY${row}`, DASAR PENGENAAN PAJAK);
+  // setCellValue(headerSheet, `BZ${row}`, NILAI JASA);
+  // setCellValue(headerSheet, `CA${row}`, UANG MUKA);
   setCellValue(headerSheet, `CB${row}`, transaksiData.beratKotor);
-  setCellValue(headerSheet, `CC${row}`, transaksiData.beratBersih);
+  setCellValue(headerSheet, `CC${row}`, getBeratBersih(data.listBarang));
+  // setCellValue(headerSheet, `CD${row}`, VOLUME);
+  setCellValue(headerSheet, `CE${row}`, data.pernyataan.tempat);
+  setCellValue(headerSheet, `CF${row}`, data.pernyataan.tanggal);
+  setCellValue(headerSheet, `CG${row}`, data.pernyataan.nama);
+  setCellValue(headerSheet, `CH${row}`, data.pernyataan.jabatan);
+  setCellValue(headerSheet, `CI${row}`, transaksiData.kodeJenisValuta);
+  setCellValue(
+    headerSheet,
+    `CJ${row}`,
+    transaksiData.komponenBiaya?.kodeHargaInvoice,
+  );
+  setCellValue(headerSheet, `CN${row}`, transaksiData.kodeJenisTransaksi);
+  // setCellValue(headerSheet, `CP${row}`, NOMOR DAFTAR);
+  // setCellValue(headerSheet, `CQ${row}`, TANGGAL DAFTAR);
+  // setCellValue(headerSheet, `CT${row}`, PPN PAJAK);
+  // setCellValue(headerSheet, `CU${row}`, PPNBM PAJAK);
+  // setCellValue(headerSheet, `CV${row}`, TARIF PPN PAJAK);
+  // setCellValue(headerSheet, `CW${row}`, TARIF PPNBM PAJAK);
+
   setCellValue(headerSheet, `DC${row}`, "T");
 }
 
@@ -343,4 +402,237 @@ function setKontainerSheetData(
     // G - NOMOR SEGEL
     setCellValue(kontainerSheet, `G${row}`, kontainerData.nomorSegel);
   }
+}
+
+function setKomponenBiayaSheetData(
+  komponenBiayaSheet: ExcelJS.Worksheet,
+  data: FormInputs,
+) {
+  const komponenBiaya = data.transaksi.komponenBiaya;
+
+  // ROW 2
+  setCellValue(komponenBiayaSheet, "A2", data.nomorAju);
+  setCellValue(komponenBiayaSheet, "B2", "1");
+  setCellValue(komponenBiayaSheet, "C2", komponenBiaya?.hargaInvoice ?? 0);
+  setCellValue(
+    komponenBiayaSheet,
+    "D2",
+    komponenBiaya?.pembayaranTidakLangsung ?? 0,
+  );
+  setCellValue(komponenBiayaSheet, "E2", komponenBiaya?.diskon ?? 0);
+  setCellValue(
+    komponenBiayaSheet,
+    "F2",
+    komponenBiaya?.komisiDanJasaPerantara ?? 0,
+  );
+  setCellValue(komponenBiayaSheet, "G2", komponenBiaya?.pengemasan ?? 0);
+  setCellValue(komponenBiayaSheet, "H2", komponenBiaya?.pengepakan ?? 0);
+  setCellValue(komponenBiayaSheet, "I2", komponenBiaya?.assist ?? 0);
+  setCellValue(komponenBiayaSheet, "J2", komponenBiaya?.royalti ?? 0);
+  setCellValue(komponenBiayaSheet, "K2", komponenBiaya?.proceeds ?? 0);
+  setCellValue(komponenBiayaSheet, "L2", komponenBiaya?.freight ?? 0);
+  setCellValue(komponenBiayaSheet, "M2", komponenBiaya?.pemuatan ?? 0);
+  setCellValue(komponenBiayaSheet, "N2", komponenBiaya?.asuransi ?? 0);
+  setCellValue(komponenBiayaSheet, "O2", komponenBiaya?.garansi ?? 0);
+  setCellValue(
+    komponenBiayaSheet,
+    "P2",
+    komponenBiaya?.biayaKepentinganSendiri ?? 0,
+  );
+  setCellValue(
+    komponenBiayaSheet,
+    "Q2",
+    komponenBiaya?.biayaSetelahImport ?? 0,
+  );
+  setCellValue(komponenBiayaSheet, "R2", komponenBiaya?.pajakInternal ?? 0);
+  setCellValue(komponenBiayaSheet, "S2", komponenBiaya?.bunga ?? 0);
+  setCellValue(komponenBiayaSheet, "T2", komponenBiaya?.deviden ?? 0);
+
+  // Row 3
+  setCellValue(komponenBiayaSheet, "A3", data.nomorAju);
+  setCellValue(komponenBiayaSheet, "B3", "2");
+  setCellValue(komponenBiayaSheet, "C3", 0);
+  setCellValue(komponenBiayaSheet, "D3", 0);
+  setCellValue(komponenBiayaSheet, "E3", 0);
+  setCellValue(komponenBiayaSheet, "F3", 0);
+  setCellValue(komponenBiayaSheet, "G3", 0);
+  setCellValue(komponenBiayaSheet, "H3", 0);
+  setCellValue(komponenBiayaSheet, "I3", 0);
+  setCellValue(komponenBiayaSheet, "J3", 0);
+  setCellValue(komponenBiayaSheet, "K3", 0);
+  setCellValue(komponenBiayaSheet, "L3", 0);
+  setCellValue(komponenBiayaSheet, "M3", 0);
+  setCellValue(komponenBiayaSheet, "N3", 0);
+  setCellValue(komponenBiayaSheet, "O3", 0);
+  setCellValue(komponenBiayaSheet, "P3", 0);
+  setCellValue(komponenBiayaSheet, "Q3", 0);
+  setCellValue(komponenBiayaSheet, "R3", 0);
+  setCellValue(komponenBiayaSheet, "S3", 0);
+  setCellValue(komponenBiayaSheet, "T3", 0);
+}
+
+function setBarangSheetData(barangSheet: ExcelJS.Worksheet, data: FormInputs) {
+  const listBarang = data.listBarang;
+  const start = 2;
+
+  listBarang.map((barang, index) => {
+    const row = index + start;
+    setCellValue(barangSheet, `A${row}`, data.nomorAju);
+    setCellValue(barangSheet, `B${row}`, barang.seri);
+    setCellValue(barangSheet, `C${row}`, barang.hs);
+    setCellValue(barangSheet, `D${row}`, barang.kodeBarang);
+    setCellValue(barangSheet, `E${row}`, barang.uraianJenisBarang);
+    setCellValue(barangSheet, `F${row}`, barang.merek);
+    setCellValue(barangSheet, `G${row}`, barang.tipe);
+    setCellValue(barangSheet, `H${row}`, barang.ukuran);
+    setCellValue(barangSheet, `I${row}`, barang.spesifikasiLain);
+    setCellValue(barangSheet, `J${row}`, barang.kodeSatuan);
+    setCellValue(barangSheet, `K${row}`, barang.jumlah);
+    setCellValue(barangSheet, `L${row}`, barang.kodeJenisKemasan);
+    setCellValue(barangSheet, `M${row}`, barang.kemasan);
+    // setCellValue(barangSheet, `N${row}`, barang);
+    // setCellValue(barangSheet, `O${row}`, barang);
+    // setCellValue(barangSheet, `P${row}`, barang);
+    // setCellValue(barangSheet, `Q${row}`, barang);
+    // setCellValue(barangSheet, `R${row}`, barang);
+    // setCellValue(barangSheet, `S${row}`, barang);
+    setCellValue(barangSheet, `T${row}`, barang.beratBersih);
+    // setCellValue(barangSheet, `U${row}`, barang);
+    // setCellValue(barangSheet, `V${row}`, barang);
+    // setCellValue(barangSheet, `W${row}`, barang);
+    // setCellValue(barangSheet, `X${row}`, barang);
+    // setCellValue(barangSheet, `Y${row}`, barang);
+    setCellValue(barangSheet, `Z${row}`, barang.hargaInvoice);
+    // setCellValue(barangSheet, `AA${row}`, barang);
+    // setCellValue(barangSheet, `AB${row}`, barang);
+    // setCellValue(barangSheet, `AC${row}`, barang);
+    // setCellValue(barangSheet, `AD${row}`, barang);
+    // setCellValue(barangSheet, `AE${row}`, barang);
+    // setCellValue(barangSheet, `AF${row}`, barang);
+    // setCellValue(barangSheet, `AG${row}`, barang);
+    // setCellValue(barangSheet, `AH${row}`, barang);
+    // setCellValue(barangSheet, `AI${row}`, barang);
+    setCellValue(
+      barangSheet,
+      `AJ${row}`,
+      (barang.hargaInvoice ?? 0) / (barang.jumlah ?? 1),
+    );
+    // setCellValue(barangSheet, `AK${row}`, barang);
+    // setCellValue(barangSheet, `AL${row}`, barang);
+    // setCellValue(barangSheet, `AM${row}`, barang);
+    // setCellValue(barangSheet, `AN${row}`, barang);
+    // setCellValue(barangSheet, `AO${row}`, barang);
+    // setCellValue(barangSheet, `AP${row}`, barang);
+    // setCellValue(barangSheet, `AQ${row}`, barang);
+    // setCellValue(barangSheet, `AR${row}`, barang);
+    // setCellValue(barangSheet, `AS${row}`, barang);
+    // setCellValue(barangSheet, `AT${row}`, barang);
+    setCellValue(barangSheet, `AU${row}`, data.transaksi.kodeJenisTransaksi);
+    // setCellValue(barangSheet, `AV${row}`, barang);
+    // setCellValue(barangSheet, `AW${row}`, barang);
+    setCellValue(barangSheet, `AX${row}`, barang.kondisiBarang);
+    setCellValue(barangSheet, `AY${row}`, barang.negara);
+    // setCellValue(barangSheet, `AZ${row}`, barang);
+    // setCellValue(barangSheet, `BA${row}`, barang);
+    // setCellValue(barangSheet, `BB${row}`, barang);
+    // setCellValue(barangSheet, `BC${row}`, barang);
+    // setCellValue(barangSheet, `BD${row}`, barang);
+    // setCellValue(barangSheet, `BE${row}`, barang);
+    // setCellValue(barangSheet, `BF${row}`, barang);
+    // setCellValue(barangSheet, `BG${row}`, barang);
+    // setCellValue(barangSheet, `BH${row}`, barang);
+    // setCellValue(barangSheet, `BI${row}`, barang);
+    // setCellValue(barangSheet, `BJ${row}`, barang);
+    // setCellValue(barangSheet, `BK${row}`, barang);
+    // setCellValue(barangSheet, `BL${row}`, barang);
+    // setCellValue(barangSheet, `BM${row}`, barang);
+    // setCellValue(barangSheet, `BN${row}`, barang);
+    // setCellValue(barangSheet, `BO${row}`, barang);
+    setCellValue(barangSheet, `BP${row}`, barang.metodePenentuanNilai);
+    setCellValue(barangSheet, `BQ${row}`, barang.alasan);
+    setCellValue(barangSheet, `BR${row}`, barang.statementPerbedaan);
+  });
+}
+
+function setBarangTarifSheetData(
+  tarifSheet: ExcelJS.Worksheet,
+  data: FormInputs,
+) {
+  const listBarang = data.listBarang;
+  const start = 2;
+  const kodePungut: PungutanType[] = ["ppn", "bm", "pph"];
+
+  listBarang.map((barang, index) => {
+    const rowStart = index * 3 + start;
+
+    kodePungut.map((kode, i) => {
+      const row = rowStart + i;
+
+      setCellValue(tarifSheet, `A${row}`, data.nomorAju);
+      setCellValue(tarifSheet, `B${row}`, barang.seri);
+      setCellValue(tarifSheet, `C${row}`, kode.toUpperCase());
+      setCellValue(tarifSheet, `D${row}`, barang[`${kode}Pembayaran`]);
+      setCellValue(tarifSheet, `E${row}`, barang[`${kode}Percentage`]);
+      setCellValue(tarifSheet, `F${row}`, barang[`${kode}Pembayaran`]);
+      // setCellValue(tarifSheet, `G${row}`, 0);
+      // setCellValue(tarifSheet, `H${row}`, );
+      // setCellValue(tarifSheet, `I${row}`, );
+      // setCellValue(tarifSheet, `J${row}`, );
+      setCellValue(tarifSheet, `K${row}`, barang.kodeSatuan);
+      setCellValue(tarifSheet, `L${row}`, barang.jumlah);
+      // setCellValue(tarifSheet, `M${row}`, );
+      // setCellValue(tarifSheet, `N${row}`, );
+      // setCellValue(tarifSheet, `O${row}`, );
+      // setCellValue(tarifSheet, `P${row}`, );
+      // setCellValue(tarifSheet, `Q${row}`, );
+      // setCellValue(tarifSheet, `R${row}`, );
+      // setCellValue(tarifSheet, `S${row}`, );
+    });
+  });
+}
+
+function setBarangDokumenSheetData(
+  barangDokumenSheet: ExcelJS.Worksheet,
+  data: FormInputs,
+) {
+  const listBarang = data.listBarang;
+  let row = 2;
+
+  listBarang.map((barang) => {
+    const listDokumen = barang.listDokumen;
+
+    listDokumen?.map((item) => {
+      const doc = data.listDokumen.find(
+        (i) => i.nomorDokumen == item.nomorDokumen,
+      );
+      setCellValue(barangDokumenSheet, `A${row}`, data.nomorAju);
+      setCellValue(barangDokumenSheet, `B${row}`, barang.seri);
+      setCellValue(barangDokumenSheet, `C${row}`, doc?.seri ?? "");
+      setCellValue(barangDokumenSheet, `D${row}`, item.nomorUrut);
+
+      row++;
+    });
+  });
+}
+
+function setPungutanDokumenSheetData(
+  pungutanSheet: ExcelJS.Worksheet,
+  data: FormInputs,
+) {
+  const start = 2;
+  const pungutan: PungutanType[] = ["bm", "pph", "ppn"];
+
+  pungutan.map((kode, i) => {
+    const row = start + i;
+
+    setCellValue(pungutanSheet, `A${row}`, data.nomorAju);
+    setCellValue(pungutanSheet, `B${row}`, "1");
+    setCellValue(pungutanSheet, `C${row}`, kode.toUpperCase());
+    setCellValue(
+      pungutanSheet,
+      `D${row}`,
+      getPungutan(kode, data.transaksi, data.listBarang),
+    );
+    // setCellValue(pungutanSheet, `E${row}`, );
+  });
 }
