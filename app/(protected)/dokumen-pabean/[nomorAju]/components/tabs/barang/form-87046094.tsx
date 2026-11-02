@@ -2,7 +2,7 @@
 import type { BarangItemData } from "@/app/providers/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
-import { hsOption } from "@/app/constants/barang-options";
+import { cbuOptions } from "@/app/constants/barang-options";
 import { required } from "@/lib/validation";
 
 type FormProps = {
@@ -12,11 +12,11 @@ type FormProps = {
 
 export default function Form_87046094({ barang, updateSpecs }: FormProps) {
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       <InputSelect
         labelPosition="left"
         label="CBU"
-        options={hsOption}
+        options={cbuOptions}
         value={barang.spesifikasi?.cbu ?? ""}
         onChange={(value) => updateSpecs("cbu", value)}
         rules={[required()]}
