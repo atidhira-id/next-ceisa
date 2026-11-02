@@ -15,7 +15,12 @@ import ModalInformasiBiaya from "./modal-informasi-biaya";
 import InputNumber from "../../input-number";
 import InputRadio from "../../input-radio";
 import { required } from "@/lib/validation";
-import { getBiayaPenambah, getBiayaPengurang } from "@/lib/utils";
+import {
+  getBeratBersih,
+  getBiayaPenambah,
+  getBiayaPengurang,
+  getPabeanRupiah,
+} from "@/lib/utils";
 
 export function TransaksiTab() {
   const { documentData, updateDocumentData } = useDocument();
@@ -23,13 +28,6 @@ export function TransaksiTab() {
   const listBarang = documentData!.listBarang;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const pabeanRupiah =
-    (transaksi.ndpbm ?? 0) * (transaksi.komponenBiaya?.hargaInvoice ?? 0);
-  const totalBeratBersih = listBarang.reduce(
-    (total, barang) => total + (barang.beratBersih ?? 0),
-    0,
-  );
 
   return (
     <div className="space-y-6">
@@ -112,7 +110,7 @@ export function TransaksiTab() {
 
           <InputNumber
             title="Nilai Pabean dalam Rupiah"
-            value={pabeanRupiah}
+            value={getPabeanRupiah(transaksi)}
             onChange={() => {}}
             disabled
           />
@@ -188,9 +186,9 @@ export function TransaksiTab() {
               })
             }
           />
-          <InputNormal
+          <InputNumber
             title="Berat Bersih (Kg)"
-            value={String(totalBeratBersih.toFixed(2))}
+            value={getBeratBersih(listBarang)}
             disabled
           />
         </InputWrapper>
