@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { SquareArrowOutUpRight, Trash } from "lucide-react";
 
 type Draft = {
   id: string;
@@ -179,14 +180,14 @@ export default function DocumentTable() {
                       )}`}
                       className="text-blue-600 hover:underline"
                     >
-                      Buka
+                      <SquareArrowOutUpRight size={18} />
                     </Link>
                     <button
                       type="button"
                       onClick={() => handleDeleteDraft(document.nomorAju)}
                       className="text-red-600 hover:text-red-800 hover:underline hover:cursor-pointer"
                     >
-                      Hapus
+                      <Trash size={18} />
                     </button>
                   </td>
                 </tr>

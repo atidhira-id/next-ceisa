@@ -12,6 +12,7 @@ import { TransaksiTab } from "./tabs/transaksi/transaksi-tab";
 import BarangTab from "./tabs/barang/barang-tab";
 import PernyataanTab from "./tabs/pernyataan/pernyataan-tab";
 import PungutanTab from "./tabs/pungutan/pungutan-tab";
+import { MoveLeft, MoveRight } from "lucide-react";
 
 type DocumentFormProps = {
   nomorAju: string;
@@ -232,18 +233,18 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
             type="button"
             onClick={handlePrevious}
             disabled={isFirstTab}
-            className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex items-center gap-1 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            ← Sebelumnya
+            <MoveLeft size={14} /> Sebelumnya
           </button>
 
           {!isLastTab && (
             <button
               type="button"
               onClick={handleNext}
-              className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+              className="flex items-center gap-1 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
             >
-              Berikutnya →
+              Berikutnya <MoveRight size={14} />
             </button>
           )}
         </div>

@@ -11,7 +11,7 @@ import { getLabel } from "@/lib/utils";
 import type { DocumentItemData } from "@/app/providers/types";
 import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modal-user-confirmation";
 import InputWrapper from "../../input-wrapper";
-import { Trash, SquareArrowOutUpRight } from "lucide-react";
+import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
 
 export default function DokumenTab() {
   const { documentData, updateDocumentData } = useDocument();
@@ -60,9 +60,9 @@ export default function DokumenTab() {
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="rounded-md bg-gray-900 px-3 m-2 text-sm font-medium text-white hover:bg-gray-800"
+            className="flex items-center gap-1 rounded-md bg-gray-900 px-3 m-2 text-sm font-medium text-white hover:bg-gray-800"
           >
-            + Tambah Dokumen
+            <Plus size={16} /> Tambah Dokumen
           </button>
         }
       >
@@ -115,10 +115,7 @@ export default function DokumenTab() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {getLabel(
-                        kodeFasilitasOptions,
-                        document.kodeFasilitas ?? "",
-                      )}
+                      {getLabel(kodeFasilitasOptions, document.kodeIjin ?? "")}
                     </td>
                     <td>
                       <button

@@ -1,3 +1,5 @@
+import { Plus } from "lucide-react";
+
 type DocumentHeaderProps = {
   onAddDocument?: () => void;
 };
@@ -9,9 +11,10 @@ export default function DocumentHeader({ onAddDocument }: DocumentHeaderProps) {
       <button
         type="button"
         onClick={onAddDocument}
-        className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+        className="flex items-center gap-1 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
       >
-        + Tambah Dokumen
+        <Plus size={16} />
+        <span>Tambah Dokumen</span>
       </button>
     </div>
   );
