@@ -22,8 +22,13 @@ import Form_87046094 from "./form-87046094";
 import InputTextArea from "../../input-textarea";
 import InputNumber from "../../input-number";
 import InputRadio from "../../input-radio";
-import { getBiayaPenambah, getBiayaPengurang, getLabel } from "@/lib/utils";
-import ModalDokumenFasilitas from "./modal-dokumen-fasilitas";
+import {
+  getBiayaPenambah,
+  getBiayaPengurang,
+  getLabel,
+  getPabeanRupiah,
+} from "@/lib/utils";
+import { ModalDokumenFasilitas } from "./modal-dokumen-fasilitas";
 import { hsData } from "@/app/constants/hs";
 import { jenisKemasanOptions } from "@/app/constants/kemas-kontainer-options";
 import { kodeJenisOptions } from "@/app/constants/dokumen-options";
@@ -112,8 +117,9 @@ export default function ModalAddBarang({
   }
 
   function checkLartas() {
-    const lb = newBarang.hs?.lartasBorder;
-    const lpb = newBarang.hs?.lartasPostBorder;
+    const hs = hsData.find((item) => item.kode == newBarang.hs);
+    const lb = hs?.lartasBorder;
+    const lpb = hs?.lartasPostBorder;
 
     if (lb && lpb) {
       return "Lartas Border & Post Border";
@@ -126,22 +132,16 @@ export default function ModalAddBarang({
     }
   }
 
-  function getPungutan(type: "bm" | "pph" | "ppn", code: string): number {
-    const hs = hsData.find((item) => item.kode == code);
-
-    return hs ? hs[type] : 0;
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="w-full max-w-7xl h-full max-h-225 flex flex-col rounded-lg bg-white shadow-xl">
-        <div className="border-b px-6 py-4">
+        <div className="border-b border-gray-300 px-6 py-4">
           <h2 className="text-lg font-semibold">Tambah Barang</h2>
         </div>
 
         <div className="grow space-y-5 px-6 py-5 overflow-auto">
           {/* DATA BARANG */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-10">
             {/* Column 1 */}
             <div className="flex flex-col gap-3">
               {/* Seri */}
@@ -156,17 +156,25 @@ export default function ModalAddBarang({
                 labelPosition="left"
                 label="Pos Tarif/HS"
                 options={hsOption}
-                value={newBarang.hs?.kode ?? ""}
+                value={newBarang.hs ?? ""}
                 onChange={(value) => {
                   const hs = hsData.find((item) => item.kode == value);
 
-                  setNewBarang({ ...newBarang, hs: hs });
+                  setNewBarang({
+                    ...newBarang,
+                    ...{
+                      hs: value,
+                      bmPercentage: hs?.bm ?? 0,
+                      pphPercentage: hs?.pph ?? 0,
+                      ppnPercentage: hs?.ppn ?? 0,
+                    },
+                  });
                 }}
                 rules={[required()]}
               />
 
               {/* FORM FOR 87046094 */}
-              {newBarang.hs?.kode == "87046094" && (
+              {newBarang.hs == "87046094" && (
                 <Form_87046094 barang={newBarang} updateSpecs={updateSpecs} />
               )}
 
@@ -370,19 +378,19 @@ export default function ModalAddBarang({
               <InputNumber
                 labelPosition="left"
                 title="Nilai CIF"
-                value={0}
+                value={data.transaksi.komponenBiaya?.hargaInvoice ?? 0}
                 disabled
               />
               <InputNumber
                 labelPosition="left"
                 title="Harga Per Satuan"
-                value={0}
+                value={(newBarang.hargaInvoice ?? 0) / (newBarang.jumlah ?? 1)}
                 disabled
               />
               <InputNumber
                 labelPosition="left"
                 title="Nilai Pabean Rupiah"
-                value={0}
+                value={getPabeanRupiah(data.transaksi)}
                 disabled
               />
               <InputSelect
@@ -582,8 +590,8 @@ export default function ModalAddBarang({
                       rules={[required()]}
                     />
                     <InputNumberWithPercentage
-                      value={getPungutan("bm", newBarang.hs?.kode ?? "")}
-                      disabled
+                      value={newBarang.bmPercentage ?? 0}
+                      onChange={(value) => updateData("bmPercentage", value)}
                     />
                     <InputSelect
                       value={newBarang.bmPembayaran ?? ""}
@@ -601,8 +609,8 @@ export default function ModalAddBarang({
                   <div className="flex items-center gap-1">
                     <p className="w-3/4 text-sm font-bold">PPN (DPP 11/12)</p>
                     <InputNumberWithPercentage
-                      value={getPungutan("ppn", newBarang.hs?.kode ?? "")}
-                      disabled
+                      value={newBarang.ppnPercentage ?? 0}
+                      onChange={(value) => updateData("ppnPercentage", value)}
                     />
                     <InputSelect
                       value={newBarang.ppnPembayaran ?? ""}
@@ -617,8 +625,8 @@ export default function ModalAddBarang({
                   <div className="flex items-center gap-1">
                     <p className="w-3/4 text-sm">PPH</p>
                     <InputNumberWithPercentage
-                      value={getPungutan("pph", newBarang.hs?.kode ?? "")}
-                      disabled
+                      value={newBarang.pphPercentage ?? 0}
+                      onChange={(value) => updateData("pphPercentage", value)}
                     />
                     <InputSelect
                       value={newBarang.pphPembayaran ?? ""}
