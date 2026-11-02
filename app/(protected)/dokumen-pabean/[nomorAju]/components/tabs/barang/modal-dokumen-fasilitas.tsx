@@ -12,15 +12,29 @@ type ModalDokumenFasilitasProps = {
   onSaveDocuments: (documents: BarangDokumenData[]) => void;
 };
 
-export default function ModalDokumenFasilitas({
+export function ModalDokumenFasilitas({
   onCloseModal,
   selectedDocuments: initialSelectedDocuments,
   onSaveDocuments,
 }: ModalDokumenFasilitasProps) {
+  const filteredKodeDokumen = ["705", "380", "465"];
   const { documentData } = useDocument();
   const data = documentData!;
+  const selectableDocuments = data.listDokumen.filter(
+    (document) => !filteredKodeDokumen.includes(document.kodeDokumen),
+  );
+  const selectableDocumentNumbers = new Set(
+    selectableDocuments.map((document) => document.nomorDokumen),
+  );
   const [selectedDocuments, setSelectedDocuments] = useState(
-    () => new Set(initialSelectedDocuments.map((document) => document.nomorDokumen)),
+    () =>
+      new Set(
+        initialSelectedDocuments
+          .map((document) => document.nomorDokumen)
+          .filter((documentNumber) =>
+            selectableDocumentNumbers.has(documentNumber),
+          ),
+      ),
   );
   const [documentOrderNumbers, setDocumentOrderNumbers] = useState(
     () =>
@@ -32,8 +46,8 @@ export default function ModalDokumenFasilitas({
       ),
   );
   const allDocumentsSelected =
-    data.listDokumen.length > 0 &&
-    data.listDokumen.every((document) =>
+    selectableDocuments.length > 0 &&
+    selectableDocuments.every((document) =>
       selectedDocuments.has(document.nomorDokumen),
     );
 
@@ -51,9 +65,7 @@ export default function ModalDokumenFasilitas({
 
   function toggleAllDocuments(isSelected: boolean) {
     setSelectedDocuments(
-      isSelected
-        ? new Set(data.listDokumen.map((document) => document.nomorDokumen))
-        : new Set(),
+      isSelected ? new Set(selectableDocumentNumbers) : new Set(),
     );
   }
 
@@ -66,12 +78,13 @@ export default function ModalDokumenFasilitas({
   }
 
   function handleSave() {
-    onSaveDocuments(
-      Array.from(selectedDocuments, (nomorDokumen) => ({
-        nomorDokumen,
-        nomorUrut: documentOrderNumbers.get(nomorDokumen) ?? 0,
-      })),
+    const documentsToSave = Array.from(selectedDocuments, (nomorDokumen) => ({
+      nomorDokumen,
+      nomorUrut: documentOrderNumbers.get(nomorDokumen) ?? 0,
+    })).filter((document) =>
+      selectableDocumentNumbers.has(document.nomorDokumen),
     );
+    onSaveDocuments(documentsToSave);
     onCloseModal();
   }
 
@@ -136,7 +149,7 @@ export default function ModalDokumenFasilitas({
                 </thead>
 
                 <tbody className="divide-y">
-                  {data.listDokumen.map((document) => (
+                  {selectableDocuments.map((document) => (
                     <tr key={document.seri} className="hover:bg-gray-50">
                       <td className="px-4 py-3">
                         <input
@@ -165,8 +178,7 @@ export default function ModalDokumenFasilitas({
                       <td className="px-4 py-3">
                         <InputNumber
                           value={
-                            documentOrderNumbers.get(document.nomorDokumen) ??
-                            0
+                            documentOrderNumbers.get(document.nomorDokumen) ?? 0
                           }
                           onChange={(value) =>
                             updateOrderNumber(document.nomorDokumen, value)
