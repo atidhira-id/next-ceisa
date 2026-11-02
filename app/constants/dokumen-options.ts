@@ -31,6 +31,7 @@ export const kodeJenisOptions: OptionType[] = [
   { value: "814", label: "814 - SK Izin Ekspor Berkala" },
   { value: "815", label: "815 - SK Izin Tata Niaga Ekspor" },
   { value: "816", label: "816 - Dokumen Ekspor (PEB)" },
+  { value: "825", label: "825 - SURAT KETERANGAN ELEKTRONIK" },
   { value: "834", label: "834 - SNI Gula Kristal Mentah" },
   { value: "835", label: "835 - Izin / Pendaftaran Pestisida" },
   { value: "836", label: "836 - Izin Impor dari Kementerian Pertanian" },
