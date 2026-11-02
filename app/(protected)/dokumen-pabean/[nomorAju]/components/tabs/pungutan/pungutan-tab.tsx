@@ -1,7 +1,6 @@
 import { useDocument } from "@/app/providers/document-provider";
 import { formatRupiah, getPungutan } from "@/lib/utils";
-
-type PungutanType = "bm" | "pph" | "ppn";
+import { PungutanType } from "@/app/providers/types";
 
 export default function PungutanTab() {
   const { documentData } = useDocument();

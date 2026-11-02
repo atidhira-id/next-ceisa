@@ -116,7 +116,6 @@ export type TransaksiData = {
   komponenBiaya?: KomponenBiaya;
 
   beratKotor?: number;
-  beratBersih?: number;
   perhitunganProporsional?: string;
 };
 
@@ -226,3 +225,4 @@ export type HsType = {
   lartasBorder?: string;
   lartasPostBorder?: string;
 };
+export type PungutanType = "bm" | "pph" | "ppn";
