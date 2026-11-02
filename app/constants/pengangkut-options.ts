@@ -1,11 +1,11 @@
 import type { OptionType } from "@/app/providers/types";
 
 export const nomorTutupPuOptions: OptionType[] = [
-  { value: "0", label: "BC 1.0" },
-  { value: "1", label: "BC 1.1" },
-  { value: "2", label: "BC 1.2" },
-  { value: "3", label: "BC 1.3" },
-  { value: "4", label: "BC 1.4" },
+  { value: "10", label: "BC 1.0" },
+  { value: "11", label: "BC 1.1" },
+  { value: "12", label: "BC 1.2" },
+  { value: "13", label: "BC 1.3" },
+  { value: "14", label: "BC 1.4" },
 ];
 
 export const caraPengangkutanOptions: OptionType[] = [

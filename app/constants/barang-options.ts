@@ -1167,38 +1167,36 @@ export const kodeSatuanBarangOptions: OptionType[] = [
 
 export const metodePenentuanNilaiOptions: OptionType[] = [
   {
-    value: "METODE 1",
+    value: "Metode 1",
     label: "METODE 1 - METODE NILAI TRANSAKSI BARANG YANG BERSANGKUTAN",
   },
   {
-    value: "METODE 2",
+    value: "Metode 2",
     label: "METODE 2 - METODE NILAI TRANSAKSI BARANG IDENTIK",
   },
   {
-    value: "METODE 3",
+    value: "Metode 3",
     label: "METODE 3 - METODE NILAI TRANSAKSI BARANG SERUPA",
   },
   {
-    value: "METODE 4",
+    value: "Metode 4",
     label: "METODE 4 - METODE DEDUKSI",
   },
   {
-    value: "METODE 5",
+    value: "Metode 5",
     label: "METODE 5 - METODE KOMPUTASI",
   },
   {
-    value: "METODE 6",
+    value: "Metode 6",
     label: "METODE 6 - METODE FALLBACK",
   },
 ];
 
-export const alasanOptions: OptionType[] = [
-  { value: "TIDAK ADA", label: "TIDAK ADA" },
-];
+export const alasanOptions: OptionType[] = [{ value: "", label: "TIDAK ADA" }];
 
 export const statementPerbedaanOption: OptionType[] = [
-  { value: "Ada", label: "Ada" },
-  { value: "Tidak Ada", label: "Tidak Ada" },
+  { value: "A", label: "Ada" },
+  { value: "T", label: "Tidak Ada" },
 ];
 
 export const bmOptions: OptionType[] = [{ value: "BM", label: "BM" }];
