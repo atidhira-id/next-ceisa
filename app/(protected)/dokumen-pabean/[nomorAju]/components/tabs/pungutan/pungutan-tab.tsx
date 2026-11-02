@@ -1,5 +1,20 @@
+import { useDocument } from "@/app/providers/document-provider";
+import { formatRupiah, getPungutan } from "@/lib/utils";
+
+type PungutanType = "bm" | "pph" | "ppn";
+
 export default function PungutanTab() {
-  const pungutan = [];
+  const { documentData } = useDocument();
+  const data = documentData!;
+
+  const pungutanList: PungutanType[] = ["bm", "pph", "ppn"];
+  const pungutan = [
+    getPungutan("bm", data.transaksi, data.listBarang),
+    getPungutan("pph", data.transaksi, data.listBarang),
+    getPungutan("ppn", data.transaksi, data.listBarang),
+  ];
+  const total = pungutan.reduce((acc, val) => acc + val, 0);
+
   return (
     <div>
       {/* Header */}
@@ -12,7 +27,7 @@ export default function PungutanTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="border-b bg-gray-50">
-              <tr>
+              <tr className="text-center">
                 <th className="w-16 px-4 py-3 font-medium text-gray-600">
                   Pungutan
                 </th>
@@ -34,13 +49,30 @@ export default function PungutanTab() {
             </thead>
 
             <tbody className="divide-y">
-              {pungutan.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="p-4 text-center">
-                    Belum ada pungutan.
+              {pungutanList.map((title) => (
+                <tr key={title}>
+                  <td className="p-4 text-center uppercase">{title}</td>
+                  <td className="p-4 text-center">
+                    {formatRupiah(
+                      getPungutan(title, data.transaksi, data.listBarang),
+                    )}
                   </td>
+                  <td className="p-4 text-center">-</td>
+                  <td className="p-4 text-center">-</td>
+                  <td className="p-4 text-center">-</td>
+                  <td className="p-4 text-center">-</td>
+                  <td className="p-4 text-center">-</td>
                 </tr>
-              )}
+              ))}
+              <tr>
+                <td className="p-4 text-center uppercase">TOTAL</td>
+                <td className="p-4 text-center">{formatRupiah(total)}</td>
+                <td className="p-4 text-center">-</td>
+                <td className="p-4 text-center">-</td>
+                <td className="p-4 text-center">-</td>
+                <td className="p-4 text-center">-</td>
+                <td className="p-4 text-center">-</td>
+              </tr>
             </tbody>
           </table>
         </div>
