@@ -13,6 +13,7 @@ type InputSelectProps = {
   rules?: Rule<string>[];
   error?: string;
   disabled?: boolean;
+  allowCustom?: boolean;
 };
 
 export default function InputSelect({
@@ -24,6 +25,7 @@ export default function InputSelect({
   rules,
   error,
   disabled = false,
+  allowCustom = false,
 }: InputSelectProps) {
   const inputId = useId();
   const { error: err, onBlur: markTouched } = useFieldError(
@@ -41,13 +43,13 @@ export default function InputSelect({
   // State to manage the input query and whether the dropdown is open
   const [queryDraft, setQueryDraft] = useState(() => ({
     value,
-    query: selectedOption?.label ?? "",
+    query: selectedOption?.label ?? (allowCustom ? value : ""),
   }));
   const [isOpen, setIsOpen] = useState(false);
   const query =
     queryDraft.value === value
       ? queryDraft.query
-      : (selectedOption?.label ?? "");
+      : (selectedOption?.label ?? (allowCustom ? value : ""));
 
   // Filter the options based on the input query
   const filteredOptions = useMemo(() => {
@@ -62,6 +64,9 @@ export default function InputSelect({
       return optionText.includes(normalizedQuery);
     });
   }, [options, query]);
+  const exactOption = options.find(
+    (option) => option.value === query.trim() || option.label === query.trim(),
+  );
 
   // Handle the selection of an option
   function handleSelect(selectedValue: string, selectedLabel: string) {
@@ -75,6 +80,22 @@ export default function InputSelect({
     onChange("");
     setQueryDraft({ value: "", query: "" });
     setIsOpen(false);
+  }
+
+  function selectCustomValue() {
+    const customValue = query.trim();
+
+    if (!allowCustom || !customValue) {
+      return false;
+    }
+
+    if (exactOption) {
+      handleSelect(exactOption.value, exactOption.label);
+    } else {
+      handleSelect(customValue, customValue);
+    }
+
+    return true;
   }
 
   return (
@@ -103,11 +124,33 @@ export default function InputSelect({
           autoComplete="off"
           onFocus={() => setIsOpen(true)}
           onBlur={() => {
+            const customValue = query.trim();
+
+            if (allowCustom && customValue && filteredOptions.length === 0) {
+              onChange(customValue);
+              setQueryDraft({ value: customValue, query: customValue });
+              setIsOpen(false);
+              markTouched();
+              return;
+            }
+
             window.setTimeout(() => {
-              setQueryDraft({ value, query: selectedOption?.label ?? "" });
+              setQueryDraft({
+                value,
+                query: selectedOption?.label ?? (allowCustom ? value : ""),
+              });
               setIsOpen(false);
               markTouched();
             }, 150);
+          }}
+          onKeyDown={(event) => {
+            if (
+              event.key === "Enter" &&
+              query.trim() !== value &&
+              selectCustomValue()
+            ) {
+              event.preventDefault();
+            }
           }}
           onChange={(event) => {
             const nextQuery = event.target.value;
@@ -136,25 +179,38 @@ export default function InputSelect({
           </button>
         )}
 
-        {isOpen && filteredOptions.length > 0 && (
-          <ul className="absolute z-20 mt-1 max-h-52 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
-            {filteredOptions.map((option) => (
-              <li
-                key={option.value}
-                className="border-b border-gray-100 last:border-b-0"
-              >
-                <button
-                  type="button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => handleSelect(option.value, option.label)}
-                  className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-sm text-gray-700 transition hover:bg-gray-50"
+        {isOpen &&
+          (filteredOptions.length > 0 || (allowCustom && query.trim())) && (
+            <ul className="absolute z-20 mt-1 max-h-52 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
+              {allowCustom && query.trim() && !exactOption && (
+                <li className="border-b border-gray-100">
+                  <button
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={selectCustomValue}
+                    className="w-full px-3 py-2 text-left text-sm text-gray-700 transition hover:bg-gray-50"
+                  >
+                    Gunakan nama: {query.trim()}
+                  </button>
+                </li>
+              )}
+              {filteredOptions.map((option) => (
+                <li
+                  key={option.value}
+                  className="border-b border-gray-100 last:border-b-0"
                 >
-                  {option.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+                  <button
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => handleSelect(option.value, option.label)}
+                    className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-sm text-gray-700 transition hover:bg-gray-50"
+                  >
+                    {option.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
       </div>
     </div>
   );
