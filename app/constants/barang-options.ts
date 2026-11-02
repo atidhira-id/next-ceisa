@@ -1151,6 +1151,11 @@ export const hsOption: OptionType[] = [
   },
 ];
 
+export const cbuOptions: OptionType[] = [
+  { value: "CBU", label: "CBU" },
+  { value: "NONCBU", label: "NONCBU" },
+];
+
 export const kondisiBarangOption: OptionType[] = [
   { value: "Barang Baru", label: "Barang Baru" },
   { value: "Barang Bukan Baru", label: "Barang Bukan Baru" },
