@@ -15,7 +15,8 @@ export const initialImportir: EntitasImportirData = {
   kodeNomorIdentitas: "6",
   nomorIdentitas: "0010606028007000",
   nama: "PT United Tractors Pandu Engineering",
-  alamat: "KAWASAN INDUSTRI JABABEKA\nJL. JABABEKA XI BLOK H30-40\n000/000",
+  alamat:
+    "JL. JABABEKA XI KAWASAN INDUSTRI JABABEKA, BLOK H, 30-40, HAJARMEKAR, CIKARANG UTARA, KAB. BEKASI, JAWA BARAT, 17530",
   kodeApi: kodeApiNibOptions[1].value,
   api: "9120105931425",
   kodeStatus: kodeStatusOptions[0].value,
