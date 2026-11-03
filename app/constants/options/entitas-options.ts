@@ -1,4 +1,4 @@
-import type { OptionType } from "@/app/providers/types";
+import type { OptionType } from "@/app/types";
 
 export const kodeNomorIdentitasOptions: OptionType[] = [
   { value: "6", label: "6 - NPWP 16 DIGIT" },

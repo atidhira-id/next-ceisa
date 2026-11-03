@@ -1,8 +1,8 @@
 "use client";
-import type { BarangItemData } from "@/app/providers/types";
+import type { BarangItemData } from "@/app/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
-import { cbuOptions } from "@/app/constants/barang-options";
+import { cbuOptions } from "@/app/constants/options/barang-options";
 import { required } from "@/lib/validation";
 
 type FormProps = {

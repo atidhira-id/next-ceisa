@@ -3,6 +3,17 @@ export type OptionType = {
   label: string;
 };
 
+export type DocumentTab =
+  | "Header"
+  | "Entitas"
+  | "Dokumen"
+  | "Pengangkut"
+  | "Kemasan & Peti Kemas"
+  | "Transaksi"
+  | "Barang"
+  | "Pungutan"
+  | "Pernyataan";
+
 export type FormInputs = {
   nomorAju: string;
   jenisEntitas: string;
@@ -225,4 +236,12 @@ export type HsType = {
   lartasBorder?: string;
   lartasPostBorder?: string;
 };
-export type PungutanType = "bm" | "pph" | "ppn";
+
+export type PungutanType = {
+  bm: number;
+  ppn: number;
+  pph: number;
+  total: number;
+};
+
+export type PungutanKeys = keyof PungutanType;

@@ -5,7 +5,7 @@ import InputTextArea from "../../input-textarea";
 import {
   kodeNegaraOptions,
   supplierNameOptions,
-} from "@/app/constants/entitas-options";
+} from "@/app/constants/options/entitas-options";
 import { required } from "@/lib/validation";
 import { supplierData } from "@/app/constants/supplier";
 

@@ -2,7 +2,7 @@
 import { useId, useMemo, useState } from "react";
 import { Rule, useFieldError } from "@/lib/validation";
 import Error from "./error";
-import { OptionType } from "@/app/providers/types";
+import { OptionType } from "@/app/types";
 
 type InputSelectProps = {
   labelPosition?: "top" | "left";

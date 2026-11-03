@@ -1,15 +1,8 @@
 "use client";
-
 import { useEffect, useState } from "react";
-
 import { useDocument } from "@/app/providers/document-provider";
-
 import { DocumentForm } from "./document-form";
-import { FormInputs } from "@/app/providers/types";
-
-type Props = {
-  nomorAju: string;
-};
+import { FormInputs } from "@/app/types";
 
 type DraftResponse = {
   draft: {
@@ -18,7 +11,7 @@ type DraftResponse = {
   };
 };
 
-export function DocumentLoader({ nomorAju }: Props) {
+export function DocumentLoader({ nomorAju }: { nomorAju: string }) {
   const { documentData, setDocumentData } = useDocument();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -37,8 +30,6 @@ export function DocumentLoader({ nomorAju }: Props) {
           { cache: "no-store" },
         );
 
-        // Jika draft belum tersimpan, data baru yang sudah ada
-        // di provider tetap boleh digunakan.
         if (response.status === 404) {
           if (!cancelled && documentData?.nomorAju !== nomorAju) {
             setError("Draft tidak ditemukan atau belum disimpan.");
@@ -77,8 +68,6 @@ export function DocumentLoader({ nomorAju }: Props) {
     return () => {
       cancelled = true;
     };
-    // documentData sengaja tidak menjadi dependency agar perubahan
-    // input formulir tidak memicu pengambilan ulang draft.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nomorAju, setDocumentData]);
 

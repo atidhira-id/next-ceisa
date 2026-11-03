@@ -6,9 +6,9 @@ import { Warning } from "../../warning";
 import {
   kodeJenisOptions,
   kodeFasilitasOptions,
-} from "@/app/constants/dokumen-options";
+} from "@/app/constants/options/dokumen-options";
 import { getLabel } from "@/lib/utils";
-import type { DocumentItemData } from "@/app/providers/types";
+import type { DocumentItemData } from "@/app/types";
 import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modal-user-confirmation";
 import InputWrapper from "../../input-wrapper";
 import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";

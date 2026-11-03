@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { Prisma } from "@/generated/prisma/client";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { FormInputs } from "@/app/providers/types";
+import { FormInputs } from "@/app/types";
 
 export const runtime = "nodejs";
 

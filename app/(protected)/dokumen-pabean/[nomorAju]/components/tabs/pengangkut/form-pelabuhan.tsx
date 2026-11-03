@@ -3,8 +3,8 @@ import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
-import { pelabuhanOptions } from "@/app/constants/header-options";
-import { tempatPenimbunanOptions } from "@/app/constants/pengangkut-options";
+import { pelabuhanOptions } from "@/app/constants/options/header-options";
+import { tempatPenimbunanOptions } from "@/app/constants/options/pengangkut-options";
 import { required } from "@/lib/validation";
 
 export default function FormPelabuhan() {

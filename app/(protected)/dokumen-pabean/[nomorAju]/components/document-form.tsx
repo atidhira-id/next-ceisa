@@ -1,44 +1,29 @@
 "use client";
-
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import { DocumentTabs, type DocumentTab } from "./document-tabs";
-import { HeaderTab } from "./tabs/header/header-tab";
+import { DocumentTabs } from "./document-tabs";
+import type { DocumentTab } from "@/app/types";
+import { tabs } from "@/app/constants/tabs";
+import HeaderTab from "./tabs/header/header-tab";
 import EntitasTab from "./tabs/entitas/entitas-tab";
 import DokumenTab from "./tabs/dokumen/dokumen-tab";
 import PengangkutTab from "./tabs/pengangkut/pengangkut-tab";
 import KemasanKontainerTab from "./tabs/kemasan-kontainer/kemasan-kontainer-tab";
-import { TransaksiTab } from "./tabs/transaksi/transaksi-tab";
+import TransaksiTab from "./tabs/transaksi/transaksi-tab";
 import BarangTab from "./tabs/barang/barang-tab";
-import PernyataanTab from "./tabs/pernyataan/pernyataan-tab";
 import PungutanTab from "./tabs/pungutan/pungutan-tab";
+import PernyataanTab from "./tabs/pernyataan/pernyataan-tab";
 import { MoveLeft, MoveRight } from "lucide-react";
 
-type DocumentFormProps = {
-  nomorAju: string;
-};
-
-const tabOrder: DocumentTab[] = [
-  "header",
-  "entitas",
-  "dokumen",
-  "pengangkut",
-  "kemasan & peti kemas",
-  "transaksi",
-  "barang",
-  "pungutan",
-  "pernyataan",
-];
-
-export function DocumentForm({ nomorAju }: DocumentFormProps) {
+export function DocumentForm({ nomorAju }: { nomorAju: string }) {
   const { documentData } = useDocument();
 
   const [isSaving, setIsSaving] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [activeTab, setActiveTab] = useState<DocumentTab>("header");
-  const activeTabIndex = tabOrder.indexOf(activeTab);
+  const [activeTab, setActiveTab] = useState<DocumentTab>("Header");
+  const activeTabIndex = tabs.indexOf(activeTab);
   const isFirstTab = activeTabIndex === 0;
-  const isLastTab = activeTabIndex === tabOrder.length - 1;
+  const isLastTab = activeTabIndex === tabs.length - 1;
 
   if (!documentData) {
     return (
@@ -53,7 +38,7 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
       return;
     }
 
-    setActiveTab(tabOrder[activeTabIndex - 1]);
+    setActiveTab(tabs[activeTabIndex - 1]);
   }
 
   function handleNext() {
@@ -61,7 +46,7 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
       return;
     }
 
-    setActiveTab(tabOrder[activeTabIndex + 1]);
+    setActiveTab(tabs[activeTabIndex + 1]);
   }
 
   async function handleSaveDraft() {
@@ -146,31 +131,31 @@ export function DocumentForm({ nomorAju }: DocumentFormProps) {
 
   function renderTabContent() {
     switch (activeTab) {
-      case "header":
+      case "Header":
         return <HeaderTab />;
 
-      case "entitas":
+      case "Entitas":
         return <EntitasTab />;
 
-      case "dokumen":
+      case "Dokumen":
         return <DokumenTab />;
 
-      case "pengangkut":
+      case "Pengangkut":
         return <PengangkutTab />;
 
-      case "kemasan & peti kemas":
+      case "Kemasan & Peti Kemas":
         return <KemasanKontainerTab />;
 
-      case "transaksi":
+      case "Transaksi":
         return <TransaksiTab />;
 
-      case "barang":
+      case "Barang":
         return <BarangTab />;
 
-      case "pungutan":
+      case "Pungutan":
         return <PungutanTab />;
 
-      case "pernyataan":
+      case "Pernyataan":
         return <PernyataanTab />;
 
       default:

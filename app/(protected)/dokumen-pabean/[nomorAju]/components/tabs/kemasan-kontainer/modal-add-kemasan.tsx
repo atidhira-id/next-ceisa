@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import { type KemasanItemData } from "@/app/providers/types";
+import { type KemasanItemData } from "@/app/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputNumber from "../../input-number";
-import { jenisKemasanOptions } from "@/app/constants/kemas-kontainer-options";
+import { jenisKemasanOptions } from "@/app/constants/options/kemas-kontainer-options";
 import { required, min } from "@/lib/validation";
 
 type ModalAddKemasanItemProps = {

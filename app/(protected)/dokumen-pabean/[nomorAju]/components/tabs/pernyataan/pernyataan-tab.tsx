@@ -3,7 +3,7 @@ import { useDocument } from "@/app/providers/document-provider";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputDate from "../../input-date";
-import { PernyataanData } from "@/app/providers/types";
+import { PernyataanData } from "@/app/types";
 
 export default function PernyataanTab() {
   const { documentData, updateDocumentData } = useDocument();

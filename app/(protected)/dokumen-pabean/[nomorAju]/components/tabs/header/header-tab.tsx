@@ -8,10 +8,10 @@ import {
   jenisPIBOptions,
   jenisImportOptions,
   caraPembayaranOptions,
-} from "@/app/constants/header-options";
+} from "@/app/constants/options/header-options";
 import { required } from "@/lib/validation";
 
-export function HeaderTab() {
+export default function HeaderTab() {
   const { documentData, updateDocumentData } = useDocument();
   const data = documentData!;
   const header = data.header;

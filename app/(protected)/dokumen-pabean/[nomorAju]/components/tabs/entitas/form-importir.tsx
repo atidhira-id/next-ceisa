@@ -8,7 +8,7 @@ import {
   kodeNomorIdentitasOptions,
   kodeApiNibOptions,
   kodeStatusOptions,
-} from "@/app/constants/entitas-options";
+} from "@/app/constants/options/entitas-options";
 import { maxLength, minLength, required } from "@/lib/validation";
 
 export default function FormImportir() {

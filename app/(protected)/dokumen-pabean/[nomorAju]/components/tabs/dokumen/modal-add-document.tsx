@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import { type DocumentItemData } from "@/app/providers/types";
+import { type DocumentItemData } from "@/app/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
 import {
   kodeJenisOptions,
   kodeFasilitasOptions,
-} from "@/app/constants/dokumen-options";
+} from "@/app/constants/options/dokumen-options";
 import { required } from "@/lib/validation";
 
 const initialDocument: DocumentItemData = {

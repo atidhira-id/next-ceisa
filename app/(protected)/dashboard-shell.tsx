@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -151,7 +150,7 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
 
           <div className="ml-2 min-w-0 md:ml-4">
             <p className="truncate text-md font-bold">
-              PT. Badan United Tractors Pandu Engineering
+              PT. United Tractors Pandu Engineering
             </p>
           </div>
         </header>

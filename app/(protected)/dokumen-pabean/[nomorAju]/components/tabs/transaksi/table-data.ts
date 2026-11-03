@@ -1,5 +1,5 @@
-import { KomponenBiaya } from "@/app/providers/types";
-import { kodeAsuransiOption } from "@/app/constants/transaksi-options";
+import { KomponenBiaya } from "@/app/types";
+import { kodeAsuransiOption } from "@/app/constants/options/transaksi-options";
 
 export const inputsOne: { label: string; field: keyof KomponenBiaya }[] = [
   { label: "1. Harga Invoice", field: "hargaInvoice" },

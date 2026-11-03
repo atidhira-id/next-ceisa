@@ -1,5 +1,8 @@
-import type { OptionType, EntitasImportirData } from "@/app/providers/types";
-import { kodeApiNibOptions, kodeStatusOptions } from "./entitas-options";
+import type { OptionType, EntitasImportirData } from "@/app/types";
+import {
+  kodeApiNibOptions,
+  kodeStatusOptions,
+} from "./options/entitas-options";
 
 export const entitasOptions: OptionType[] = [
   { value: "IMPORTIR", label: "IMPORTIR" },

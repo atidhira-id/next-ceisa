@@ -1,4 +1,4 @@
-import { HsType } from "@/app/providers/types";
+import { HsType } from "@/app/types";
 
 export const hsData: HsType[] = [
   {

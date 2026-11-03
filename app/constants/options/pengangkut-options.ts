@@ -1,4 +1,4 @@
-import type { OptionType } from "@/app/providers/types";
+import type { OptionType } from "@/app/types";
 
 export const nomorTutupPuOptions: OptionType[] = [
   { value: "10", label: "BC 1.0" },

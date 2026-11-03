@@ -5,7 +5,7 @@ import InputTextArea from "../../input-textarea";
 import {
   kodeNegaraOptions,
   supplierNameOptions,
-} from "@/app/constants/entitas-options";
+} from "@/app/constants/options/entitas-options";
 import { supplierData } from "@/app/constants/supplier";
 import { required } from "@/lib/validation";
 
@@ -23,7 +23,8 @@ export default function FormPengirim() {
         alamat:
           supplier?.alamat ?? (nama === pengirim.nama ? pengirim.alamat : ""),
         negara:
-          supplier?.kodeNegara ?? (nama === pengirim.nama ? pengirim.negara : ""),
+          supplier?.kodeNegara ??
+          (nama === pengirim.nama ? pengirim.negara : ""),
       },
     });
   }

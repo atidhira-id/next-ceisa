@@ -5,6 +5,7 @@ import Error from "./error";
 
 type InputNumberProps = {
   labelPosition?: "top" | "left";
+  numberFormat?: "ID" | "US";
   title?: string;
   value: number;
   onChange?: (value: number) => void;
@@ -13,25 +14,44 @@ type InputNumberProps = {
   disabled?: boolean;
 };
 
-function format(raw: string) {
-  const cleaned = raw.replace(/[^\d,]/g, "");
-  const [intRaw, ...rest] = cleaned.split(",");
+function getSeparators(numberFormat: "ID" | "US") {
+  return numberFormat === "ID"
+    ? { decimal: ",", grouping: "." }
+    : { decimal: ".", grouping: "," };
+}
+
+function format(raw: string, numberFormat: "ID" | "US") {
+  const { decimal, grouping } = getSeparators(numberFormat);
+  const cleaned = raw
+    .split("")
+    .filter((character) => /\d/.test(character) || character === decimal)
+    .join("");
+  const [intRaw, ...fractionParts] = cleaned.split(decimal);
+  const hasDecimal = cleaned.includes(decimal);
+  const fraction = fractionParts.join("");
   const int = (
-    intRaw.replace(/^0+(?=\d)/, "") || (rest.length ? "0" : "")
-  ).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  return rest.length ? `${int},${rest.join("")}` : int;
+    intRaw.replace(/^0+(?=\d)/, "") || (hasDecimal ? "0" : "")
+  ).replace(/\B(?=(\d{3})+(?!\d))/g, grouping);
+  return hasDecimal ? `${int}${decimal}${fraction}` : int;
 }
 
-function parse(text: string) {
-  return Number(text.replace(/\./g, "").replace(",", ".")) || 0;
+function parse(text: string, numberFormat: "ID" | "US") {
+  const { decimal, grouping } = getSeparators(numberFormat);
+  return Number(text.split(grouping).join("").replace(decimal, ".")) || 0;
 }
 
-function fromNumber(n: number) {
-  return n === 0 ? "" : format(String(n).replace(".", ","));
+function fromNumber(n: number, numberFormat: "ID" | "US") {
+  if (!n) {
+    return "";
+  }
+
+  const { decimal } = getSeparators(numberFormat);
+  return format(String(n).replace(".", decimal), numberFormat);
 }
 
 export default function InputNumber({
   labelPosition = "top",
+  numberFormat = "ID",
   title,
   value,
   onChange,
@@ -43,13 +63,20 @@ export default function InputNumber({
   const { error: err, onBlur } = useFieldError(value, rules, error);
   const ref = useRef<HTMLInputElement>(null);
   const caretRef = useRef<number | null>(null);
-  const [text, setText] = useState(() => fromNumber(value));
+  const [text, setText] = useState(() => fromNumber(value, numberFormat));
   const [prevValue, setPrevValue] = useState(value);
+  const [prevNumberFormat, setPrevNumberFormat] = useState(numberFormat);
 
-  // sync when parent changes value externally
-  if (value !== prevValue) {
+  // Sync the displayed text when the value or number format changes externally.
+  if (numberFormat !== prevNumberFormat) {
+    setPrevNumberFormat(numberFormat);
     setPrevValue(value);
-    if (parse(text) !== value) setText(fromNumber(value));
+    setText(fromNumber(value, numberFormat));
+  } else if (value !== prevValue) {
+    setPrevValue(value);
+    if (parse(text, numberFormat) !== value) {
+      setText(fromNumber(value, numberFormat));
+    }
   }
 
   // restore caret after reformatting
@@ -61,21 +88,26 @@ export default function InputNumber({
   }, [text]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { decimal } = getSeparators(numberFormat);
     const raw = e.target.value;
     const caret = e.target.selectionStart ?? raw.length;
-    const significant = raw.slice(0, caret).replace(/[^\d,]/g, "").length;
-    const next = format(raw);
+    const significant = raw
+      .slice(0, caret)
+      .split("")
+      .filter((character) => /\d/.test(character) || character === decimal)
+      .length;
+    const next = format(raw, numberFormat);
 
     let pos = 0;
     let count = 0;
     while (pos < next.length && count < significant) {
-      if (/[\d,]/.test(next[pos])) count++;
+      if (/\d/.test(next[pos]) || next[pos] === decimal) count++;
       pos++;
     }
     caretRef.current = pos;
 
     setText(next);
-    onChange?.(parse(next));
+    onChange?.(parse(next, numberFormat));
   };
 
   return (
@@ -101,7 +133,7 @@ export default function InputNumber({
           aria-describedby={err ? `${inputId}-error` : undefined}
           type="text"
           inputMode="decimal"
-          placeholder="0.0"
+          placeholder={`0${getSeparators(numberFormat).decimal}0`}
           value={text}
           disabled={disabled}
           className={`w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${

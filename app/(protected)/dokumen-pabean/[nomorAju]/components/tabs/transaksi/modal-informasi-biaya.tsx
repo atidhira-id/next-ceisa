@@ -11,9 +11,9 @@ import InputSelect from "../../input-select";
 import {
   kodeAsuransiOption,
   kodeIncoterm,
-} from "@/app/constants/transaksi-options";
+} from "@/app/constants/options/transaksi-options";
 import InputNumber from "../../input-number";
-import { KomponenBiaya } from "@/app/providers/types";
+import { KomponenBiaya } from "@/app/types";
 import { formatRupiah } from "@/lib/utils";
 
 type ModalInformasiBiayaProps = {

@@ -6,7 +6,7 @@ import InputTextArea from "../../input-textarea";
 import {
   kodeNomorIdentitasOptions,
   kodeAfiliasiOptions,
-} from "@/app/constants/entitas-options";
+} from "@/app/constants/options/entitas-options";
 import { maxLength, minLength, required } from "@/lib/validation";
 
 export default function FormPemilikBarang() {

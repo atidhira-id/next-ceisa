@@ -1,9 +1,10 @@
 import type {
   BarangItemData,
   KomponenBiaya,
+  PungutanType,
   TransaksiData,
-} from "@/app/providers/types";
-import type { OptionType } from "@/app/providers/types";
+} from "@/app/types";
+import type { OptionType } from "@/app/types";
 
 export function getLabel(options: OptionType[], code: string) {
   const option = options.find((item) => item.value === code);
@@ -48,6 +49,22 @@ export function getBiayaPengurang(transaksiData: TransaksiData): number {
   return biayaTambahan;
 }
 
+export function getCif(
+  barang: BarangItemData,
+  transaksiData: TransaksiData,
+): number {
+  return (
+    (barang.hargaInvoice ?? 0) +
+    (transaksiData.komponenBiaya?.asuransi ?? 0) +
+    (transaksiData.komponenBiaya?.freight ?? 0)
+  );
+}
+
+export function getHargaSatuan(barang: BarangItemData): number {
+  const unitPrice = (barang.hargaInvoice ?? 0) / (barang.jumlah ?? 1);
+  return Math.ceil(unitPrice * 100) / 100;
+}
+
 export function getBeratBersih(listBarangData: BarangItemData[]): number {
   return listBarangData.reduce(
     (total, barang) => total + (barang.beratBersih ?? 0),
@@ -55,7 +72,14 @@ export function getBeratBersih(listBarangData: BarangItemData[]): number {
   );
 }
 
-export function getPabeanRupiah(transaksiData: TransaksiData): number {
+export function getPabeanRupiah(
+  transaksiData: TransaksiData,
+  barang?: BarangItemData,
+): number {
+  if (barang) {
+    return (transaksiData.ndpbm ?? 0) * getCif(barang, transaksiData);
+  }
+
   return (
     (transaksiData.ndpbm ?? 0) *
     (transaksiData.komponenBiaya?.hargaInvoice ?? 0)
@@ -70,15 +94,33 @@ export function formatRupiah(value: number): string {
   }).format(value);
 }
 
+export function getPungutanBarang(
+  transaksiData: TransaksiData,
+  barang: BarangItemData,
+): PungutanType {
+  const hargaRupiah = getPabeanRupiah(transaksiData, barang);
+  const bm = (hargaRupiah * (barang.bmPercentage ?? 0)) / 100;
+
+  const ppn = ((hargaRupiah + bm) * (barang.ppnPercentage ?? 0)) / 100;
+  const pph = ((hargaRupiah + bm) * (barang.pphPercentage ?? 0)) / 100;
+  const total = bm + ppn + pph;
+
+  return { bm, ppn, pph, total };
+}
+
 export function getPungutan(
-  type: "bm" | "ppn" | "pph",
   transaksiData: TransaksiData,
   listBarang: BarangItemData[],
-): number {
-  const pabeanRupiah = getPabeanRupiah(transaksiData);
-  const pungutan = listBarang.reduce((acc, item) => {
-    const percentage = item[`${type}Percentage`];
-    return acc + (pabeanRupiah * (percentage ?? 0)) / 100;
-  }, 0);
-  return Math.ceil(pungutan / 1000) * 1000;
+): PungutanType {
+  const pungutan: PungutanType = { bm: 0, ppn: 0, pph: 0, total: 0 };
+
+  listBarang.map((barang) => {
+    const pungutanBarang = getPungutanBarang(transaksiData, barang);
+    console.log(pungutanBarang);
+    pungutan.bm += pungutanBarang.bm;
+    pungutan.ppn += pungutanBarang.ppn;
+    pungutan.pph += pungutanBarang.pph;
+    pungutan.total += pungutanBarang.total;
+  });
+  return pungutan;
 }

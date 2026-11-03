@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import type { BarangDokumenData } from "@/app/providers/types";
+import type { BarangDokumenData } from "@/app/types";
 import InputWrapper from "../../input-wrapper";
-import { kodeJenisOptions } from "@/app/constants/dokumen-options";
+import { kodeJenisOptions } from "@/app/constants/options/dokumen-options";
 import InputNumber from "../../input-number";
 import { getLabel } from "@/lib/utils";
 

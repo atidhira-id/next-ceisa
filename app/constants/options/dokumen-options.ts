@@ -1,4 +1,4 @@
-import { OptionType } from "@/app/providers/types";
+import { OptionType } from "@/app/types";
 
 export const kodeJenisOptions: OptionType[] = [
   { value: "217", label: "217 - Packing List" },

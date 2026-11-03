@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import { type KontainerItemData } from "@/app/providers/types";
+import { type KontainerItemData } from "@/app/types";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import {
   jenisMuatanOptions,
   tipeKontainerOptions,
   ukuranKontainerOptions,
-} from "@/app/constants/kemas-kontainer-options";
+} from "@/app/constants/options/kemas-kontainer-options";
 import { kontainerName, required } from "@/lib/validation";
 
 type ModalAddKontainerItemProps = {
@@ -67,6 +67,7 @@ export default function ModalAddKontainerItem({
           {/* Nomor Kontainer */}
           <InputNormal
             title="Nomor"
+            maxLength={11}
             value={nomor}
             onChange={(value) => setNomor(value)}
             rules={[required(), kontainerName()]}

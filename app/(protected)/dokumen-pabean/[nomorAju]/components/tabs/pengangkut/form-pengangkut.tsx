@@ -4,8 +4,8 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
-import { caraPengangkutanOptions } from "@/app/constants/pengangkut-options";
-import { kodeNegaraOptions } from "@/app/constants/entitas-options";
+import { caraPengangkutanOptions } from "@/app/constants/options/pengangkut-options";
+import { kodeNegaraOptions } from "@/app/constants/options/entitas-options";
 import { required } from "@/lib/validation";
 
 export default function FormPengangkut() {

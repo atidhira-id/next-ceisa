@@ -3,7 +3,7 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputTextArea from "../../input-textarea";
-import { kodeNomorIdentitasOptions } from "@/app/constants/entitas-options";
+import { kodeNomorIdentitasOptions } from "@/app/constants/options/entitas-options";
 import { maxLength, minLength, required } from "@/lib/validation";
 
 export default function FormNpwpPemusatan() {

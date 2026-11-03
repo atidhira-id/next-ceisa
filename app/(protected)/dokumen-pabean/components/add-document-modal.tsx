@@ -7,7 +7,7 @@ import {
   jenisDokumenOptions,
   initialImportir,
 } from "@/app/constants";
-import { FormInputs } from "@/app/providers/types";
+import { FormInputs } from "@/app/types";
 
 type AddDocumentModalProps = {
   onCloseModal: () => void;

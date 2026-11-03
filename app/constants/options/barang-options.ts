@@ -1,4 +1,4 @@
-import type { OptionType } from "@/app/providers/types";
+import type { OptionType } from "@/app/types";
 
 export const hsOption: OptionType[] = [
   {
@@ -1161,8 +1161,57 @@ export const kondisiBarangOption: OptionType[] = [
   { value: "Barang Bukan Baru", label: "Barang Bukan Baru" },
 ];
 
-export const kodeSatuanBarangOptions: OptionType[] = [
-  { value: "NIU", label: "NIU - NUMBER" },
+export const kodeSatuanOptions: OptionType[] = [
+  { value: "PCE", label: "PCE - Piece" },
+  { value: "NIU", label: "NIU - Number Of Unit" },
+  { value: "SET", label: "SET - Set" },
+  { value: "EA", label: "EA - Each" },
+  { value: "KGM", label: "KGM - Kilogram" },
+  { value: "GRM", label: "GRM - Gram" },
+  { value: "TNE", label: "TNE - Metric Ton" },
+  { value: "LTR", label: "LTR - Litre" },
+  { value: "MLT", label: "MLT - Millilitre" },
+  { value: "MTQ", label: "MTQ - Cubic Metre" },
+  { value: "CMQ", label: "CMQ - Cubic Centimetre" },
+  { value: "MTR", label: "MTR - Metre" },
+  { value: "CMT", label: "CMT - Centimetre" },
+  { value: "MMT", label: "MMT - Millimetre" },
+  { value: "KMT", label: "KMT - Kilometre" },
+  { value: "INH", label: "INH - Inch" },
+  { value: "FOT", label: "FOT - Foot" },
+  { value: "YRD", label: "YRD - Yard" },
+  { value: "FTK", label: "FTK - Square Foot" },
+  { value: "MTK", label: "MTK - Square Metre" },
+  { value: "CMK", label: "CMK - Square Centimetre" },
+  { value: "KWH", label: "KWH - Kilowatt Hour" },
+  { value: "WTT", label: "WTT - Watt" },
+  { value: "KWT", label: "KWT - Kilowatt" },
+  { value: "HUR", label: "HUR - Hour" },
+  { value: "DAY", label: "DAY - Day" },
+  { value: "MIN", label: "MIN - Minute" },
+  { value: "SEC", label: "SEC - Second" },
+  { value: "DZN", label: "DZN - Dozen" },
+  { value: "PRS", label: "PRS - Pair" },
+  { value: "PK", label: "PK - Pack" },
+  { value: "CT", label: "CT - Carton" },
+  { value: "BOX", label: "BOX - Box" },
+  { value: "BG", label: "BG - Bag" },
+  { value: "DR", label: "DR - Drum" },
+  { value: "BOT", label: "BOT - Bottle" },
+  { value: "CAN", label: "CAN - Can" },
+  { value: "JR", label: "JR - Jar" },
+  { value: "RL", label: "RL - Roll" },
+  { value: "SHT", label: "SHT - Sheet" },
+  { value: "PLT", label: "PLT - Pallet" },
+  { value: "CON", label: "CON - Container" },
+  { value: "Vial", label: "Vial - Vial" },
+  { value: "AMP", label: "AMP - Ampoule" },
+  { value: "LOT", label: "LOT - Lot" },
+  { value: "JOB", label: "JOB - Job" },
+  { value: "UNT", label: "UNT - Unit" },
+  { value: "NO", label: "NO - Number" },
+  { value: "MWH", label: "MWH - Megawatt Hour" },
+  { value: "KGS", label: "KGS - Kilogram per Second" },
 ];
 
 export const metodePenentuanNilaiOptions: OptionType[] = [

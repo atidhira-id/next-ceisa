@@ -10,7 +10,7 @@ import {
   kodeAsuransiOption,
   perhitunganProporsionalOption,
   kodeIncoterm,
-} from "@/app/constants/transaksi-options";
+} from "@/app/constants/options/transaksi-options";
 import ModalInformasiBiaya from "./modal-informasi-biaya";
 import InputNumber from "../../input-number";
 import InputRadio from "../../input-radio";
@@ -22,7 +22,7 @@ import {
   getPabeanRupiah,
 } from "@/lib/utils";
 
-export function TransaksiTab() {
+export default function TransaksiTab() {
   const { documentData, updateDocumentData } = useDocument();
   const transaksi = documentData!.transaksi;
   const listBarang = documentData!.listBarang;
@@ -159,6 +159,7 @@ export function TransaksiTab() {
         <InputWrapper title="Berat">
           <InputNumber
             title="Berat Kotor (Kg)"
+            numberFormat={"US"}
             value={transaksi.beratKotor ?? 0}
             onChange={(value) =>
               updateDocumentData({
@@ -188,6 +189,7 @@ export function TransaksiTab() {
           />
           <InputNumber
             title="Berat Bersih (Kg)"
+            numberFormat={"US"}
             value={getBeratBersih(listBarang)}
             disabled
           />

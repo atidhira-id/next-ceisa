@@ -10,9 +10,9 @@ import {
   jenisMuatanOptions,
   tipeKontainerOptions,
   ukuranKontainerOptions,
-} from "@/app/constants/kemas-kontainer-options";
+} from "@/app/constants/options/kemas-kontainer-options";
 import { getLabel } from "@/lib/utils";
-import { KemasanItemData, KontainerItemData } from "@/app/providers/types";
+import { KemasanItemData, KontainerItemData } from "@/app/types";
 import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
 
 export default function KemasanKontainerTab() {

@@ -1,4 +1,4 @@
-import type { OptionType } from "@/app/providers/types";
+import type { OptionType } from "@/app/types";
 
 export const pelabuhanOptions: OptionType[] = [
   { value: "AEAUH", label: "AEAUH - Abu Dhabi / Zayed International Airport" },

@@ -4,7 +4,7 @@ import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
 import InputDate from "../../input-date";
-import { nomorTutupPuOptions } from "@/app/constants/pengangkut-options";
+import { nomorTutupPuOptions } from "@/app/constants/options/pengangkut-options";
 import { required, maxLength, minLength } from "@/lib/validation";
 
 export default function FormBc() {
@@ -31,6 +31,7 @@ export default function FormBc() {
             rules={[required()]}
           />
           <InputNormal
+            maxLength={4}
             value={pengangkut.nomorTutupPu ?? ""}
             onChange={(value) =>
               updateDocumentData({
@@ -59,6 +60,7 @@ export default function FormBc() {
 
         <div className="flex items-center gap-2">
           <InputNormal
+            maxLength={4}
             value={pengangkut.nomorPos1 ?? ""}
             onChange={(value) =>
               updateDocumentData({
@@ -68,6 +70,7 @@ export default function FormBc() {
             rules={[required(), maxLength(4)]}
           />
           <InputNormal
+            maxLength={4}
             value={pengangkut.nomorPos2 ?? ""}
             onChange={(value) =>
               updateDocumentData({
@@ -77,6 +80,7 @@ export default function FormBc() {
             rules={[required(), maxLength(4)]}
           />
           <InputNormal
+            maxLength={4}
             value={pengangkut.nomorPos3 ?? ""}
             onChange={(value) =>
               updateDocumentData({

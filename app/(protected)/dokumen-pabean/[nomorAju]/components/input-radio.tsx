@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { OptionType } from "@/app/providers/types";
+import { OptionType } from "@/app/types";
 import { Rule, useFieldError } from "@/lib/validation";
 import Error from "./error";
 

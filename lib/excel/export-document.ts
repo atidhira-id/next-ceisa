@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 import path from "node:path";
 
-import type { FormInputs, PungutanType } from "@/app/providers/types";
+import type { FormInputs, PungutanKeys } from "@/app/types";
 import {
   getBeratBersih,
   getBiayaPenambah,
@@ -560,7 +560,8 @@ function setBarangTarifSheetData(
 ) {
   const listBarang = data.listBarang;
   const start = 2;
-  const kodePungut: PungutanType[] = ["ppn", "bm", "pph"];
+  type Keys = "bm" | "ppn" | "pph";
+  const kodePungut: Keys[] = ["bm", "ppn", "pph"];
 
   listBarang.map((barang, index) => {
     const rowStart = index * 3 + start;
@@ -620,19 +621,16 @@ function setPungutanDokumenSheetData(
   data: FormInputs,
 ) {
   const start = 2;
-  const pungutan: PungutanType[] = ["bm", "pph", "ppn"];
+  const pungutanKeys: PungutanKeys[] = ["bm", "pph", "ppn"];
+  const pungutan = getPungutan(data.transaksi, data.listBarang);
 
-  pungutan.map((kode, i) => {
+  pungutanKeys.map((kode, i) => {
     const row = start + i;
 
     setCellValue(pungutanSheet, `A${row}`, data.nomorAju);
     setCellValue(pungutanSheet, `B${row}`, "1");
     setCellValue(pungutanSheet, `C${row}`, kode.toUpperCase());
-    setCellValue(
-      pungutanSheet,
-      `D${row}`,
-      getPungutan(kode, data.transaksi, data.listBarang),
-    );
+    setCellValue(pungutanSheet, `D${row}`, pungutan[kode]);
     // setCellValue(pungutanSheet, `E${row}`, );
   });
 }

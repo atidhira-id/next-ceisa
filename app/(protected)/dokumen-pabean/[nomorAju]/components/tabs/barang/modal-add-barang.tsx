@@ -1,22 +1,22 @@
 "use client";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import type { BarangItemData } from "@/app/providers/types";
+import type { BarangItemData } from "@/app/types";
 import InputWrapper from "../../input-wrapper";
 import InputNormal from "../../input-normal";
 import InputSelect from "../../input-select";
-import { kodeNegaraOptions } from "@/app/constants/entitas-options";
+import { kodeNegaraOptions } from "@/app/constants/options/entitas-options";
 import {
   bmOptions,
   pembayaranOptions,
   kondisiBarangOption,
   statementPerbedaanOption,
   hsOption,
-  kodeSatuanBarangOptions,
+  kodeSatuanOptions,
   metodePenentuanNilaiOptions,
   alasanOptions,
   jenisTarifOptions,
-} from "@/app/constants/barang-options";
+} from "@/app/constants/options/barang-options";
 import { required } from "@/lib/validation";
 import Form_87046094 from "./form-87046094";
 import InputTextArea from "../../input-textarea";
@@ -25,13 +25,15 @@ import InputRadio from "../../input-radio";
 import {
   getBiayaPenambah,
   getBiayaPengurang,
+  getCif,
+  getHargaSatuan,
   getLabel,
   getPabeanRupiah,
 } from "@/lib/utils";
 import { ModalDokumenFasilitas } from "./modal-dokumen-fasilitas";
 import { hsData } from "@/app/constants/hs";
-import { jenisKemasanOptions } from "@/app/constants/kemas-kontainer-options";
-import { kodeJenisOptions } from "@/app/constants/dokumen-options";
+import { jenisKemasanOptions } from "@/app/constants/options/kemas-kontainer-options";
+import { kodeJenisOptions } from "@/app/constants/options/dokumen-options";
 import { Trash } from "lucide-react";
 
 const initialBarangData: BarangItemData = {
@@ -291,6 +293,7 @@ export default function ModalAddBarang({
               />
               <InputNumber
                 labelPosition="left"
+                numberFormat={"US"}
                 title="Berat Bersih (kg)"
                 value={newBarang.beratBersih ?? 0}
                 onChange={(value) => updateData("beratBersih", value)}
@@ -312,7 +315,7 @@ export default function ModalAddBarang({
                   />
                   <InputSelect
                     value={newBarang.kodeSatuan ?? ""}
-                    options={kodeSatuanBarangOptions}
+                    options={kodeSatuanOptions}
                     onChange={(value) => updateData("kodeSatuan", value)}
                     rules={[required()]}
                   />
@@ -340,6 +343,7 @@ export default function ModalAddBarang({
 
               <InputNumber
                 labelPosition="left"
+                numberFormat={"US"}
                 title="Harga Invoice"
                 value={newBarang.hargaInvoice ?? defaultHargaInvoice ?? 0}
                 onChange={(value) => updateData("hargaInvoice", value)}
@@ -378,19 +382,20 @@ export default function ModalAddBarang({
               <InputNumber
                 labelPosition="left"
                 title="Nilai CIF"
-                value={data.transaksi.komponenBiaya?.hargaInvoice ?? 0}
+                value={getCif(newBarang, data.transaksi)}
                 disabled
               />
               <InputNumber
                 labelPosition="left"
+                numberFormat={"US"}
                 title="Harga Per Satuan"
-                value={(newBarang.hargaInvoice ?? 0) / (newBarang.jumlah ?? 1)}
+                value={getHargaSatuan(newBarang)}
                 disabled
               />
               <InputNumber
                 labelPosition="left"
                 title="Nilai Pabean Rupiah"
-                value={getPabeanRupiah(data.transaksi)}
+                value={getPabeanRupiah(data.transaksi, newBarang)}
                 disabled
               />
               <InputSelect
@@ -403,7 +408,8 @@ export default function ModalAddBarang({
                 }}
                 rules={[required()]}
               />
-              {newBarang.metodePenentuanNilai != "METODE 1" && (
+              {newBarang.metodePenentuanNilai !=
+                metodePenentuanNilaiOptions[0].value && (
                 <InputSelect
                   labelPosition="left"
                   label="Alasan"
@@ -601,7 +607,7 @@ export default function ModalAddBarang({
                       }}
                       rules={[required()]}
                     />
-                    <InputNumberWithPercentage value={0} disabled />
+                    <InputNumberWithPercentage value={100} disabled />
                   </div>
                 </InputWrapper>
 
@@ -620,7 +626,7 @@ export default function ModalAddBarang({
                       }}
                       rules={[required()]}
                     />
-                    <InputNumberWithPercentage value={0} disabled />
+                    <InputNumberWithPercentage value={100} disabled />
                   </div>
                   <div className="flex items-center gap-1">
                     <p className="w-3/4 text-sm">PPH</p>
@@ -636,7 +642,7 @@ export default function ModalAddBarang({
                       }}
                       rules={[required()]}
                     />
-                    <InputNumberWithPercentage value={0} disabled />
+                    <InputNumberWithPercentage value={100} disabled />
                   </div>
                 </InputWrapper>
 

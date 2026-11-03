@@ -8,6 +8,7 @@ type InputNormalProps = {
   title?: string;
   value: string;
   onChange?: (value: string) => void;
+  maxLength?: number;
   rules?: Rule<string>[];
   error?: string;
   disabled?: boolean;
@@ -18,6 +19,7 @@ export default function InputNormal({
   title,
   value,
   onChange,
+  maxLength,
   rules,
   error,
   disabled = false,
@@ -47,11 +49,18 @@ export default function InputNormal({
           aria-invalid={!!err}
           aria-describedby={err ? `${inputId}-error` : undefined}
           value={value ?? ""}
+          maxLength={maxLength}
           disabled={disabled}
           className={`w-full rounded-md border px-3 py-2 text-sm text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed ${
             err ? "border-red-500" : "border-gray-300"
           }`}
-          onChange={(e) => onChange?.(e.target.value)}
+          onChange={(e) =>
+            onChange?.(
+              maxLength === undefined
+                ? e.target.value
+                : e.target.value.slice(0, maxLength),
+            )
+          }
         />
         {err && (
           <div className="absolute -bottom-5 left-0">
