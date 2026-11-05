@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { House, LogOut, Menu, MoveLeft, MoveRight, X } from "lucide-react";
+import Image from "next/image";
 
 type DashboardShellProps = {
   children: React.ReactNode;
@@ -37,17 +38,16 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
       >
         {/* Logo */}
         <div
-          className={`flex h-16 justify-center items-center border-b ${
+          className={` flex h-16 justify-center items-center border-b ${
             collapsed ? "justify-center px-5 md:px-0" : "px-5"
           }`}
         >
           <Link
             href="/dokumen-pabean"
-            className="font-semibold"
+            className="relative block w-15 h-8"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <p className={collapsed ? "md:hidden" : "text-center"}>PT. UTPE</p>
-            {collapsed && <span className="hidden md:inline">UTPE</span>}
+            <Image src={"/utpe.png"} alt="Logo" fill className="object-cover" />
           </Link>
         </div>
 
