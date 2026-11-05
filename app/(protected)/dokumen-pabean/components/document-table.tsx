@@ -18,6 +18,11 @@ export default function DocumentTable() {
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [nomorAjuFilter, setNomorAjuFilter] = useState("");
+  const [kodeDokumenFilter, setKodeDokumenFilter] = useState("");
+  const [jenisEntitasFilter, setJenisEntitasFilter] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const loadDrafts = useCallback(async (showLoading = true) => {
     try {
@@ -86,6 +91,24 @@ export default function DocumentTable() {
     };
   }, []);
 
+  const filteredDrafts = drafts.filter(
+    (draft) =>
+      draft.nomorAju.toLowerCase().includes(nomorAjuFilter.trim().toLowerCase()) &&
+      draft.kodeDokumen
+        .toLowerCase()
+        .includes(kodeDokumenFilter.trim().toLowerCase()) &&
+      draft.jenisEntitas
+        .toLowerCase()
+        .includes(jenisEntitasFilter.trim().toLowerCase()),
+  );
+  const totalPages = Math.max(1, Math.ceil(filteredDrafts.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const firstItemIndex = (currentPage - 1) * pageSize;
+  const visibleDrafts = filteredDrafts.slice(
+    firstItemIndex,
+    firstItemIndex + pageSize,
+  );
+
   if (isLoading) {
     return <p>Memuat daftar dokumen...</p>;
   }
@@ -138,33 +161,84 @@ export default function DocumentTable() {
           <table className="w-full text-left text-sm">
             <thead className="border-b bg-gray-50">
               <tr>
-                <th className="w-16 px-4 py-3 font-medium text-gray-600">
+                <th className="w-16 px-4 pt-3 font-medium text-gray-600">
                   Nomor
                 </th>
-                <th className="w-16 px-4 py-3 font-medium text-gray-600">
-                  Nomor Aju
+                <th className="w-16 px-4 pt-3 font-medium text-gray-600">
+                  <p>Nomor Aju</p>
                 </th>
 
-                <th className="px-4 py-3 font-medium text-gray-600">
-                  Kode Dokumen
+                <th className="px-4 pt-3 font-medium text-gray-600">
+                  <p>Kode Dokumen</p>
                 </th>
 
-                <th className="px-4 py-3 font-medium text-gray-600">
-                  Jenis Entitas
+                <th className="px-4 pt-3 font-medium text-gray-600">
+                  <p>Jenis Entitas</p>
                 </th>
 
-                <th className="px-4 py-3 font-medium text-gray-600">
+                <th className="px-4 pt-3 font-medium text-gray-600">
                   Terakhir Diperbarui
                 </th>
 
-                <th className="px-4 py-3 font-medium text-gray-600">Aksi</th>
+                <th className="px-4 pt-3 font-medium text-gray-600 text-right">
+                  Aksi
+                </th>
+              </tr>
+              <tr>
+                <th className="w-16 px-4 pb-3"></th>
+                <th className="px-4 pb-3">
+                  <input
+                    type="search"
+                    value={nomorAjuFilter}
+                    onChange={(event) => {
+                      setNomorAjuFilter(event.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Cari Nomor Aju"
+                    aria-label="Filter Nomor Aju"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 font-normal text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  />
+                </th>
+
+                <th className="px-4 pb-3">
+                  <input
+                    type="search"
+                    value={kodeDokumenFilter}
+                    onChange={(event) => {
+                      setKodeDokumenFilter(event.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Cari Kode Dokumen"
+                    aria-label="Filter Kode Dokumen"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 font-normal text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  />
+                </th>
+
+                <th className="px-4 pb-3">
+                  <input
+                    type="search"
+                    value={jenisEntitasFilter}
+                    onChange={(event) => {
+                      setJenisEntitasFilter(event.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Cari Jenis Entitas"
+                    aria-label="Filter Jenis Entitas"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 font-normal text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  />
+                </th>
+
+                <th className="px-4 pb-3"></th>
+                <th className="px-4 pb-3"></th>
               </tr>
             </thead>
 
             <tbody className="divide-y">
-              {drafts.map((document, index) => (
+              {visibleDrafts.map((document, index) => (
                 <tr key={document.nomorAju} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-500">{index + 1}</td>
+                  <td className="px-4 py-3 text-gray-500">
+                    {firstItemIndex + index + 1}
+                  </td>
 
                   <td className="px-4 py-3 font-medium">{document.nomorAju}</td>
 
@@ -173,7 +247,7 @@ export default function DocumentTable() {
                   <td className="px-4 py-3">{document.jenisEntitas}</td>
 
                   <td className="px-4 py-3">{document.updatedAt}</td>
-                  <td className="px-4 py-3 flex gap-3">
+                  <td className="px-4 py-3 flex gap-3 justify-end">
                     <Link
                       href={`/dokumen-pabean/${encodeURIComponent(
                         document.nomorAju,
@@ -193,15 +267,62 @@ export default function DocumentTable() {
                 </tr>
               ))}
 
-              {drafts.length === 0 && (
+              {filteredDrafts.length === 0 && (
                 <tr>
                   <td colSpan={6} className="p-4 text-center">
-                    Belum ada dokumen.
+                    {drafts.length === 0
+                      ? "Belum ada dokumen."
+                      : "Tidak ada dokumen yang sesuai dengan filter."}
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+        </div>
+        <div className="flex flex-col gap-3 border-t px-4 py-3 text-sm text-gray-600 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <label htmlFor="draft-page-size">Baris per halaman</label>
+            <select
+              id="draft-page-size"
+              value={pageSize}
+              onChange={(event) => {
+                setPageSize(Number(event.target.value));
+                setPage(1);
+              }}
+              className="rounded-md border border-gray-300 bg-white px-2 py-1.5 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
+            <span>
+              Menampilkan{" "}
+              {filteredDrafts.length === 0 ? 0 : firstItemIndex + 1}-
+              {Math.min(firstItemIndex + visibleDrafts.length, filteredDrafts.length)}{" "}
+              dari {filteredDrafts.length} dokumen
+            </span>
+          </div>
+          <div className="flex items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Sebelumnya
+            </button>
+            <span aria-live="polite">
+              Halaman {currentPage} dari {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Berikutnya
+            </button>
+          </div>
         </div>
       </div>
     </>
