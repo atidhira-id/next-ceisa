@@ -9,6 +9,7 @@ export const kodeJenisOptions: OptionType[] = [
   { value: "430", label: "430 - Bank Garansi" },
   { value: "440", label: "440 - Surat Tanda Bukti Setor (STBS)" },
   { value: "454", label: "454 - SSPCP" },
+  { value: "464", label: "464 - Letter of Credit (LC)" },
   { value: "465", label: "465 - Letter of Credit (LC)" },
   { value: "666", label: "666 - Pengecualian dengan Surat Keputusan" },
   { value: "704", label: "704 - Master Bill of Lading (MBL)" },
