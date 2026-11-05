@@ -16,6 +16,7 @@ import {
   metodePenentuanNilaiOptions,
   alasanOptions,
   jenisTarifOptions,
+  tipeBarangOptions,
 } from "@/app/constants/options/barang-options";
 import { required } from "@/lib/validation";
 import Form_87046094 from "./form-87046094";
@@ -27,6 +28,7 @@ import {
   getBiayaPengurang,
   getCif,
   getHargaSatuan,
+  getHsCode,
   getLabel,
   getPabeanRupiah,
 } from "@/lib/utils";
@@ -74,6 +76,26 @@ export default function ModalAddBarang({
     value: number | string | boolean,
   ) {
     setNewBarang({ ...newBarang, [field]: value });
+  }
+
+  function handleTipeChange(value: string) {
+    const nextTipe = value === "TANPA TIPE" ? "TANPA TIPE" : value;
+    const autoHs = getHsCode(nextTipe);
+
+    if (!autoHs) {
+      setNewBarang((current) => ({ ...current, tipe: nextTipe }));
+      return;
+    }
+
+    const hs = hsData.find((item) => item.kode === autoHs);
+    setNewBarang((current) => ({
+      ...current,
+      tipe: nextTipe,
+      hs: autoHs,
+      bmPercentage: hs?.bm ?? current.bmPercentage ?? 0,
+      pphPercentage: hs?.pph ?? current.pphPercentage ?? 0,
+      ppnPercentage: hs?.ppn ?? current.ppnPercentage ?? 0,
+    }));
   }
 
   function updateSpecs(field: string, value: string) {
@@ -162,17 +184,16 @@ export default function ModalAddBarang({
                 onChange={(value) => {
                   const hs = hsData.find((item) => item.kode == value);
 
-                  setNewBarang({
-                    ...newBarang,
-                    ...{
-                      hs: value,
-                      bmPercentage: hs?.bm ?? 0,
-                      pphPercentage: hs?.pph ?? 0,
-                      ppnPercentage: hs?.ppn ?? 0,
-                    },
-                  });
+                  setNewBarang((current) => ({
+                    ...current,
+                    hs: value,
+                    bmPercentage: hs?.bm ?? current.bmPercentage ?? 0,
+                    pphPercentage: hs?.pph ?? current.pphPercentage ?? 0,
+                    ppnPercentage: hs?.ppn ?? current.ppnPercentage ?? 0,
+                  }));
                 }}
                 rules={[required()]}
+                allowCustom
               />
 
               {/* FORM FOR 87046094 */}
@@ -252,11 +273,13 @@ export default function ModalAddBarang({
                     />
                     Tanpa Tipe
                   </label>
-                  <InputNormal
+                  <InputSelect
                     value={newBarang.tipe ?? ""}
-                    onChange={(value) => updateData("tipe", value)}
+                    options={tipeBarangOptions}
+                    onChange={handleTipeChange}
                     rules={[required()]}
                     disabled={newBarang.tipe === "TANPA TIPE"}
+                    allowCustom
                   />
                 </div>
               </div>
