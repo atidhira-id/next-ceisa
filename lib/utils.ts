@@ -1,3 +1,4 @@
+import { TipeBarangHsData } from "@/app/constants/db_hs";
 import type {
   BarangItemData,
   KomponenBiaya,
@@ -10,6 +11,12 @@ export function getLabel(options: OptionType[], code: string) {
   const option = options.find((item) => item.value === code);
 
   return option?.label;
+}
+
+export function getHsCode(tipeBarang: string): string {
+  const hs = TipeBarangHsData[tipeBarang];
+
+  return hs ?? "";
 }
 
 export function getBiayaPenambah(transaksiData: TransaksiData): number {
