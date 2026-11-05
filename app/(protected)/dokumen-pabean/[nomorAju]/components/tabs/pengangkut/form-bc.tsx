@@ -31,7 +31,7 @@ export default function FormBc() {
             rules={[required()]}
           />
           <InputNormal
-            maxLength={4}
+            maxLength={6}
             value={pengangkut.nomorTutupPu ?? ""}
             onChange={(value) =>
               updateDocumentData({
