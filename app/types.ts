@@ -1,3 +1,13 @@
+export type Draft = {
+  id: string;
+  nomorAju: string;
+  kodeDokumen: string;
+  jenisEntitas: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type OptionType = {
   value: string;
   label: string;
