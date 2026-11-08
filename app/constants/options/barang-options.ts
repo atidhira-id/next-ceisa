@@ -36332,8 +36332,8 @@ export const cbuOptions: OptionType[] = [
 ];
 
 export const kondisiBarangOption: OptionType[] = [
-  { value: "Barang Baru", label: "Barang Baru" },
-  { value: "Barang Bukan Baru", label: "Barang Bukan Baru" },
+  { value: "1", label: "Barang Baru" },
+  { value: "2", label: "Barang Bukan Baru" },
 ];
 
 export const kodeSatuanOptions: OptionType[] = [
