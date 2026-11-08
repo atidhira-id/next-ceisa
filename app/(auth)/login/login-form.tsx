@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import { SubmitEvent, ChangeEvent, useState } from "react";
 import { redirect } from "next/navigation";
 
 export function LoginForm() {
@@ -10,7 +10,7 @@ export function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
@@ -33,49 +33,53 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium">
-          Email
-        </label>
+      <InputLogin
+        label="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
 
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className="w-full rounded-md border px-3 py-2"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-medium">
-          Password
-        </label>
-
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          className="w-full rounded-md border px-3 py-2"
-        />
-      </div>
+      <InputLogin
+        label="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <button
         type="submit"
-        disabled={loading}
-        className="w-full rounded-md bg-black px-4 py-2 text-white disabled:opacity-50"
+        disabled={loading || email == "" || password == ""}
+        className="w-full rounded-md bg-black px-4 py-3 mt-5 text-white font-bold tracking-wide disabled:opacity-50 hover:cursor-pointer"
       >
-        {loading ? "Signing in..." : "Sign in"}
+        {loading ? "Sedang Masuk..." : "Masuk"}
       </button>
     </form>
+  );
+}
+
+type InputLoginType = {
+  label: "email" | "password";
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
+function InputLogin({ label, value, onChange }: InputLoginType) {
+  return (
+    <div>
+      <label htmlFor={label} className="mb-1 block text-md font-medium">
+        {label == "email" ? "Email" : "Password"}
+      </label>
+
+      <input
+        id={label}
+        name={label}
+        type={label == "email" ? "email" : "password"}
+        required
+        value={value}
+        onChange={onChange}
+        className="w-full rounded-sm border border-red-300 px-3 py-2 outline-none focus:border-red-600"
+      />
+    </div>
   );
 }

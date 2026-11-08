@@ -28,11 +28,11 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
       <aside
         id="dashboard-sidebar"
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col border-r bg-white transition-all duration-200 md:static md:z-auto ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col border-r transition-all duration-200 md:static md:z-auto ${
           collapsed ? "md:w-20" : "md:w-64"
         } ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
@@ -67,7 +67,7 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center rounded-md px-3 py-2 text-sm transition ${
                   isActive
-                    ? "bg-gray-200 font-medium"
+                    ? "bg-red-200 font-medium"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                 } gap-3 ${collapsed ? "md:justify-center" : ""}`}
               >
@@ -97,7 +97,7 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
             type="button"
             onClick={() => signOut({ callbackUrl: "/login" })}
             title={collapsed ? "Logout" : undefined}
-            className={`flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 ${
+            className={`flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 hover:cursor-pointer ${
               collapsed ? "gap-3 md:justify-center" : "gap-3"
             }`}
           >
@@ -120,7 +120,7 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
       {/* Main area */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
-        <header className="flex h-16 items-center border-b bg-white px-4">
+        <header className="flex h-16 items-center border-b px-4">
           <button
             type="button"
             onClick={() => setMobileMenuOpen((open) => !open)}
