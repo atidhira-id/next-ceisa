@@ -7,6 +7,13 @@ import type {
 } from "@/app/types";
 import type { OptionType } from "@/app/types";
 
+export function formatDateIndonesian(date: string): string {
+  return new Date(date).toLocaleString("id-ID", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+}
+
 export function getLabel(options: OptionType[], code: string) {
   const option = options.find((item) => item.value === code);
 
