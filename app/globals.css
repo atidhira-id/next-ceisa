@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: oklch(97.1% 0.013 17.38);
+  --color-background: #f8fafc;
   --color-foreground: #09251c;
 }
 

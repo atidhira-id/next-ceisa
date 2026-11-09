@@ -1,4 +1,4 @@
-import { TipeBarangHsData } from "@/app/constants/db_hs";
+import { TipeBarangHsData } from "@/app/constants/tipeBarang";
 import type {
   BarangItemData,
   KomponenBiaya,

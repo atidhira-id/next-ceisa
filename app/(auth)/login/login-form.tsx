@@ -18,13 +18,16 @@ export function LoginForm() {
     setError("");
     setLoading(true);
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    setLoading(false);
+    let result;
+    try {
+      result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+    } finally {
+      setLoading(false);
+    }
 
     if (!result || result.error) {
       setError("Email atau password salah.");

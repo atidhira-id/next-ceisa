@@ -1,4 +1,4 @@
-import { DocumentLoader } from "./components/document-loader";
+import { DocumentLoader } from "./components/documentLoader";
 
 type DocumentPageProps = {
   params: Promise<{
