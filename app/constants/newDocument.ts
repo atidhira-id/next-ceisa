@@ -6,6 +6,13 @@ export function generateNewDocument(
   entitas: string,
   kodeDokumen: string,
 ): FormInputs {
+  const createdAt = new Date();
+  const tanggal = [
+    createdAt.getFullYear(),
+    String(createdAt.getMonth() + 1).padStart(2, "0"),
+    String(createdAt.getDate()).padStart(2, "0"),
+  ].join("-");
+
   return {
     nomorAju: nomorAju,
     jenisEntitas: entitas,
@@ -22,6 +29,11 @@ export function generateNewDocument(
     listKontainer: [],
     transaksi: {},
     listBarang: [],
-    pernyataan: {},
+    pernyataan: {
+      tempat: "JAKARTA",
+      tanggal,
+      nama: "DAVID",
+      jabatan: "DIREKTUR",
+    },
   };
 }
