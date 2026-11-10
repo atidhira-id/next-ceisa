@@ -14,7 +14,7 @@ import BarangTab from "./tabs/barang/barangTab";
 import PungutanTab from "./tabs/pungutan/pungutanTab";
 import PernyataanTab from "./tabs/pernyataan/pernyataanTab";
 import { MoveLeft, MoveRight } from "lucide-react";
-import { NormalButton } from "../../components/buttons";
+import { NormalButton } from "../../../../components/buttons";
 
 export function DocumentForm({ nomorAju }: { nomorAju: string }) {
   const { documentData } = useDocument();

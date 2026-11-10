@@ -8,7 +8,7 @@ import {
   kodeAfiliasiOptions,
 } from "@/app/constants/options/entitasOptions";
 import { maxLength, minLength, required } from "@/lib/validation";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 export default function FormPemilikBarang() {
   const { documentData, updateDocumentData } = useDocument();

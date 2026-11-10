@@ -21,7 +21,7 @@ import {
   getBiayaPengurang,
   getPabeanRupiah,
 } from "@/lib/utils";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 export default function TransaksiTab() {
   const { documentData, updateDocumentData } = useDocument();

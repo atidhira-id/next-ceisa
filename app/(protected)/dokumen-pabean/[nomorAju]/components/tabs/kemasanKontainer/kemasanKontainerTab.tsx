@@ -14,7 +14,7 @@ import {
 import { getLabel } from "@/lib/utils";
 import { KemasanItemData, KontainerItemData } from "@/app/types";
 import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 export default function KemasanKontainerTab() {
   const { documentData, updateDocumentData } = useDocument();
@@ -179,7 +179,7 @@ export default function KemasanKontainerTab() {
             }
           >
             {/* TABLE DATA KONTAINER */}
-            <div className="w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div className="w-full overflow-hidden rounded-sm border border-slate-200 bg-white shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full min-w-180 text-left text-sm">
                   <thead className="border-b border-slate-200 bg-slate-50">
@@ -297,6 +297,8 @@ export default function KemasanKontainerTab() {
       {/* Modal Delete Kemasan */}
       {kemasanToDelete && (
         <ModalUserConfirmation
+          title="Hapus Kemasan"
+          description="Apakah anda yakin ingin menghapus kemasan ini?"
           handleYes={handleDeleteKemasan}
           handleNo={() => setKemasanToDelete(null)}
         />
@@ -304,6 +306,8 @@ export default function KemasanKontainerTab() {
       {/* Modal Delete Kontainer */}
       {kontainerToDelete && (
         <ModalUserConfirmation
+          title="Hapus Kontainer"
+          description="Apakah anda yakin ingin menghapus kontainer ini?"
           handleYes={handleDeleteKontainer}
           handleNo={() => setKontainerToDelete(null)}
         />

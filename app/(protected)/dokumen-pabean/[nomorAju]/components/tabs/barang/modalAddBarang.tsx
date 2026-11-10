@@ -37,7 +37,7 @@ import { hsData } from "@/app/constants/hs";
 import { jenisKemasanOptions } from "@/app/constants/options/kemasKontainerOptions";
 import { kodeJenisOptions } from "@/app/constants/options/dokumenOptions";
 import { Plus, Trash } from "lucide-react";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 const initialBarangData: BarangItemData = {
   statementPerbedaan: statementPerbedaanOption[1].value,

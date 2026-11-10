@@ -6,7 +6,7 @@ import ModalAddBarang from "./modalAddBarang";
 import InputWrapper from "../../inputs/input-wrapper";
 import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modalUserConfirmation";
 import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("id-ID", {
@@ -91,76 +91,104 @@ export default function BarangTab() {
         }
       >
         {/* Table */}
-        <div className="overflow-hidden rounded-sm border bg-white">
+        <div className="w-full overflow-hidden rounded-sm border border-slate-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b bg-gray-50">
+            <table className="w-full min-w-225 text-left text-sm">
+              <thead className="border-b border-slate-200 bg-slate-50">
                 <tr>
-                  <th className="w-16 px-4 py-3 font-medium text-gray-600">
+                  <th className="w-16 px-4 py-3 font-semibold text-slate-600">
                     Seri
                   </th>
 
-                  <th className="px-4 py-3 font-medium text-gray-600">
+                  <th className="w-52 px-4 py-3 font-semibold text-slate-600">
                     Pos Tarif/HS
                   </th>
 
-                  <th className="px-4 py-3 font-medium text-gray-600">
+                  <th className="min-w-36 px-4 py-3 font-semibold text-slate-600">
                     Uraian Jenis Barang
                   </th>
 
-                  <th className="px-4 py-3 font-medium text-gray-600">
+                  <th className="w-40 px-4 py-3 font-semibold text-slate-600">
                     Nilai Barang
                   </th>
-                  <th className="px-4 py-3 font-medium text-gray-600">
+
+                  <th className="w-32 px-4 py-3 font-semibold text-slate-600">
                     Jumlah Satuan
                   </th>
-                  <th className="px-4 py-3 font-medium text-gray-600">
+
+                  <th className="w-36 px-4 py-3 font-semibold text-slate-600">
                     Berat Bersih (kg)
                   </th>
-                  <th className="px-4 py-3 font-medium text-gray-600"></th>
+
+                  <th className="w-24 px-4 py-3 text-right font-semibold text-slate-600">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
 
-              <tbody className="divide-y">
+              <tbody className="divide-y divide-slate-100">
                 {data.listBarang.map((barang) => (
-                  <tr key={barang.seri} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium">{barang.seri}</td>
+                  <tr
+                    key={barang.seri}
+                    className="transition-colors hover:bg-slate-50"
+                  >
+                    <td className="px-4 py-3 font-medium tabular-nums text-slate-700">
+                      {barang.seri}
+                    </td>
 
-                    <td className="px-4 py-3">{barang.hs}</td>
-                    <td className="px-4 py-3 whitespace-pre-line">
+                    <td className="px-4 py-3 font-medium text-slate-700">
+                      {barang.hs}
+                    </td>
+
+                    <td className="whitespace-pre-line px-4 py-3 text-slate-600">
                       {barang.uraianJenisBarang}
                     </td>
-                    <td className="px-4 py-3">
+
+                    <td className="px-4 py-3 font-medium tabular-nums text-slate-700">
                       {formatCurrency(barang.hargaInvoice ?? 0)}
                     </td>
-                    <td className="px-4 py-3">{barang.jumlah}</td>
-                    <td className="px-4 py-3">{barang.beratBersih}</td>
-                    <td className="px-4 py-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenBarangModal(barang)}
-                        title="Buka barang"
-                        className="rounded-md p-2 text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:cursor-pointer"
-                      >
-                        <SquareArrowOutUpRight size={16} />
-                      </button>
 
-                      <button
-                        type="button"
-                        onClick={() => setBarangToDelete(barang)}
-                        title="Hapus barang"
-                        className="rounded-md p-2 text-red-600 hover:bg-red-50 hover:text-red-700 hover:cursor-pointer"
-                      >
-                        <Trash size={16} />
-                      </button>
+                    <td className="px-4 py-3 tabular-nums text-slate-600">
+                      {barang.jumlah}
+                    </td>
+
+                    <td className="px-4 py-3 tabular-nums text-slate-600">
+                      {barang.beratBersih}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenBarangModal(barang)}
+                          title="Buka barang"
+                          aria-label="Buka barang"
+                          className="inline-flex size-8 items-center justify-center rounded-lg text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                        >
+                          <SquareArrowOutUpRight size={16} />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setBarangToDelete(barang)}
+                          title="Hapus barang"
+                          aria-label="Hapus barang"
+                          className="inline-flex size-8 items-center justify-center rounded-lg text-red-500 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-200"
+                        >
+                          <Trash size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
 
                 {!data.listBarang.length && (
                   <tr>
-                    <td colSpan={7} className="p-4 text-center">
-                      Belum Ada Data
+                    <td
+                      colSpan={7}
+                      className="px-4 py-12 text-center text-sm text-slate-400"
+                    >
+                      Belum ada data barang
                     </td>
                   </tr>
                 )}

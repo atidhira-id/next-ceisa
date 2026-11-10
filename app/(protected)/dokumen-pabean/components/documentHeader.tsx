@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { NormalButton } from "./buttons";
+import { NormalButton } from "../../../components/buttons";
 
 type DocumentHeaderProps = {
   onAddDocument?: () => void;

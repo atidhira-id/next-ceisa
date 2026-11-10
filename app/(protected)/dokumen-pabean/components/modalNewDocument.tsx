@@ -10,7 +10,12 @@ import { FormInputs } from "@/app/types";
 import { generateNewDocument } from "@/app/constants/newDocument";
 import InputSelect from "../[nomorAju]/components/inputs/input-select";
 import { required } from "@/lib/validation";
-import { NormalButton } from "./buttons";
+import {
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalWrapper,
+} from "@/app/components/modal";
 
 type ModalNewDocumentProps = {
   onCloseModal: () => void;
@@ -88,46 +93,37 @@ export default function ModalNewDocument({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-        <div className="w-full max-w-md rounded-lg bg-white shadow-xl">
-          <div className="px-6 py-4">
-            <h2 className="text-lg font-semibold">Tambah Dokumen</h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Pilih entitas dan jenis dokumen yang akan dibuat.
-            </p>
-          </div>
+      <ModalWrapper className="w-full max-w-md">
+        <ModalHeader title="Tambah Dokumen" onCloseModal={onCloseModal}>
+          <p className="mt-1 text-sm text-gray-500">
+            Pilih entitas dan jenis dokumen yang akan dibuat.
+          </p>
+        </ModalHeader>
 
-          <div className="space-y-8 px-6 pt-3 pb-8">
-            <InputSelect
-              label="Entitas"
-              value={entitas}
-              options={entitasOptions}
-              onChange={(value) => setEntitas(value)}
-              rules={[required()]}
-            />
-            <InputSelect
-              label="Jenis Dokumen"
-              value={kodeDokumen}
-              options={jenisDokumenOptions}
-              onChange={(value) => setKodeDokumen(value)}
-              rules={[required()]}
-            />
-          </div>
+        <ModalContent>
+          <InputSelect
+            label="Entitas"
+            value={entitas}
+            options={entitasOptions}
+            onChange={(value) => setEntitas(value)}
+            rules={[required()]}
+          />
+          <InputSelect
+            label="Jenis Dokumen"
+            value={kodeDokumen}
+            options={jenisDokumenOptions}
+            onChange={(value) => setKodeDokumen(value)}
+            rules={[required()]}
+          />
+        </ModalContent>
 
-          <div className="flex justify-end gap-3 px-6 py-4">
-            <NormalButton variant={"inverted"} onClick={onCloseModal}>
-              Batal
-            </NormalButton>
-
-            <NormalButton
-              disabled={!entitas || !kodeDokumen}
-              onClick={handleContinue}
-            >
-              OK
-            </NormalButton>
-          </div>
-        </div>
-      </div>
+        <ModalFooter
+          disabled={!entitas || !kodeDokumen}
+          textYes="Simpan"
+          handleYes={handleContinue}
+          handleNo={onCloseModal}
+        />
+      </ModalWrapper>
     </>
   );
 }

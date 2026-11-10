@@ -12,7 +12,7 @@ import type { DocumentItemData } from "@/app/types";
 import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modalUserConfirmation";
 import InputWrapper from "../../inputs/input-wrapper";
 import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 export default function DokumenTab() {
   const { documentData, updateDocumentData } = useDocument();

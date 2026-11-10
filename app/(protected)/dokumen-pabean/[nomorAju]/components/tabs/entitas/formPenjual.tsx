@@ -8,7 +8,7 @@ import {
 } from "@/app/constants/options/entitasOptions";
 import { required } from "@/lib/validation";
 import { supplierData } from "@/app/constants/supplier";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 export default function FormPenjual() {
   const { documentData, updateDocumentData } = useDocument();

@@ -4,7 +4,7 @@ import type { BarangDokumenData } from "@/app/types";
 import { kodeJenisOptions } from "@/app/constants/options/dokumenOptions";
 import InputNumber from "../../inputs/input-number";
 import { getLabel } from "@/lib/utils";
-import { NormalButton } from "@/app/(protected)/dokumen-pabean/components/buttons";
+import { NormalButton } from "@/app/components/buttons";
 
 type ModalDokumenFasilitasProps = {
   onCloseModal: () => void;
