@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import { LoginForm } from "./login-form";
 
 export default function LoginPage() {
@@ -27,18 +27,19 @@ export default function LoginPage() {
         {/* LOGO */}
         <div className="mb-12 flex flex-col items-center justify-center gap-3">
           <div className="relative h-10 w-20">
-            <Image
+            {/* <Image
               src="/utpe.png"
               alt="UTPE Logo"
               fill
               priority
               className="object-contain"
-            />
+            /> */}
+            <h1 className="text-xl font-bold text-center">UTPE</h1>
           </div>
 
-          <h1 className="text-xl font-bold tracking-tight text-slate-800">
+          <h2 className="text-xl font-bold tracking-tight text-slate-800">
             UTPE Ceisa Clone
-          </h1>
+          </h2>
 
           <p className="text-center text-sm text-slate-500">
             Import & Export Document Management

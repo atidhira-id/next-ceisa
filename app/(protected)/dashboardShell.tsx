@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { navigation } from "@/app/constants/sideNavigation";
 import { LogOut, Menu, MoveLeft, MoveRight, X } from "lucide-react";
-import Image from "next/image";
+// import Image from "next/image";
 
 const dashboardText = {
   companyName: "PT. United Tractors Pandu Engineering",
@@ -45,13 +45,14 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
             className="relative block w-15 h-8"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <Image
+            {/* <Image
               src={"/utpe.png"}
               alt="Logo"
               fill
               priority
               className="object-cover"
-            />
+            /> */}
+            <h1 className="text-center text-xl font-bold">UTPE</h1>
           </Link>
         </div>
 
