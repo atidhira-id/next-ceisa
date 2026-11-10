@@ -44,11 +44,6 @@ export const supplierData = [
     kodeNegara: "SG",
   },
   {
-    nama: "SCANIA CV AB (2)",
-    alamat: "BEDRIJFSSTRAAT 1208 OUDSBERGEN BELGIUM",
-    kodeNegara: "BE",
-  },
-  {
     nama: "MARUBENI ITOCHU STEEL INC",
     alamat:
       "TOKYO MIDTOWN YAESU, 2-2-1, YAESU, CHUO-KU, TOKYO, 104-0028, JAPAN",
@@ -83,17 +78,6 @@ export const supplierData = [
     kodeNegara: "CN",
   },
   {
-    nama: "FUZHOU INNOVATION MECHATRONICS TECH LIMITED (3)",
-    alamat:
-      "ROOM 1533, BUILDING 1, SANSHENG BINJIANG INTERNATIONAL, NO. 96 JIANGBIN WEST AVENUE, CANGSHAN FISTRICT, FUZHOU CITY, FUJIAN",
-    kodeNegara: "CN",
-  },
-  {
-    nama: "YORK TRANSPORT EQUIPMENT (ASIA) PTE LTD (2)",
-    alamat: "WEST SPRING BUILDING, 61C TUAS BAY DRIVE, SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
     nama: "WABCO ASIA PTE LTD",
     alamat: 'C/O KUEHNE+NAGAL PTE LTD 4 BENOI "CRESCENT  POKKA INTERNATIONAL',
     kodeNegara: "SG",
@@ -104,37 +88,9 @@ export const supplierData = [
     kodeNegara: "BE",
   },
   {
-    nama: "SCANIA CV AB C/O GETS BUSINESS SVC. (2)",
-    alamat: "Bedok North Avenue 4 level 211,SINGAPORE SINGAPORE SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "SUMITOMO CORPORATION (SHANGHAI) LTD (2)",
-    alamat:
-      "10F, SHANGHAI WORLD FINANCIAL CENTER 100 CENTURY AVENUE, PUDONG NEW ARE SHANGHAI, 200120",
-    kodeNegara: "CN",
-  },
-  {
     nama: "SBS-SINGA BEARINGS SOLUTIONS PTE LTD",
     alamat:
       "50 BUKIT BATOK STREET 23, 06-08 MIDVIEW BUILDING,(COLLECT FR. / DELIVER TO 05-08) SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "SBS-SINGA BEARINGS SOLUTIONS PTE LTD (2)",
-    alamat:
-      "50 Bukit Batok Street 23,06-08 Midview Building,(Collect fr. / Deliver to 05-08) SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "FUZHOU INNOVATION MECHATRONICS TECH LIMITED (4)",
-    alamat:
-      "ROOM 1533, BUILDING 1, SANSHENG BINJIANG INTERNATIONAL NO.96 JIANGBIN WEST AVENUE, CANGSHAN DISTRICT, FUZHOU CITY, FUJIAN",
-    kodeNegara: "CN",
-  },
-  {
-    nama: "TURBO ONE PTE LTD (2)",
-    alamat: "20 TOH GUAN ROAD, 05-00 SINGAPORE 608839",
     kodeNegara: "SG",
   },
   {
@@ -164,22 +120,10 @@ export const supplierData = [
     kodeNegara: "CH",
   },
   {
-    nama: "FUZHOU INNOVATION MECHATRONICS TECH LIMITED (5)",
-    alamat:
-      "ROOM 1533, BUILDING 1, SANSHENG BINJIANG INTERNATIONAL NO. 96 JIANGBIN WEST AVENUE, CANGSHAN DISTRICT, FUZHOU CITY, FUJIAN PROVINCE.",
-    kodeNegara: "CN",
-  },
-  {
     nama: "CHONGQING WEINENG OIL PURIFICATION SOLUTIONS CO.LTD",
     alamat:
       "5504,NO.26, HUAJIN ROAD, HUAYAN TOWN, JIULONGPO DISTRICT, CHONGQING, CHINA",
     kodeNegara: "CN",
-  },
-  {
-    nama: "SBS-SINGA BEARINGS SOLUTIONS PTE LTD (3)",
-    alamat:
-      "50 BUKIT BATOK STREET 23 #06-08 MIDVIEW BUILDING,(COLLECT FR. / DELIVER TO 05-08) SINGAPORE",
-    kodeNegara: "SG",
   },
   {
     nama: "FUWA K HITCH (AUSTRALIA) PTY LTD",
@@ -193,36 +137,9 @@ export const supplierData = [
     kodeNegara: "HK",
   },
   {
-    nama: "NIITSU TURBO INDUSTRIES (M) SDN BHD (2)",
-    alamat:
-      "2B, JALAN 3/32A, OFF BATU 6 1/2, JALAN KEPONG 52100, KUALA LUMPUR, MALAYSIA",
-    kodeNegara: "MY",
-  },
-  {
     nama: "SHANGHAI ENNEAGON ENERGY TECHNOLOGY CO.,LTD",
     alamat: "NO. 150 LAODONGZHI ROAD, JIADING DISTRICT, SHANGHAI, 201821",
     kodeNegara: "CN",
-  },
-  {
-    nama: "YORK TRANSPORT EQUIPMENT (ASIA) PTE LTD (3)",
-    alamat: "WEST SPRING BUILDING 61 C TUAS BAY DRIVE SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "YORK TRANSPORT EQUIPMENT (ASIA) PTE LTD (4)",
-    alamat: "WEST SPRING BUILDING 61C TUAS BAY DRIVE SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "NIITSU TURBO INDUSTRIES (M) SDN BHD (3)",
-    alamat:
-      "2B, JALAN 3/32A, OFF BATU 6 1/2 JALAN KEPONG KUALA LUMPUR 52100 MY",
-    kodeNegara: "MY",
-  },
-  {
-    nama: "SCANIA CV AB C/O GETS BUSINESS SVC. (3)",
-    alamat: "BEDOK NORTH AVENUE 4 LEVEL 211,SINGAPORE",
-    kodeNegara: "SG",
   },
   {
     nama: "DONGGUAN CIMC VEHICLE CO .TD",
@@ -241,46 +158,14 @@ export const supplierData = [
     kodeNegara: "SG",
   },
   {
-    nama: "SCANIA CV AB C/O GETS BUSINESS SVC. (4)",
-    alamat: "Bedok North Avenue 4 level 211,SINGAPORE SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "TURBO ONE PTE LTD (3)",
-    alamat:
-      "20 TOH GUAN ROAD #05-00 CJ LOGISTICS BUILDING JURING EAST 608839 SG",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "FUZHOU INNOVATION MECHATRONICS TECH LIMITED (6)",
-    alamat:
-      "ROOM 308, BUILDING 1, FUZHOU SOFTWARE PARK ZONE A, NO.89 SOFTWARE AVENUE, GULOU DISTRICT, FUZHOU CITY, FUJIAN,",
-    kodeNegara: "CN",
-  },
-  {
-    nama: "YUTONG HONGKONG LIMITED (2)",
-    alamat: "ROOM 1102,11/F CAPITAL CENTRE 151 GLOUCHESTER ROAD WANCHAI",
-    kodeNegara: "HK",
-  },
-  {
     nama: "BESTAR STEEL CO.LTD",
     alamat: "STEEL INDUSTRIAL ZONE, NO.9 XIANGFUROAD, CHANGSHA, HUNAN",
     kodeNegara: "CN",
   },
   {
-    nama: "YORK TRANSPORT EQUIPMENT (ASIA) PTE LTD (5)",
-    alamat: "WEST SPRING BUILDING 61 C TUAS BAY DRIVE SINGAPORE 637044",
-    kodeNegara: "SG",
-  },
-  {
     nama: "SHANDONG RENAI IRON AND STEEL CO LTD",
     alamat: "INDUSTRIAL PARK, LIAOCHENG CITY, SHANDONG PROVINCE CHINA",
     kodeNegara: "CN",
-  },
-  {
-    nama: "SCANIA CV AB C/O GETS BUSINESS SVC. (5)",
-    alamat: "Bedok North Avenue 4 level 211,SINGAPORE",
-    kodeNegara: "SG",
   },
   {
     nama: "KISWEL SDN BHD (CO.NO. 207284-K)",
@@ -293,18 +178,8 @@ export const supplierData = [
     kodeNegara: "SG",
   },
   {
-    nama: "SCANIA CV AB PARTS EUROPE (2)",
-    alamat: "BEDRIJFSSTRAAT 1208 B-3660 OUDSBERGEN",
-    kodeNegara: "BE",
-  },
-  {
     nama: "BPW ASIA PTE LTD (2)",
     alamat: "66 JOO KOON CIRCLE SINGAPORE",
-    kodeNegara: "SG",
-  },
-  {
-    nama: "YORK TRANSPORT EQUIPMENT (ASIA)",
-    alamat: "WEST SPRING BUILDING 61C TUAS BAY DRIVE SINGAPORE 637044",
     kodeNegara: "SG",
   },
   {
@@ -317,11 +192,6 @@ export const supplierData = [
     alamat:
       "NO.26 CHUANGXIN WEST ROAD, INDUSTRIAL ZONE, LEPING SANSHUI, FOSHAN GUANGDONG,CHINA",
     kodeNegara: "CN",
-  },
-  {
-    nama: "YORK TRANSPORT EQUIPMENT (ASIA) PTE LTD (6)",
-    alamat: "WEST SPRING BULDING 61 C TUAS BAY DRIVE SINGAPORE",
-    kodeNegara: "SG",
   },
   {
     nama: "KISWEL SDN BHD",
