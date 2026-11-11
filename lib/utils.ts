@@ -113,10 +113,16 @@ export function getPungutanBarang(
   barang: BarangItemData,
 ): PungutanType {
   const hargaRupiah = getPabeanRupiah(transaksiData, barang);
-  const bm = (hargaRupiah * (barang.bmPercentage ?? 0)) / 100;
+  const bm =
+    Math.ceil((hargaRupiah * (barang.bmPercentage ?? 0)) / 100 / 1000) * 1000;
 
-  const ppn = ((hargaRupiah + bm) * (barang.ppnPercentage ?? 0)) / 100;
-  const pph = ((hargaRupiah + bm) * (barang.pphPercentage ?? 0)) / 100;
+  const ppn =
+    Math.ceil(((hargaRupiah + bm) * (barang.ppnPercentage ?? 0)) / 100 / 100) *
+    100;
+
+  const pph =
+    Math.ceil(((hargaRupiah + bm) * (barang.pphPercentage ?? 0)) / 100 / 100) *
+    100;
   const total = bm + ppn + pph;
 
   return { bm, ppn, pph, total };
@@ -130,7 +136,6 @@ export function getPungutan(
 
   listBarang.map((barang) => {
     const pungutanBarang = getPungutanBarang(transaksiData, barang);
-    console.log(pungutanBarang);
     pungutan.bm += pungutanBarang.bm;
     pungutan.ppn += pungutanBarang.ppn;
     pungutan.pph += pungutanBarang.pph;

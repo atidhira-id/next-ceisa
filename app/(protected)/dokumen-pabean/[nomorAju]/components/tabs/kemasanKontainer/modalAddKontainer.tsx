@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import { type KontainerItemData } from "@/app/types";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
 import {
   jenisMuatanOptions,
   tipeKontainerOptions,

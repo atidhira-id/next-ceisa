@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import type { BarangDokumenData } from "@/app/types";
 import { kodeJenisOptions } from "@/app/constants/options/dokumenOptions";
-import InputNumber from "../../inputs/input-number";
+import InputNumber from "@/app/components/inputs/input-number";
 import { getLabel } from "@/lib/utils";
 import { NormalButton } from "@/app/components/buttons";
 

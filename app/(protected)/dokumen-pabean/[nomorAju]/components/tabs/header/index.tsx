@@ -1,7 +1,7 @@
 "use client";
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputSelect from "../../inputs/input-select";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputSelect from "@/app/components/inputs/input-select";
 import {
   pelabuhanOptions,
   kantorPabeanOptions,

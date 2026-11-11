@@ -4,23 +4,24 @@ import { useDocument } from "@/app/providers/document-provider";
 import { DocumentTabs } from "./documentTabs";
 import type { DocumentTab } from "@/app/types";
 import { tabs } from "@/app/constants/tabs";
-import HeaderTab from "./tabs/header/headerTab";
-import EntitasTab from "./tabs/entitas/entitasTab";
-import DokumenTab from "./tabs/dokumen/dokumenTab";
-import PengangkutTab from "./tabs/pengangkut/pengangkutTab";
-import KemasanKontainerTab from "./tabs/kemasanKontainer/kemasanKontainerTab";
-import TransaksiTab from "./tabs/transaksi/transaksiTab";
-import BarangTab from "./tabs/barang/barangTab";
-import PungutanTab from "./tabs/pungutan/pungutanTab";
-import PernyataanTab from "./tabs/pernyataan/pernyataanTab";
+import HeaderTab from "../tabs/header";
+import EntitasTab from "../tabs/entitas";
+import DokumenTab from "../tabs/dokumen";
+import PengangkutTab from "../tabs/pengangkut";
+import KemasanKontainerTab from "../tabs/kemasanKontainer";
+import TransaksiTab from "../tabs/transaksi";
+import BarangTab from "../tabs/barang";
+import PungutanTab from "../tabs/pungutan";
+import PernyataanTab from "../tabs/pernyataan";
 import { MoveLeft, MoveRight } from "lucide-react";
-import { NormalButton } from "../../../../components/buttons";
+import { NormalButton } from "@/app/components/buttons";
+import { useDocumentForm } from "./useDocumentForm";
 
 export function DocumentForm({ nomorAju }: { nomorAju: string }) {
   const { documentData } = useDocument();
+  const { isSaving, isExporting, handleSaveDraft, handleExportExcel } =
+    useDocumentForm(documentData);
 
-  const [isSaving, setIsSaving] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
   const [activeTab, setActiveTab] = useState<DocumentTab>("Header");
   const activeTabIndex = tabs.indexOf(activeTab);
   const isFirstTab = activeTabIndex === 0;
@@ -48,86 +49,6 @@ export function DocumentForm({ nomorAju }: { nomorAju: string }) {
     }
 
     setActiveTab(tabs[activeTabIndex + 1]);
-  }
-
-  async function handleSaveDraft() {
-    if (!documentData) {
-      alert("Data dokumen belum tersedia.");
-      return;
-    }
-
-    try {
-      setIsSaving(true);
-
-      const response = await fetch("/api/documents/drafts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(documentData),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message ?? "Gagal menyimpan draft.");
-      }
-
-      alert("Draft berhasil disimpan.");
-    } catch (error) {
-      alert(
-        error instanceof Error
-          ? error.message
-          : "Terjadi kesalahan saat menyimpan draft.",
-      );
-    } finally {
-      setIsSaving(false);
-    }
-  }
-
-  async function handleExportExcel() {
-    if (!documentData) {
-      return;
-    }
-
-    try {
-      setIsExporting(true);
-
-      const response = await fetch("/api/documents/export", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(documentData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-
-        throw new Error(errorData?.message ?? "Gagal membuat file Excel.");
-      }
-
-      const blob = await response.blob();
-
-      const downloadUrl = window.URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-
-      link.href = downloadUrl;
-      link.download = `dokumen-${documentData.nomorAju}.xlsx`;
-
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      window.URL.revokeObjectURL(downloadUrl);
-    } catch (error) {
-      console.error(error);
-
-      alert(error instanceof Error ? error.message : "Gagal export Excel.");
-    } finally {
-      setIsExporting(false);
-    }
   }
 
   function renderTabContent() {

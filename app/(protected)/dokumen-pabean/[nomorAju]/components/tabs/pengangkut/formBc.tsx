@@ -1,11 +1,11 @@
 "use client";
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
-import InputDate from "../../inputs/input-date";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputDate from "@/app/components/inputs/input-date";
 import { nomorTutupPuOptions } from "@/app/constants/options/pengangkutOptions";
-import { required, maxLength, minLength } from "@/lib/validation";
+import { required, maxLength } from "@/lib/validation";
 
 export default function FormBc() {
   const { documentData, updateDocumentData } = useDocument();
@@ -38,7 +38,7 @@ export default function FormBc() {
                 pengangkut: { ...pengangkut, nomorTutupPu: value },
               })
             }
-            rules={[required(), minLength(4), maxLength(4)]}
+            rules={[required(), maxLength(6)]}
           />
           <InputDate
             value={pengangkut.tanggalTutupPu ?? ""}

@@ -1,7 +1,7 @@
 "use client";
 import type { BarangItemData } from "@/app/types";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
 import { cbuOptions } from "@/app/constants/options/barangOptions";
 import { required } from "@/lib/validation";
 

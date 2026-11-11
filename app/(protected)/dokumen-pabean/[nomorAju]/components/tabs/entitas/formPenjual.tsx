@@ -1,7 +1,7 @@
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputSelect from "../../inputs/input-select";
-import InputTextArea from "../../inputs/input-textarea";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputTextArea from "@/app/components/inputs/input-textarea";
 import {
   kodeNegaraOptions,
   supplierNameOptions,

@@ -1,8 +1,8 @@
 "use client";
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputNormal from "../../inputs/input-normal";
-import InputDate from "../../inputs/input-date";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputDate from "@/app/components/inputs/input-date";
 import { PernyataanData } from "@/app/types";
 import { FileText } from "lucide-react";
 

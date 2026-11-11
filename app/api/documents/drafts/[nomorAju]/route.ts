@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/auth";
-import { prisma } from "@/lib/prisma";
+import {
+  deleteDocumentDraft,
+  getDocumentDraft,
+} from "@/services/document.service";
+import { requireAuth } from "@/lib/auth/requireAuth";
 
 export const runtime = "nodejs";
 
@@ -14,43 +15,15 @@ export async function GET(_request: Request, { params }: RouteContext) {
   try {
     const { nomorAju } = await params;
 
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
+    const auth = await requireAuth();
+    if (auth.error) {
       return NextResponse.json(
-        { message: "Silakan login terlebih dahulu." },
-        { status: 401 },
+        { message: auth.error.message },
+        { status: auth.error.status },
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "Pengguna tidak ditemukan." },
-        { status: 401 },
-      );
-    }
-
-    const draft = await prisma.documentDraft.findFirst({
-      where: {
-        nomorAju,
-        createdById: user.id,
-        status: "DRAFT",
-      },
-      select: {
-        id: true,
-        nomorAju: true,
-        kodeDokumen: true,
-        jenisEntitas: true,
-        data: true,
-        status: true,
-        updatedAt: true,
-      },
-    });
+    const draft = await getDocumentDraft(nomorAju, auth.user.id);
 
     if (!draft) {
       return NextResponse.json(
@@ -74,37 +47,16 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   try {
     const { nomorAju } = await params;
 
-    const session = await getServerSession(authOptions);
+    const auth = await requireAuth();
 
-    if (!session?.user?.email) {
+    if (auth.error) {
       return NextResponse.json(
-        { message: "Silakan login terlebih dahulu." },
-        { status: 401 },
+        { message: auth.error.message },
+        { status: auth.error.status },
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "Pengguna tidak ditemukan." },
-        { status: 401 },
-      );
-    }
-
-    const draft = await prisma.documentDraft.findFirst({
-      where: {
-        nomorAju,
-        createdById: user.id,
-        status: "DRAFT",
-      },
-      select: {
-        id: true,
-      },
-    });
+    const draft = await deleteDocumentDraft(nomorAju, auth.user.id);
 
     if (!draft) {
       return NextResponse.json(
@@ -112,16 +64,6 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
         { status: 404 },
       );
     }
-
-    // Soft delete
-    await prisma.documentDraft.update({
-      where: {
-        id: draft.id,
-      },
-      data: {
-        status: "DELETED",
-      },
-    });
 
     return NextResponse.json({
       message: "Draft berhasil dihapus.",

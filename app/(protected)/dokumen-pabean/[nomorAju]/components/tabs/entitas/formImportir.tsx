@@ -1,9 +1,9 @@
 "use client";
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
-import InputTextArea from "../../inputs/input-textarea";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputTextArea from "@/app/components/inputs/input-textarea";
 import {
   kodeNomorIdentitasOptions,
   kodeApiNibOptions,

@@ -1,15 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import { DocumentForm } from "./documentForm";
-import { FormInputs } from "@/app/types";
-
-type DraftResponse = {
-  draft: {
-    nomorAju: string;
-    data: FormInputs;
-  };
-};
+import { DocumentForm } from "../documentForm";
+import { loadDocumentDraft } from "./loadDocument";
 
 export function DocumentLoader({ nomorAju }: { nomorAju: string }) {
   const { documentData, setDocumentData } = useDocument();
@@ -25,28 +18,9 @@ export function DocumentLoader({ nomorAju }: { nomorAju: string }) {
       setError("");
 
       try {
-        const response = await fetch(
-          `/api/documents/drafts/${encodeURIComponent(nomorAju)}`,
-          { cache: "no-store" },
-        );
-
-        if (response.status === 404) {
-          if (!cancelled && documentData?.nomorAju !== nomorAju) {
-            setError("Draft tidak ditemukan atau belum disimpan.");
-          }
-          return;
-        }
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result.message ?? "Gagal memuat draft.");
-        }
-
-        const payload = result as DraftResponse;
-
+        const data = await loadDocumentDraft(nomorAju);
         if (!cancelled) {
-          setDocumentData(payload.draft.data);
+          setDocumentData(data);
         }
       } catch (err) {
         if (!cancelled) {
@@ -68,7 +42,6 @@ export function DocumentLoader({ nomorAju }: { nomorAju: string }) {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nomorAju, setDocumentData]);
 
   if (isLoading) {

@@ -6,9 +6,7 @@ import {
   entitasOptions,
   jenisDokumenOptions,
 } from "@/app/constants/options/newDocumentOptions";
-import { FormInputs } from "@/app/types";
-import { generateNewDocument } from "@/app/constants/newDocument";
-import InputSelect from "../[nomorAju]/components/inputs/input-select";
+import InputSelect from "../../../../components/inputs/input-select";
 import { required } from "@/lib/validation";
 import {
   ModalContent,
@@ -16,6 +14,7 @@ import {
   ModalHeader,
   ModalWrapper,
 } from "@/app/components/modal";
+import { createDocument } from "./createDocument";
 
 type ModalNewDocumentProps = {
   onCloseModal: () => void;
@@ -36,51 +35,17 @@ export default function ModalNewDocument({
     }
 
     try {
-      // Get nomorAju from server
-      const response = await fetch("/api/documents/generate-nomor-aju", {
-        method: "POST",
-      });
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message ?? "Gagal membuat nomor AJU.");
-      }
-
-      const nomorAju: string = result.nomorAju;
-      if (typeof nomorAju !== "string" || nomorAju.length !== 26) {
-        throw new Error("Format nomor AJU yang diterima tidak valid.");
-      }
-
-      const initialDocumentData: FormInputs = generateNewDocument(
-        nomorAju,
-        entitas,
-        kodeDokumen,
-      );
-
-      // Save initial draft into Neon
-      const saveResponse = await fetch("/api/documents/drafts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...initialDocumentData,
-        }),
-      });
-
-      const saveResult = await saveResponse.json();
-      if (!saveResponse.ok) {
-        throw new Error(
-          saveResult.message ?? "Gagal menyimpan draft ke database.",
-        );
-      }
+      // Create new document
+      const initialDocumentData = await createDocument(entitas, kodeDokumen);
 
       // Update state client
       setDocumentData(initialDocumentData);
 
       // Close modal and redirect to [nomorAju] page
       onCloseModal();
-      router.push(`/dokumen-pabean/${encodeURIComponent(nomorAju)}`);
+      router.push(
+        `/dokumen-pabean/${encodeURIComponent(initialDocumentData.nomorAju)}`,
+      );
     } catch (error) {
       console.error(error);
       alert(

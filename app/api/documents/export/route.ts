@@ -1,66 +1,42 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/auth";
-import { exportDocumentToExcel } from "@/lib/excel/export-document";
+import { exportDocument } from "@/services/document.service";
+import { exportDocumentSchema } from "@/validators/document.schema";
+import { FormInputs } from "@/app/types";
+import { requireAuth } from "@/lib/auth/requireAuth";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
-    // Check if the user is authenticated
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    const auth = await requireAuth();
+    if (auth.error) {
       return NextResponse.json(
-        {
-          message: "Unauthorized",
-        },
-        {
-          status: 401,
-        },
+        { message: auth.error.message },
+        { status: auth.error.status },
       );
     }
 
-    // Parse the request body to get the document data
-    const documentData = await request.json();
-    if (!documentData || typeof documentData !== "object") {
+    const body: unknown = await request.json();
+
+    const validation = exportDocumentSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
         {
           message: "Data dokumen tidak valid.",
+          errors: validation.error.issues.map((issue) => ({
+            field: issue.path.join("."),
+            message: issue.message,
+          })),
         },
-        {
-          status: 400,
-        },
+        { status: 400 },
       );
     }
 
-    if (!documentData.nomorAju) {
-      return NextResponse.json(
-        {
-          message: "Nomor Aju wajib tersedia.",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
+    const documentData = validation.data as FormInputs;
+    const excelBuffer = await exportDocument(documentData);
 
-    if (!documentData.kodeDokumen) {
-      return NextResponse.json(
-        {
-          message: "Kode Dokumen wajib tersedia.",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
-
-    // Export the document data to an Excel file
-    const excelBuffer = await exportDocumentToExcel(documentData);
-
-    const now = new Date();
-    const filename = `dokumen-${String(documentData.nomorAju)}-${now.toISOString().split("T")[0]}.xlsx`;
+    const date = new Date().toISOString().slice(0, 10);
+    const filename = `dokumen-${documentData.nomorAju}-${date}.xlsx`;
 
     return new NextResponse(excelBuffer, {
       status: 200,
@@ -75,12 +51,8 @@ export async function POST(request: Request) {
     console.error("Gagal export dokumen ke Excel:", error);
 
     return NextResponse.json(
-      {
-        message: "Gagal membuat file Excel.",
-      },
-      {
-        status: 500,
-      },
+      { message: "Gagal membuat file Excel." },
+      { status: 500 },
     );
   }
 }

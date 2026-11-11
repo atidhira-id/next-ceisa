@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
 import ModalAddKemasanItem from "./modalAddKemasan";
 import ModalAddKontainerItem from "./modalAddKontainer";
-import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modalUserConfirmation";
+import ModalUserConfirmation from "@/app/components/modalUserConfirmation";
 import {
   jenisKemasanOptions,
   jenisMuatanOptions,

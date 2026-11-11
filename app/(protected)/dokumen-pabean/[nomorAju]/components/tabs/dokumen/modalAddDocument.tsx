@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import { type DocumentItemData } from "@/app/types";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
-import InputDate from "../../inputs/input-date";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputDate from "@/app/components/inputs/input-date";
 import {
   kodeJenisOptions,
   kodeFasilitasOptions,
@@ -46,8 +46,7 @@ export default function ModalAddDocumentItem({
     !newDocument.kodeDokumen.trim() ||
     !newDocument.nomorDokumen.trim() ||
     !newDocument.tanggalDokumen.trim() ||
-    (newDocument.kodeDokumen === "861" &&
-      !newDocument.kodeFasilitas?.trim()) ||
+    (newDocument.kodeDokumen === "861" && !newDocument.kodeFasilitas?.trim()) ||
     (newDocument.kodeDokumen === "888" && !newDocument.kodeIjin?.trim());
 
   function handleSimpan() {

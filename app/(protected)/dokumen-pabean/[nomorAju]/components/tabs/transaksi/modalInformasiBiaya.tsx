@@ -7,12 +7,12 @@ import {
   inputsThree,
   initialKomponenBiaya,
 } from "./transaksiTableData";
-import InputSelect from "../../inputs/input-select";
+import InputSelect from "@/app/components/inputs/input-select";
 import {
   kodeAsuransiOption,
   kodeIncoterm,
 } from "@/app/constants/options/transaksiOptions";
-import InputNumber from "../../inputs/input-number";
+import InputNumber from "@/app/components/inputs/input-number";
 import { KomponenBiaya } from "@/app/types";
 import { formatRupiah } from "@/lib/utils";
 import {

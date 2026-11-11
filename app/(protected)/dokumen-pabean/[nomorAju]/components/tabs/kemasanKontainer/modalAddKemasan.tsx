@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import { type KemasanItemData } from "@/app/types";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
-import InputNumber from "../../inputs/input-number";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputNumber from "@/app/components/inputs/input-number";
 import { jenisKemasanOptions } from "@/app/constants/options/kemasKontainerOptions";
 import { required, min } from "@/lib/validation";
 import {

@@ -10,12 +10,11 @@ export default function DokumenPabeanPage() {
     <div>
       <DocumentHeader onAddDocument={() => setIsModalOpen(true)} />
 
-      {/* Modal */}
+      <DocumentTable />
+
       {isModalOpen && (
         <ModalNewDocument onCloseModal={() => setIsModalOpen(false)} />
       )}
-      {/* Table */}
-      <DocumentTable />
     </div>
   );
 }

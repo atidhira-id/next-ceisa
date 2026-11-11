@@ -1,53 +1,25 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { Prisma } from "@/generated/prisma/client";
-import { authOptions } from "@/auth";
-import { prisma } from "@/lib/prisma";
 import { FormInputs } from "@/app/types";
+import {
+  getDocumentDrafts,
+  saveDocumentDraft,
+} from "@/services/document.service";
+import { saveDraftSchema } from "@/validators/document.schema";
+import { requireAuth } from "@/lib/auth/requireAuth";
 
 export const runtime = "nodejs";
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
+    const auth = await requireAuth();
+    if (auth.error) {
       return NextResponse.json(
-        { message: "Silakan login terlebih dahulu." },
-        { status: 401 },
+        { message: auth.error.message },
+        { status: auth.error.status },
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "Pengguna tidak ditemukan." },
-        { status: 401 },
-      );
-    }
-
-    const drafts = await prisma.documentDraft.findMany({
-      where: {
-        createdById: user.id,
-        status: "DRAFT",
-      },
-      select: {
-        id: true,
-        nomorAju: true,
-        kodeDokumen: true,
-        jenisEntitas: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-      orderBy: {
-        updatedAt: "desc",
-      },
-    });
+    const drafts = await getDocumentDrafts(auth.user.id);
 
     return NextResponse.json({ drafts });
   } catch (error) {
@@ -62,79 +34,31 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
+    const auth = await requireAuth();
+    if (auth.error) {
       return NextResponse.json(
-        { message: "Silakan login terlebih dahulu." },
-        { status: 401 },
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { message: "Pengguna tidak ditemukan." },
-        { status: 401 },
+        { message: auth.error.message },
+        { status: auth.error.status },
       );
     }
 
     const body: unknown = await request.json();
-
-    if (!body || typeof body !== "object") {
-      return NextResponse.json(
-        { message: "Data draft tidak valid." },
-        { status: 400 },
-      );
-    }
-
-    const documentData = body as FormInputs;
-
-    if (
-      typeof documentData.nomorAju !== "string" ||
-      !documentData.nomorAju.trim() ||
-      typeof documentData.kodeDokumen !== "string" ||
-      !documentData.kodeDokumen.trim() ||
-      typeof documentData.jenisEntitas !== "string" ||
-      !documentData.jenisEntitas.trim()
-    ) {
+    const validation = saveDraftSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
         {
-          message: "Nomor Aju, Kode Dokumen, dan Jenis Entitas wajib tersedia.",
+          message: "Data draft tidak valid.",
+          errors: validation.error.issues.map((issue) => ({
+            field: issue.path.join("."),
+            message: issue.message,
+          })),
         },
         { status: 400 },
       );
     }
 
-    const draft = await prisma.documentDraft.upsert({
-      where: {
-        nomorAju_createdById: {
-          nomorAju: documentData.nomorAju,
-          createdById: user.id,
-        },
-      },
-      create: {
-        nomorAju: documentData.nomorAju,
-        kodeDokumen: documentData.kodeDokumen,
-        jenisEntitas: documentData.jenisEntitas,
-        data: documentData as unknown as Prisma.InputJsonValue,
-        createdById: user.id,
-      },
-      update: {
-        kodeDokumen: documentData.kodeDokumen,
-        jenisEntitas: documentData.jenisEntitas,
-        data: documentData as unknown as Prisma.InputJsonValue,
-      },
-      select: {
-        id: true,
-        nomorAju: true,
-        updatedAt: true,
-      },
-    });
+    const documentData = validation.data as FormInputs;
+    const draft = await saveDocumentDraft(auth.user.id, documentData);
 
     return NextResponse.json({
       message: "Draft berhasil disimpan.",

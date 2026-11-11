@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import { Warning } from "../../warning";
 import ModalAddBarang from "./modalAddBarang";
-import InputWrapper from "../../inputs/input-wrapper";
-import ModalUserConfirmation from "@/app/(protected)/dokumen-pabean/components/modalUserConfirmation";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import ModalUserConfirmation from "@/app/components/modalUserConfirmation";
 import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
 import { NormalButton } from "@/app/components/buttons";
 

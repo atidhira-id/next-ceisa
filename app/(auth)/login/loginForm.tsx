@@ -1,11 +1,12 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { SubmitEvent, useState } from "react";
-import { redirect } from "next/navigation";
-import { EyeOff, Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState, type SubmitEvent } from "react";
 
 export function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +15,7 @@ export function LoginForm() {
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (loading) return;
 
     setError("");
     setLoading(true);
@@ -25,15 +27,20 @@ export function LoginForm() {
         password,
         redirect: false,
       });
+
+      if (!result || result.error) {
+        setError("Email atau password salah.");
+        return;
+      }
+
+      router.replace("/dokumen-pabean");
+      router.refresh();
+    } catch (error) {
+      console.error("Gagal melakukan login:", error);
+      setError("Terjadi kesalahan saat login. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }
-
-    if (!result || result.error) {
-      setError("Email atau password salah.");
-      return;
-    }
-    redirect("/dokumen-pabean");
   }
 
   return (

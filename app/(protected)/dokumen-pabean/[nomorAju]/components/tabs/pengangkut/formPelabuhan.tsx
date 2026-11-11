@@ -1,8 +1,8 @@
 "use client";
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
 import { pelabuhanOptions } from "@/app/constants/options/headerOptions";
 import { tempatPenimbunanOptions } from "@/app/constants/options/pengangkutOptions";
 import { required } from "@/lib/validation";

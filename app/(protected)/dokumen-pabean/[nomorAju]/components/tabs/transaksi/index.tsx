@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputNumber from "@/app/components/inputs/input-number";
+import InputRadio from "@/app/components/inputs/input-radio";
 import {
   jenisTransaksiOptions,
   jenisValutaOptions,
@@ -12,8 +14,6 @@ import {
   kodeIncoterm,
 } from "@/app/constants/options/transaksiOptions";
 import ModalInformasiBiaya from "./modalInformasiBiaya";
-import InputNumber from "../../inputs/input-number";
-import InputRadio from "../../inputs/input-radio";
 import { required } from "@/lib/validation";
 import {
   getBeratBersih,

@@ -2,9 +2,12 @@
 import { useState } from "react";
 import { useDocument } from "@/app/providers/document-provider";
 import type { BarangItemData } from "@/app/types";
-import InputWrapper from "../../inputs/input-wrapper";
-import InputNormal from "../../inputs/input-normal";
-import InputSelect from "../../inputs/input-select";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputTextArea from "@/app/components/inputs/input-textarea";
+import InputNumber from "@/app/components/inputs/input-number";
+import InputRadio from "@/app/components/inputs/input-radio";
 import { kodeNegaraOptions } from "@/app/constants/options/entitasOptions";
 import {
   bmOptions,
@@ -20,9 +23,6 @@ import {
 } from "@/app/constants/options/barangOptions";
 import { required } from "@/lib/validation";
 import Form_87046094 from "./form87046094";
-import InputTextArea from "../../inputs/input-textarea";
-import InputNumber from "../../inputs/input-number";
-import InputRadio from "../../inputs/input-radio";
 import {
   getBiayaPenambah,
   getBiayaPengurang,
