@@ -1,0 +1,15 @@
+{
+  "name": "Backend Dev Container",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "backend",
+  "workspaceFolder": "/app",
+  "shutdownAction": "none",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}

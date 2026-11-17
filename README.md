@@ -2,153 +2,111 @@
 
 A web application for preparing import and export customs-document drafts and exporting them to an Excel workbook based on a CEISA-style template.
 
-> **Scope:** This application supports draft preparation and Excel export. The current codebase does not submit documents to CEISA or provide an approval workflow.
+The repository contains two independent Node.js projects:
 
-## Features
+- [`frontend/`](./frontend/) — Next.js UI and NextAuth session management.
+- [`backend/`](./backend/) — Express API, authentication verification, PostgreSQL access, Prisma schema/migrations, and Excel export.
 
-- Sign in with email and password, and create an account from the auth screen.
-- Create, edit, list, filter, sort, and soft-delete customs-document drafts.
-- Capture data across nine sections: Header, Entitas, Dokumen, Pengangkut, Kemasan & Peti Kemas, Transaksi, Barang, Pungutan, and Pernyataan.
-- Generate an AJU number using a PostgreSQL sequence and the Asia/Jakarta date.
-- Calculate and display transaction, customs-value, weight, and estimated-duty values from entered data.
-- Export a document as an Excel workbook using the template at [`templates/excel-ceisa.xlsx`](./templates/excel-ceisa.xlsx).
+The frontend keeps its same-origin `/api/documents/*` requests. Next.js proxies those requests to the backend, so the backend can be deployed separately by setting the frontend's backend URL configuration.
 
-## Technology
+> **Scope:** This application supports draft preparation and Excel export. It does not submit documents to CEISA or provide an approval workflow.
 
-- Next.js 16 App Router, React 19, and TypeScript 5
-- NextAuth.js credentials authentication with `bcryptjs`
-- PostgreSQL with Prisma 7 and the Prisma PostgreSQL adapter
-- Tailwind CSS 4 and PostCSS
-- ExcelJS for workbook generation
-- `lucide-react` for icons
+## Requirements
 
-The application uses React state and a custom context for document editing; it does not currently use a separate state-management library.
+- Node.js 22.23.4 or later and npm
+- A PostgreSQL database
+- A shared `AUTH_SECRET` (or `NEXTAUTH_SECRET`) for NextAuth and the Express session verifier
 
-A registration flow is available from the sign-in page for creating new user accounts before accessing protected document workflows.
+## Local development
 
-## Prerequisites
+Create `backend/.env` with:
 
-- Node.js 22.23.4 or later (the included Dockerfile uses Node 22.23.4)
-- npm
-- A PostgreSQL database accessible to the application
+```dotenv
+DATABASE_URL="<your PostgreSQL connection string>"
+AUTH_SECRET="<a long random secret>"
+NEXTAUTH_URL="http://localhost:3000"
+```
 
-## Local setup
+Create `frontend/.env.local` with:
 
-1. Install dependencies:
+```dotenv
+AUTH_SECRET="<the same secret as the backend>"
+NEXTAUTH_URL="http://localhost:3000"
+BACKEND_URL="http://localhost:4000"
+API_BACKEND_URL="http://localhost:4000"
+```
 
-   ```bash
-   npm install
-   ```
+Keep environment files out of source control. The frontend calls `BACKEND_URL` for credential verification and uses `API_BACKEND_URL` for its document API rewrite. In production, point both values at the deployed Express service and configure `NEXTAUTH_URL` for the public frontend URL.
 
-2. Create `.env.local` in the project root. This file is git-ignored. Set the database connection string:
-
-   ```dotenv
-   DATABASE_URL="<your PostgreSQL connection string>"
-   ```
-
-   Use your database provider's connection string and keep credentials out of source control. For deployments, also configure `NEXTAUTH_SECRET` with a securely generated secret and `NEXTAUTH_URL` with the application's public base URL.
-
-3. Apply database migrations:
-
-   ```bash
-   npx prisma migrate dev
-   ```
-
-   The Prisma schema and migration history are in [`prisma/`](./prisma/). The migrations create the user and draft tables and the AJU-number sequence.
-
-4. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Open [http://localhost:3000](http://localhost:3000). Protected pages redirect unauthenticated users to `/login`.
-
-### Creating a development user
-
-The configured Prisma seed command is `tsx prisma/seed.ts`. To create the seed account, run:
+Install and start each project in its own terminal:
 
 ```bash
-npx prisma db seed
+cd backend
+npm install
+npm run migrate:dev
+npm run dev
 ```
 
-The seed file contains a fixed example account and password. It is for local development only; replace or remove it and create a secure account-provisioning process before deploying. Never use the seeded credentials in a shared or production environment.
-
-## Common commands
-
-| Command                     | Description                                          |
-| --------------------------- | ---------------------------------------------------- |
-| `npm run dev`               | Start the Next.js development server                 |
-| `npm run build`             | Generate the Prisma client and build the application |
-| `npm run start`             | Start the production Next.js server after building   |
-| `npm run lint`              | Run ESLint                                           |
-| `npx prisma migrate dev`    | Create/apply development migrations                  |
-| `npx prisma migrate deploy` | Apply committed migrations in a deployment           |
-| `npx prisma db seed`        | Run the configured database seed                     |
-
-Dependency installation also generates the Prisma client through the package `postinstall` script.
-
-## Application structure
-
-```text
-app/
-  (auth)/login/                 Login page and form
-  (protected)/                  Session-protected dashboard and pages
-    dokumen-pabean/              Draft list and document editor
-  api/                           Next.js API route handlers
-  components/                    Shared UI components
-  constants/                     Form options, reference data, and navigation
-  providers/document-provider.tsx
-  types.ts                       Document and form data types
-auth.ts                          NextAuth credentials configuration
-lib/
-  excel/export-document.ts       Excel template mapping
-  prisma.ts                      Prisma client setup
-  utils.ts                       Business calculations and formatting
-  validation.ts                  Reusable form validation
-prisma/
-  migrations/                    Database migration history
-  schema.prisma                  Database models
-  seed.ts                        Development seed
-templates/
-  excel-ceisa.xlsx               Export workbook template
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-### Main API routes
+Open [http://localhost:3000](http://localhost:3000). Express listens on port `4000`.
 
-- `GET /api/documents/drafts` — list the signed-in user's active drafts
-- `POST /api/documents/drafts` — create or update a draft
-- `GET /api/documents/drafts/[nomorAju]` — load a draft
-- `DELETE /api/documents/drafts/[nomorAju]` — soft-delete a draft
-- `POST /api/documents/generate-nomor-aju` — generate an AJU number
-- `POST /api/documents/export` — generate and return an Excel workbook
-- `/api/auth/[...nextauth]` — NextAuth authentication handlers
+To create the development seed account, run `npm run seed` from `backend/`. The seed file contains a fixed example account and password; replace or remove it before using a shared or production environment.
 
-## Data and workflow
+## Docker Compose
 
-1. A user signs in. Credentials are checked against the stored bcrypt password hash, and the application uses JWT sessions with an eight-hour maximum age.
-2. To start a document, the user selects an entity type and document type. The server allocates a sequence number and returns an AJU number.
-3. The application initializes a document with default values and saves it as a draft.
-4. The editor loads the draft into a React context. Changes are held in client state until the user explicitly saves; autosave is not currently implemented.
-5. Draft data is persisted in PostgreSQL. `DocumentDraft` stores searchable fields alongside the full document payload as JSON, and drafts are associated with their creator.
-6. Export maps the document into the workbook's sheets and downloads the resulting `.xlsx` file.
+For Compose, place `DATABASE_URL` and `AUTH_SECRET` (or `NEXTAUTH_SECRET`) in a root `.env` file, then run:
 
-Some HS-code and duty-rate reference data is currently maintained in application constants rather than retrieved from a live customs service. Calculated values and exported data should be validated against current business and regulatory requirements before operational use.
+```bash
+docker compose up --build
+```
 
-## Configuration and deployment notes
+Compose builds each folder as its own image. The frontend is exposed on port `3000`; Express is internal to the Compose network and reached through the frontend proxy.
 
-- `DATABASE_URL` is required by Prisma and the PostgreSQL adapter.
-- Set `NEXTAUTH_SECRET` and `NEXTAUTH_URL` explicitly for deployed environments.
-- The database must have the migrations applied before application use.
-- Excel export depends on the workbook template being present at `templates/excel-ceisa.xlsx`.
-- [`Dockerfile`](./Dockerfile) and [`docker-compose.yml`](./docker-compose.yml) currently describe a development setup; review and harden them before using Docker for production.
-- Protect environment files and database backups, which may contain credentials or business-sensitive document data.
+To work in VS Code, open the repository folder and run **Dev Containers: Reopen in Container**. The container uses the Compose services above and opens the repository root; the root `.env` must contain the same required values.
 
-## Current limitations and next steps
+## Project commands
+
+| Project | Command | Description |
+| --- | --- | --- |
+| Frontend | `npm run dev` | Start Next.js development server |
+| Frontend | `npm run build` | Build frontend for deployment |
+| Frontend | `npm run start` | Start the production frontend |
+| Frontend | `npm run lint` | Run ESLint |
+| Backend | `npm run dev` | Start Express development server |
+| Backend | `npm run build` | Generate Prisma client and build Express |
+| Backend | `npm run start` | Start the production API |
+| Backend | `npm run migrate:dev` | Apply development migrations |
+| Backend | `npm run migrate:deploy` | Apply committed migrations |
+| Backend | `npm run seed` | Run the configured database seed |
+
+## API
+
+- `POST /api/auth/credentials` — verify email/password credentials for NextAuth.
+- `GET /api/documents/drafts` — list the signed-in user's active drafts.
+- `POST /api/documents/drafts` — create or update a draft.
+- `GET /api/documents/drafts/:nomorAju` — load a draft.
+- `DELETE /api/documents/drafts/:nomorAju` — soft-delete a draft.
+- `POST /api/documents/generateNomorAju` — generate an AJU number.
+- `POST /api/documents/export` — generate and return an Excel workbook.
+- `GET /health` — backend health check.
+
+Express validates the NextAuth JWT cookie using the shared secret and checks that the account is active. The database and Excel template are backend-only concerns.
+
+## Deployment
+
+Build and deploy `frontend/` and `backend/` independently using their own Dockerfiles and package manifests. Configure the frontend's `BACKEND_URL` and `API_BACKEND_URL` to reach the deployed Express service, and provide `AUTH_SECRET`/`NEXTAUTH_SECRET` to both projects. Only the backend needs `DATABASE_URL`.
+
+The database must have the migrations in `backend/prisma/migrations/` applied before application use. The Excel template is located at `backend/templates/excel-ceisa.xlsx`.
+
+## Limitations
 
 - There is no direct CEISA submission or external customs-system integration.
 - There is no autosave, draft audit history, or approval/status workflow.
-- Request validation is limited; add comprehensive server-side validation before relying on the application for production document preparation.
-- The draft list currently filters, sorts, and paginates data in the browser. Server-side pagination and query tuning may be appropriate as usage grows.
-- Add automated tests for AJU numbering, calculations, access boundaries, validation, and Excel export/template mapping. No test script or test files are currently defined in the repository.
-- Document operational procedures for provisioning users, backups/restores, monitoring, and production migrations.
+- Some HS-code and duty-rate reference data is maintained in application constants rather than retrieved from a live customs service.
+- The draft list currently filters, sorts, and paginates data in the browser.
+- Add automated tests for AJU numbering, calculations, access boundaries, validation, and Excel export/template mapping before production use.

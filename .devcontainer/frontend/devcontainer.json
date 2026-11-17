@@ -1,0 +1,16 @@
+{
+  "name": "Frontend Dev Container",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "frontend",
+  "workspaceFolder": "/app",
+  "shutdownAction": "none",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  }
+}

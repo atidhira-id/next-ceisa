@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  documentDrafts DocumentDraft[]
+}
+
+model DocumentDraft {
+  id             String   @id @default(cuid())
+  ajuNumber      String
+  documentType   String
+  entityType     String
+  status         String   @default("DRAFT")
+
+  header         Json?
+  entities       Json?
+  documents      Json?
+  packages       Json?
+  containers     Json?
+  transport      Json?
+  transactions   Json?
+  goods          Json?
+  declarations   Json?
+
+  createdById    String
+  createdBy      User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([ajuNumber, createdById])
+  @@index([documentType])
+  @@index([status])
+  @@index([createdById])
+}
+
+model Company {
+  id                String   @id @default(cuid())
+  identityTypeCode  String
+  identityNumber    String
+  name              String
+  address           String
+  apiTypeCode       String
+  apiNumber         String
+  statusCode        String
+  countryCode       String
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([name])
+  @@index([identityNumber])
+}
+
+model Supplier {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  countryCode String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([name])
+}

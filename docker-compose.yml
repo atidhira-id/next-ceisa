@@ -1,25 +1,61 @@
 services:
-  next:
+  frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
 
     ports:
       - "3000:3000"
 
     volumes:
-      - .:/app
-      - node_modules:/app/node_modules
+      - ./frontend:/app
+      - frontend_deps:/app/node_modules
 
     environment:
       NODE_ENV: development
-      WATACHPACK_POOLING: "true"
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET:?AUTH_SECRET or NEXTAUTH_SECRET must be set}}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      API_BACKEND_URL: http://backend:4000
+      BACKEND_URL: http://backend:4000
 
-    command: >
-      sh -c "
-        chown -R node:node /app/node_modules &&
-        su-exec node npm run dev -- --hostname 0.0.0.0
-      "
+    command: npm run dev -- --hostname 0.0.0.0
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    
+    ports:
+      - "4000:4000"
+
+    volumes:
+      - ./backend:/app
+      - backend_deps:/app/node_modules
+
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL must be set}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET:?AUTH_SECRET or NEXTAUTH_SECRET must be set}}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      FRONTEND_URL: http://localhost:3000
+
+    command: sh -c "npx prisma generate && npm run dev"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:4000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
-  node_modules:
+  frontend_deps:
+  backend_deps:
