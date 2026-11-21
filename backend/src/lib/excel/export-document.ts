@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 import path from "node:path";
 
-import type { FormInputs, PungutanKeys } from "../../types/documentDraft";
+import type { FormInputs, PungutanKeys } from "../../types/draft";
 import {
   getBeratBersih,
   getBiayaPenambah,

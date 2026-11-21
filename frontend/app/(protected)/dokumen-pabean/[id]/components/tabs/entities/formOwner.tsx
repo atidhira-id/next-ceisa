@@ -3,35 +3,38 @@ import InputWrapper from "@/app/components/inputs/input-wrapper";
 import InputNormal from "@/app/components/inputs/input-normal";
 import InputSelect from "@/app/components/inputs/input-select";
 import InputTextArea from "@/app/components/inputs/input-textarea";
-import {
-  kodeNomorIdentitasOptions,
-  kodeAfiliasiOptions,
-} from "@/app/constants/options/entitasOptions";
-import { maxLength, minLength, required } from "@/lib/validation";
+import { maxLength, minLength, required } from "@/app/lib/validation";
 import { NormalButton } from "@/app/components/buttons";
-import { OwnerType } from "@/app/types";
+import { OwnerType } from "@/app/types/draft";
+import { useOptions } from "@/app/hooks/useOptions";
 
 export default function FormOwner() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const data = draft!;
   const entities = data.entities;
   const importer = entities.importer;
   const owner = entities.owner;
 
+  const identityTypes = useOptions("IDENTITY_TYPE");
+  const affiliationTypes = useOptions("ENTITY_AFFILIATION");
+
   function copyImporterData() {
-    updateDocumentData({
+    updateDraftData({
       entities: {
         ...entities,
         owner: { ...importer, affiliation: "" },
       },
     });
+
+    markSectionDirty("entities");
   }
 
   function updateOwner(field: keyof OwnerType, value: string) {
-    updateDocumentData({
+    updateDraftData({
       entities: { ...entities, owner: { ...owner, [field]: value } },
     });
+
+    markSectionDirty("entities");
   }
 
   return (
@@ -52,7 +55,7 @@ export default function FormOwner() {
         <div className="flex items-center gap-2">
           <InputSelect
             value={owner.identityNumberCode ?? ""}
-            options={kodeNomorIdentitasOptions}
+            options={identityTypes.options}
             onChange={(value) => updateOwner("identityNumberCode", value)}
             rules={[required()]}
           />
@@ -91,7 +94,7 @@ export default function FormOwner() {
       <InputSelect
         label="Afiliasi"
         value={owner.affiliation ?? ""}
-        options={kodeAfiliasiOptions}
+        options={affiliationTypes.options}
         onChange={(value) => updateOwner("affiliation", value)}
         rules={[required()]}
       />

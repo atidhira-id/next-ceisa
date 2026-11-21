@@ -3,8 +3,8 @@ import type {
   KomponenBiaya,
   PungutanType,
   TransaksiData,
-} from "../types/documentDraft";
-import type { OptionType } from "../types/documentDraft";
+} from "../types/draft";
+import type { OptionType } from "../types/draft";
 
 export function formatDateIndonesian(date: string): string {
   return new Date(date).toLocaleString("id-ID", {

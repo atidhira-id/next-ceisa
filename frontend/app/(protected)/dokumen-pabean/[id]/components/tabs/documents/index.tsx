@@ -1,26 +1,24 @@
 "use client";
 import { useState } from "react";
 import { useDraft } from "@/app/providers/draftProvider";
+import { getLabel } from "@/app/lib/utils";
+import type { DocumentItemType } from "@/app/types/draft";
 import ModalAddDocumentItem from "./modalAddDocument";
 import { Warning } from "../../warning";
-import {
-  kodeJenisOptions,
-  kodeFasilitasOptions,
-} from "@/app/constants/options/dokumenOptions";
-import { getLabel } from "@/lib/utils";
-import type { DocumentItemType } from "@/app/types";
 import ModalUserConfirmation from "@/app/components/modalUserConfirmation";
 import InputWrapper from "@/app/components/inputs/input-wrapper";
-import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
 import { NormalButton } from "@/app/components/buttons";
+import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
+import { useOptions } from "@/app/hooks/useOptions";
 
 export default function DocumentsTab() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const documents = documentData!.documents;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const documents = draft!.documents;
+
+  const documentTypes = useOptions("DOCUMENT_TYPE");
+  const facilitiesCode = useOptions("DOCUMENT_FACILITY");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [documentToEdit, setDocumentToEdit] = useState<DocumentItemType | null>(
     null,
   );
@@ -41,14 +39,16 @@ export default function DocumentsTab() {
     documentList = documentList.map((doc, index) => {
       return {
         ...doc,
-        seri: index + 1,
+        series: index + 1,
       };
     });
 
-    updateDocumentData({
+    updateDraftData({
       documents: documentList,
     });
     setDocumentToDelete(null);
+
+    markSectionDirty("documents");
   };
 
   return (
@@ -105,7 +105,7 @@ export default function DocumentsTab() {
                     </td>
 
                     <td className="px-4 py-3 text-slate-700">
-                      {getLabel(kodeJenisOptions, document.documentCode)}
+                      {getLabel(documentTypes.options, document.documentCode)}
                     </td>
 
                     <td className="px-4 py-3 font-medium text-slate-700">
@@ -118,16 +118,13 @@ export default function DocumentsTab() {
 
                     <td className="px-4 py-3 text-slate-600">
                       {getLabel(
-                        kodeFasilitasOptions,
+                        facilitiesCode.options,
                         document.facilityCode ?? "",
                       )}
                     </td>
 
                     <td className="px-4 py-3 text-slate-600">
-                      {getLabel(
-                        kodeFasilitasOptions,
-                        document.permissionCode ?? "",
-                      )}
+                      {document.permissionCode}
                     </td>
 
                     <td className="px-4 py-3">

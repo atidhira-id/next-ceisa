@@ -1,15 +1,7 @@
-import "dotenv/config";
 import { PrismaClient } from "../../src/generated/prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { supplierList } from "../../data/supplier";
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL!,
-});
-
-const prisma = new PrismaClient({ adapter });
-
-async function main() {
+export async function seedSupplier(prisma: PrismaClient) {
   console.log("Memulai seed Supplier...");
 
   for (const supplier of supplierList) {
@@ -41,12 +33,3 @@ async function main() {
 
   console.log("Seed Supplier selesai.");
 }
-
-main()
-  .catch((error) => {
-    console.error("Seed gagal:", error);
-    process.exitCode = 1;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });

@@ -1,10 +1,8 @@
 "use client";
-import { useState } from "react";
-import { DraftSection, useDraft } from "@/app/providers/draftProvider";
-import type { DocumentTab } from "@/app/types";
-import { tabs } from "@/app/constants/tabs";
-import { DocumentTabs } from "./documentTabs";
 
+import { useDraft } from "@/app/providers/draftProvider";
+
+import { DocumentTabs } from "./documentTabs";
 import HeaderTab from "../tabs/header";
 import EntitiesTab from "../tabs/entities";
 import DocumentsTab from "../tabs/documents";
@@ -20,13 +18,18 @@ import { NormalButton } from "@/app/components/buttons";
 import { useDocumentForm } from "./useDocumentForm";
 
 export function DocumentForm({ id }: { id: string }) {
-  const { draft, dirtySections, markSectionSaved } = useDraft();
-  const { isSaving, saveSection, handleSaveDraft } = useDocumentForm(draft);
+  const { draft } = useDraft();
+  const {
+    isSaving,
+    handleSaveDraft,
 
-  const [activeTab, setActiveTab] = useState<DocumentTab>("Header");
-  const activeTabIndex = tabs.indexOf(activeTab);
-  const isFirstTab = activeTabIndex === 0;
-  const isLastTab = activeTabIndex === tabs.length - 1;
+    activeTab,
+    isFirstTab,
+    isLastTab,
+    handleTabChange,
+    handlePrevious,
+    handleNext,
+  } = useDocumentForm(draft);
 
   if (!draft) {
     return (
@@ -34,51 +37,6 @@ export function DocumentForm({ id }: { id: string }) {
         <p className="text-sm text-gray-500">Data dokumen tidak ditemukan.</p>
       </div>
     );
-  }
-
-  async function handleTabChange(nextTab: DocumentTab) {
-    if (nextTab === activeTab) return;
-    console.log(draft);
-
-    const sectionMap: Record<DocumentTab, DraftSection[]> = {
-      Header: ["header"],
-      Entitas: ["entities"],
-      Dokumen: ["documents"],
-      Pengangkut: ["transport"],
-      "Kemasan & Peti Kemas": ["packages", "containers"],
-      Transaksi: ["transactions"],
-      Barang: ["goods"],
-      Pungutan: [],
-      Pernyataan: ["declarations"],
-    };
-
-    const sections = sectionMap[activeTab];
-
-    const dirty = sections.filter((section) =>
-      dirtySections.has(section as never),
-    );
-
-    if (dirty.length > 0) {
-      const success = await saveSection(dirty);
-
-      if (!success) return;
-
-      dirty.forEach((section) => markSectionSaved(section as never));
-    }
-
-    setActiveTab(nextTab);
-  }
-
-  function handlePrevious() {
-    if (!isFirstTab) {
-      void handleTabChange(tabs[activeTabIndex - 1]);
-    }
-  }
-
-  function handleNext() {
-    if (!isLastTab) {
-      void handleTabChange(tabs[activeTabIndex + 1]);
-    }
   }
 
   function renderTabContent() {

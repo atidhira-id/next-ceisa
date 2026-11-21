@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDraft } from "@/app/providers/draftProvider";
 import { DocumentForm } from "../documentForm";
-import { loadDocumentDraft } from "./loadDocument";
+import { loadDocumentDraft } from "./documentLoaderActions";
 
 export function DocumentLoader({ id }: { id: string }) {
   const { setDraftData } = useDraft();

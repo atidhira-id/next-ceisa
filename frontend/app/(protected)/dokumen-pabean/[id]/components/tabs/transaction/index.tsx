@@ -1,33 +1,33 @@
 "use client";
 import { useState } from "react";
 import { useDraft } from "@/app/providers/draftProvider";
-import InputWrapper from "@/app/components/inputs/input-wrapper";
-import InputNormal from "@/app/components/inputs/input-normal";
-import InputSelect from "@/app/components/inputs/input-select";
-import InputNumber from "@/app/components/inputs/input-number";
-import InputRadio from "@/app/components/inputs/input-radio";
-import {
-  jenisTransaksiOptions,
-  jenisValutaOptions,
-  kodeAsuransiOption,
-  perhitunganProporsionalOption,
-} from "@/app/constants/options/transaksiOptions";
-import ModalCostComponents from "./modalCostComponents";
-import { required } from "@/lib/validation";
+import { useOptions } from "@/app/hooks/useOptions";
+import { required } from "@/app/lib/validation";
 import {
   getTotalNetWeight,
   getIncrementalCost,
   getDeductionFees,
   getCustomsInRupiah,
-} from "@/lib/utils";
+} from "@/app/lib/utils";
+import { TransactionType } from "@/app/types/draft";
+
+import ModalCostComponents from "./modalCostComponents";
+import InputWrapper from "@/app/components/inputs/input-wrapper";
+import InputNormal from "@/app/components/inputs/input-normal";
+import InputSelect from "@/app/components/inputs/input-select";
+import InputNumber from "@/app/components/inputs/input-number";
+import InputRadio from "@/app/components/inputs/input-radio";
 import { NormalButton } from "@/app/components/buttons";
-import { TransactionType } from "@/app/types";
 
 export default function TransactionTab() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const transaction = documentData!.transactions;
-  const goods = documentData!.goods;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const transaction = draft!.transactions;
+  const goods = draft!.goods;
+
+  const currency = useOptions("CURRENCY");
+  const transactionTypes = useOptions("TRANSACTION_TYPE");
+  const insuranceCodes = useOptions("INSURANCE_TYPE");
+  const proportionalCals = useOptions("PROPORTIONAL_CALCULATION");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,7 +35,9 @@ export default function TransactionTab() {
     field: keyof TransactionType,
     value: string | number,
   ) {
-    updateDocumentData({ transactions: { ...transaction, [field]: value } });
+    updateDraftData({ transactions: { ...transaction, [field]: value } });
+
+    markSectionDirty("transactions");
   }
 
   return (
@@ -47,7 +49,7 @@ export default function TransactionTab() {
           <InputSelect
             label="Jenis Valuta"
             value={transaction.currencyCode ?? ""}
-            options={jenisValutaOptions}
+            options={currency.options}
             onChange={(value) => updateTransaction("currencyCode", value)}
             rules={[required()]}
           />
@@ -62,7 +64,7 @@ export default function TransactionTab() {
           <InputSelect
             label="Jenis Transaksi"
             value={transaction.transactionTypeCode ?? ""}
-            options={jenisTransaksiOptions}
+            options={transactionTypes.options}
             onChange={(value) =>
               updateTransaction("transactionTypeCode", value)
             }
@@ -132,7 +134,7 @@ export default function TransactionTab() {
             <div className="flex items-center gap-2">
               <InputSelect
                 value={transaction.costComponents?.insuranceCode ?? ""}
-                options={kodeAsuransiOption}
+                options={insuranceCodes.options}
                 onChange={() => {}}
                 disabled
               />
@@ -157,11 +159,8 @@ export default function TransactionTab() {
           />
           <InputRadio
             title="Perhitungan Proporsional"
-            value={
-              transaction.proportionalCalculation ??
-              perhitunganProporsionalOption[1].value
-            }
-            options={perhitunganProporsionalOption}
+            value={transaction.proportionalCalculation ?? ""}
+            options={proportionalCals.options}
             onChange={(value) =>
               updateTransaction("proportionalCalculation", value)
             }

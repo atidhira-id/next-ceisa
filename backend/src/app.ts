@@ -2,9 +2,12 @@ import express from "express";
 import cors from "cors";
 import { sessionMiddleware } from "./config/session";
 import authRoutes from "./modules/auth/auth.routes";
-import companyRoutes from "./modules/masterData/company/company.routes";
-import clientRoutes from "./modules/masterData/supplier/supplier.routes";
-import documentDraftRoutes from "./modules/documentDraft/documentDraft.routes";
+import documentDraftRoutes from "./modules/draft/draft.routes";
+import companyRoutes from "./modules/company/company.routes";
+import supplierRoutes from "./modules/supplier/supplier.routes";
+import optionsRoutes from "./modules/options/options.routes";
+import hsCodeRoutes from "./modules/hsCode/hsCode.routes";
+import goodsTypeRoutes from "./modules/goodsType/goodsType.routes";
 
 const app = express();
 
@@ -28,8 +31,11 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/drafts", documentDraftRoutes);
 app.use("/api/companies", companyRoutes);
-app.use("/api/supplier", clientRoutes);
-app.use("/api/document-drafts", documentDraftRoutes);
+app.use("/api/supplier", supplierRoutes);
+app.use("/api/options", optionsRoutes);
+app.use("/api/hs-codes", hsCodeRoutes);
+app.use("/api/goods-types", goodsTypeRoutes);
 
 export default app;

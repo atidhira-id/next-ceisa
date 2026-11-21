@@ -1,47 +1,58 @@
 "use client";
 import { useDraft } from "@/app/providers/draftProvider";
+import { useOptions } from "@/app/hooks/useOptions";
+import { TransportType } from "@/app/types/draft";
+import { required } from "@/app/lib/validation";
+
 import InputWrapper from "@/app/components/inputs/input-wrapper";
 import InputSelect from "@/app/components/inputs/input-select";
-import { pelabuhanOptions } from "@/app/constants/options/headerOptions";
-import { tempatPenimbunanOptions } from "@/app/constants/options/pengangkutOptions";
-import { required } from "@/lib/validation";
-import { TransportType } from "@/app/types";
+import InputNormal from "@/app/components/inputs/input-normal";
+import { getLabel } from "@/app/lib/utils";
 
 export default function FormPort() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const data = draft!;
   const transport = data.transport;
 
+  const ports = useOptions("PORT");
+  const storagesLocation = useOptions("STORAGE_LOCATION");
+
   function updateTransport(field: keyof TransportType, value: string) {
-    updateDocumentData({ transport: { ...transport, [field]: value } });
+    updateDraftData({ transport: { ...transport, [field]: value } });
+
+    markSectionDirty("transport");
   }
 
   return (
     <InputWrapper title="Pelabuhan & Tempat Penimbunan">
-      {/* Pelabuhan Muat */}
       <InputSelect
         label="Pelabuhan Muat"
         value={transport.loadingPortCode ?? ""}
-        options={pelabuhanOptions}
+        options={ports.options}
         onChange={(value) => updateTransport("loadingPortCode", value)}
         rules={[required()]}
       />
 
-      {/* Pelabuhan Transit */}
       <InputSelect
         label="Pelabuhan Transit"
         value={transport.transitPortCode ?? ""}
-        options={pelabuhanOptions}
+        options={ports.options}
         onChange={(value) => updateTransport("transitPortCode", value)}
         rules={[required()]}
       />
 
-      {/* Tempat Penimbunan */}
+      <InputNormal
+        title="Pelabuhan Tujuan"
+        value={
+          getLabel(ports.options, data.header.destinationPortCode ?? "") ?? ""
+        }
+        disabled
+      />
+
       <InputSelect
         label="Tempat Penimbunan"
         value={transport.storagePlaceCode ?? ""}
-        options={tempatPenimbunanOptions}
+        options={storagesLocation.options}
         onChange={(value) => updateTransport("storagePlaceCode", value)}
         rules={[required()]}
       />

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useDraft } from "@/app/providers/draftProvider";
-import type { GoodsDocumentType } from "@/app/types";
-import { kodeJenisOptions } from "@/app/constants/options/dokumenOptions";
+import type { GoodsDocumentType } from "@/app/types/draft";
 import InputNumber from "@/app/components/inputs/input-number";
-import { getLabel } from "@/lib/utils";
+import { getLabel } from "@/app/lib/utils";
 import { NormalButton } from "@/app/components/buttons";
+import { useOptions } from "@/app/hooks/useOptions";
 
 type ModalFacilityDocumentProps = {
   onCloseModal: () => void;
@@ -17,8 +17,10 @@ export function ModalFacilityDocument({
   selectedDocuments: initialSelectedDocuments,
   onSaveDocuments,
 }: ModalFacilityDocumentProps) {
-  const { draft: documentData } = useDraft();
-  const data = documentData!;
+  const { draft } = useDraft();
+  const data = draft!;
+
+  const documentTypes = useOptions("DOCUMENT_TYPE");
 
   const filteredDocumentCode = ["705", "380", "465"];
   const selectableDocuments = data.documents.filter(
@@ -171,7 +173,7 @@ export function ModalFacilityDocument({
                     <td className="px-4 py-3 font-medium">{document.series}</td>
 
                     <td className="px-4 py-3">
-                      {getLabel(kodeJenisOptions, document.documentCode)}
+                      {getLabel(documentTypes.options, document.documentCode)}
                     </td>
 
                     <td className="px-4 py-3">{document.documentNumber}</td>

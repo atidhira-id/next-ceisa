@@ -1,6 +1,6 @@
 import { useDraft } from "@/app/providers/draftProvider";
-import { LevyKeys } from "@/app/types";
-import { formatToRupiah, getLevy } from "@/lib/utils";
+import { LevyKeys } from "@/app/types/draft";
+import { formatToRupiah, getLevy } from "@/app/lib/utils";
 
 export default function LevyTab() {
   const { draft: documentData } = useDraft();

@@ -1,11 +1,19 @@
 "use client";
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { navigation } from "@/app/constants/sideNavigation";
-import { LogOut, Menu, MoveLeft, MoveRight, X } from "lucide-react";
 import { useAuth } from "../providers/authProvider";
+import Link from "next/link";
+
+import { House, LogOut, Menu, MoveLeft, MoveRight, X } from "lucide-react";
 // import Image from "next/image";
+
+const navigation = [
+  {
+    label: "Daftar Dokumen",
+    href: "/dokumen-pabean",
+    icon: House,
+  },
+];
 
 const dashboardText = {
   companyName: "Digital Importation Management System",

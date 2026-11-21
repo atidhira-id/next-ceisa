@@ -1,8 +1,8 @@
 "use client";
 import { useId, useMemo, useState } from "react";
-import { Rule, useFieldError } from "@/lib/validation";
+import { Rule, useFieldError } from "@/app/lib/validation";
 import Error from "./error";
-import { OptionType } from "@/app/types";
+import { OptionType } from "@/app/types/option";
 
 type InputSelectProps = {
   labelPosition?: "top" | "left";
@@ -41,15 +41,11 @@ export default function InputSelect({
   );
 
   // State to manage the input query and whether the dropdown is open
-  const [queryDraft, setQueryDraft] = useState(() => ({
-    value,
-    query: selectedOption?.label ?? (allowCustom ? value : ""),
-  }));
+  const [queryDraft, setQueryDraft] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+
   const query =
-    queryDraft.value === value
-      ? queryDraft.query
-      : (selectedOption?.label ?? (allowCustom ? value : ""));
+    queryDraft ?? selectedOption?.label ?? (allowCustom ? value : "");
 
   // Filter the options based on the input query
   const filteredOptions = useMemo(() => {
@@ -71,14 +67,14 @@ export default function InputSelect({
   // Handle the selection of an option
   function handleSelect(selectedValue: string, selectedLabel: string) {
     onChange(selectedValue);
-    setQueryDraft({ value: selectedValue, query: selectedLabel });
+    setQueryDraft(null);
     setIsOpen(false);
   }
 
   // Clear the user selection on input field
   function clearSelection() {
     onChange("");
-    setQueryDraft({ value: "", query: "" });
+    setQueryDraft(null);
     setIsOpen(false);
   }
 
@@ -128,17 +124,14 @@ export default function InputSelect({
 
             if (allowCustom && customValue && filteredOptions.length === 0) {
               onChange(customValue);
-              setQueryDraft({ value: customValue, query: customValue });
+              setQueryDraft(null);
               setIsOpen(false);
               markTouched();
               return;
             }
 
             window.setTimeout(() => {
-              setQueryDraft({
-                value,
-                query: selectedOption?.label ?? (allowCustom ? value : ""),
-              });
+              setQueryDraft(null);
               setIsOpen(false);
               markTouched();
             }, 150);
@@ -153,8 +146,7 @@ export default function InputSelect({
             }
           }}
           onChange={(event) => {
-            const nextQuery = event.target.value;
-            setQueryDraft({ value, query: nextQuery });
+            setQueryDraft(event.target.value);
             setIsOpen(true);
           }}
           disabled={disabled}

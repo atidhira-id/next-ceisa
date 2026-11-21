@@ -1,22 +1,26 @@
 "use client";
 import { useDraft } from "@/app/providers/draftProvider";
+import { useOptions } from "@/app/hooks/useOptions";
+import { TransportType } from "@/app/types/draft";
+import { required } from "@/app/lib/validation";
+
 import InputWrapper from "@/app/components/inputs/input-wrapper";
 import InputNormal from "@/app/components/inputs/input-normal";
 import InputSelect from "@/app/components/inputs/input-select";
 import InputDate from "@/app/components/inputs/input-date";
-import { caraPengangkutanOptions } from "@/app/constants/options/pengangkutOptions";
-import { kodeNegaraOptions } from "@/app/constants/options/entitasOptions";
-import { required } from "@/lib/validation";
-import { TransportType } from "@/app/types";
 
 export default function FormTransport() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const data = draft!;
   const transport = data.transport;
 
+  const countries = useOptions("COUNTRY");
+  const transportMethods = useOptions("TRANSPORT_METHOD");
+
   function updateTransport(field: keyof TransportType, value: string) {
-    updateDocumentData({ transport: { ...transport, [field]: value } });
+    updateDraftData({ transport: { ...transport, [field]: value } });
+
+    markSectionDirty("transport");
   }
 
   return (
@@ -25,7 +29,7 @@ export default function FormTransport() {
       <InputSelect
         label="Cara Pengangkutan"
         value={transport.transportModeCode ?? ""}
-        options={caraPengangkutanOptions}
+        options={transportMethods.options}
         onChange={(value) => updateTransport("transportModeCode", value)}
         rules={[required()]}
       />
@@ -50,7 +54,7 @@ export default function FormTransport() {
       <InputSelect
         label="Bendera"
         value={transport.flagCode ?? ""}
-        options={kodeNegaraOptions}
+        options={countries.options}
         onChange={(value) => updateTransport("flagCode", value)}
         rules={[required()]}
       />

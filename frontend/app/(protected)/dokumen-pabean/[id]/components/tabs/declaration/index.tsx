@@ -3,17 +3,16 @@ import { useDraft } from "@/app/providers/draftProvider";
 import InputWrapper from "@/app/components/inputs/input-wrapper";
 import InputNormal from "@/app/components/inputs/input-normal";
 import InputDate from "@/app/components/inputs/input-date";
-import { DeclarationsType } from "@/app/types";
+import { DeclarationsType } from "@/app/types/draft";
 import { FileText } from "lucide-react";
 
 export default function DeclarationTab() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData } = useDraft();
+  const data = draft!;
   const declaration = data.declarations;
 
   function updateData(field: keyof DeclarationsType, value: string) {
-    updateDocumentData({
+    updateDraftData({
       declarations: { ...data.declarations, [field]: value },
     });
   }

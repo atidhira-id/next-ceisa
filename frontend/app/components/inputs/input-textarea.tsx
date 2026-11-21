@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { Rule, useFieldError } from "@/lib/validation";
+import { Rule, useFieldError } from "@/app/lib/validation";
 import Error from "./error";
 
 type InputTextAreaProps = {

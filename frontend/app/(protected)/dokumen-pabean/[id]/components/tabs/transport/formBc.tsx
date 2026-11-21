@@ -1,20 +1,24 @@
 "use client";
 import { useDraft } from "@/app/providers/draftProvider";
+import { useOptions } from "@/app/hooks/useOptions";
+import { TransportType } from "@/app/types/draft";
+import { required, maxLength } from "@/app/lib/validation";
+
 import InputWrapper from "@/app/components/inputs/input-wrapper";
 import InputNormal from "@/app/components/inputs/input-normal";
 import InputSelect from "@/app/components/inputs/input-select";
 import InputDate from "@/app/components/inputs/input-date";
-import { nomorTutupPuOptions } from "@/app/constants/options/pengangkutOptions";
-import { required, maxLength } from "@/lib/validation";
-import { TransportType } from "@/app/types";
 
 export default function FormBc() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const transport = documentData!.transport;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const transport = draft!.transport;
+
+  const closingNumbers = useOptions("CUSTOMS_CLOSING_NUMBER");
 
   function updateTransport(field: keyof TransportType, value: string) {
-    updateDocumentData({ transport: { ...transport, [field]: value } });
+    updateDraftData({ transport: { ...transport, [field]: value } });
+
+    markSectionDirty("transport");
   }
 
   return (
@@ -28,7 +32,7 @@ export default function FormBc() {
         <div className="flex items-center gap-2">
           <InputSelect
             value={transport.customsSealTypeCode ?? ""}
-            options={nomorTutupPuOptions}
+            options={closingNumbers.options}
             onChange={(value) => updateTransport("customsSealTypeCode", value)}
             rules={[required()]}
           />

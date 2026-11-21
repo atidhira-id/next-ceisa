@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useMemo, useState } from "react";
-import { type DraftType } from "../types";
+import { type DraftType } from "../types/draft";
 
 export type DraftSection =
   | "header"

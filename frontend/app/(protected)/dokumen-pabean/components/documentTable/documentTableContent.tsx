@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { SquareArrowOutUpRight, Trash } from "lucide-react";
-import { formatDateIndonesian } from "@/lib/utils";
-import { DraftResponse } from "@/services/draft.service";
+import { formatDateIndonesian } from "@/app/lib/utils";
+import { DraftResponse } from "@/app/services/draft.service";
 
 type DocumentTableContentProps = {
   drafts: DraftResponse[];

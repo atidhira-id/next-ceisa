@@ -14,7 +14,7 @@ import {
   logout as logoutService,
   getCurrentUser,
   type AuthUser,
-} from "@/services/auth.service";
+} from "@/app/services/auth.service";
 
 interface AuthContextType {
   user: AuthUser | null;

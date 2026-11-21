@@ -1,5 +1,4 @@
-import { CostComponents } from "@/app/types";
-import { kodeAsuransiOption } from "@/app/constants/options/transaksiOptions";
+import { CostComponents } from "@/app/types/draft";
 
 export const inputsOne: { label: string; field: keyof CostComponents }[] = [
   { label: "1. Harga Invoice", field: "invoicePrice" },
@@ -78,27 +77,29 @@ export const inputsThree: { label: string; field: keyof CostComponents }[] = [
   },
 ];
 
-export const initialCostComponents: CostComponents = {
-  invoicePriceCode: "",
-  invoicePrice: 0,
-  indirectPayment: 0,
-  discount: 0,
+export function getInitialCostComponents(insuranceCode: string) {
+  return {
+    invoicePriceCode: "",
+    invoicePrice: 0,
+    indirectPayment: 0,
+    discount: 0,
 
-  commissionsAndBrokerage: 0,
-  packaging: 0,
-  packing: 0,
-  assists: 0,
-  royalties: 0,
-  proceeds: 0,
-  freight: 0,
-  loading: 0,
-  insuranceCode: kodeAsuransiOption[0].value,
-  insurance: 0,
-  warranty: 0,
+    commissionsAndBrokerage: 0,
+    packaging: 0,
+    packing: 0,
+    assists: 0,
+    royalties: 0,
+    proceeds: 0,
+    freight: 0,
+    loading: 0,
+    insuranceCode: insuranceCode,
+    insurance: 0,
+    warranty: 0,
 
-  ownInterestCosts: 0,
-  postImportCosts: 0,
-  internalTaxes: 0,
-  interest: 0,
-  dividends: 0,
-};
+    ownInterestCosts: 0,
+    postImportCosts: 0,
+    internalTaxes: 0,
+    interest: 0,
+    dividends: 0,
+  };
+}

@@ -15,10 +15,10 @@ model User {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  documentDrafts DocumentDraft[]
+  Drafts       Draft[]
 }
 
-model DocumentDraft {
+model Draft {
   id             String   @id @default(cuid())
   ajuNumber      String
   documentType   String
@@ -75,4 +75,64 @@ model Supplier {
   updatedAt   DateTime @updatedAt
 
   @@index([name])
+}
+
+model OptionCategory {
+  id          String         @id @default(cuid())
+  code        String         @unique
+  name        String
+  description String?
+  options     MasterOption[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([name])
+}
+
+model MasterOption {
+  id         String         @id @default(cuid())
+  categoryId String
+  value      String
+  label      String
+  sortOrder  Int            @default(0)
+  isActive   Boolean        @default(true)
+  category   OptionCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@unique([categoryId, value])
+  @@index([categoryId, sortOrder])
+  @@index([isActive])
+}
+
+model HsCode {
+  id                        String   @id @default(cuid())
+  code                      String   @unique
+  importDutyPercentage      Decimal  @db.Decimal(5, 2)
+  vatPercentage             Decimal  @db.Decimal(5, 2)
+  incomeTaxPercentage       Decimal  @db.Decimal(5, 2)
+  borderRestriction         String?
+  postBorderRestriction     String?
+  label                     String
+
+  goodsTypes       GoodsType[]
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([code])
+}
+
+model GoodsType {
+  id         String   @id @default(cuid())
+  code       String   @unique
+  hsCodeId   String
+  label      String
+
+  hsCode     HsCode   @relation(fields: [hsCodeId], references: [id], onDelete: Restrict)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([hsCodeId])
 }

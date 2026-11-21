@@ -3,32 +3,37 @@ import InputWrapper from "@/app/components/inputs/input-wrapper";
 import InputNormal from "@/app/components/inputs/input-normal";
 import InputSelect from "@/app/components/inputs/input-select";
 import InputTextArea from "@/app/components/inputs/input-textarea";
-import { kodeNomorIdentitasOptions } from "@/app/constants/options/entitasOptions";
-import { maxLength, minLength, required } from "@/lib/validation";
+import { maxLength, minLength, required } from "@/app/lib/validation";
 import { NormalButton } from "@/app/components/buttons";
-import { ImporterType } from "@/app/types";
+import { ImporterType } from "@/app/types/draft";
+import { useOptions } from "@/app/hooks/useOptions";
 
 export default function FormNpwp() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const data = draft!;
   const entities = data.entities;
   const importer = entities.importer;
   const npwp = entities.npwp;
 
+  const identityTypes = useOptions("IDENTITY_TYPE");
+
   function copyImporterData() {
-    updateDocumentData({
+    updateDraftData({
       entities: {
         ...entities,
         npwp: { ...importer },
       },
     });
+
+    markSectionDirty("entities");
   }
 
   function updateNpwp(field: keyof ImporterType, value: string) {
-    updateDocumentData({
+    updateDraftData({
       entities: { ...entities, npwp: { ...npwp, [field]: value } },
     });
+
+    markSectionDirty("entities");
   }
 
   return (
@@ -49,7 +54,7 @@ export default function FormNpwp() {
         <div className="flex items-center gap-2">
           <InputSelect
             value={npwp.identityNumberCode ?? ""}
-            options={kodeNomorIdentitasOptions}
+            options={identityTypes.options}
             onChange={(value) => updateNpwp("identityNumberCode", value)}
             rules={[required()]}
           />

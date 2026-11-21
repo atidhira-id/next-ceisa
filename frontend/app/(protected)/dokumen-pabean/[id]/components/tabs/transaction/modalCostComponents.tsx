@@ -1,20 +1,18 @@
 "use client";
 import { useState } from "react";
 import { useDraft } from "@/app/providers/draftProvider";
+import { useOptions } from "@/app/hooks/useOptions";
 import {
   inputsOne,
   inputsTwo,
   inputsThree,
-  initialCostComponents,
+  getInitialCostComponents,
 } from "./transactionTableData";
+import { CostComponents } from "@/app/types/draft";
+import { formatToRupiah } from "@/app/lib/utils";
+
 import InputSelect from "@/app/components/inputs/input-select";
-import {
-  kodeAsuransiOption,
-  kodeIncoterm,
-} from "@/app/constants/options/transaksiOptions";
 import InputNumber from "@/app/components/inputs/input-number";
-import { CostComponents } from "@/app/types";
-import { formatToRupiah } from "@/lib/utils";
 import {
   ModalContent,
   ModalFooter,
@@ -29,13 +27,15 @@ type ModalCostComponentsProps = {
 export default function ModalCostComponents({
   onCloseModal,
 }: ModalCostComponentsProps) {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData } = useDraft();
+  const data = draft!;
   const costComponents = data.transactions.costComponents;
 
+  const incotermCodes = useOptions("INCOTERM");
+  const insuranceCodes = useOptions("INSURANCE_TYPE");
+
   const [localCostComponents, setLocalCostComponents] = useState(
-    costComponents ?? initialCostComponents,
+    costComponents ?? getInitialCostComponents(insuranceCodes.options[0].value),
   );
 
   function updateCostComponents(
@@ -50,7 +50,7 @@ export default function ModalCostComponents({
   }
 
   function handleSave() {
-    updateDocumentData({
+    updateDraftData({
       transactions: {
         ...data.transactions,
         costComponents: { ...localCostComponents },
@@ -119,7 +119,7 @@ export default function ModalCostComponents({
                 child={
                   <InputSelect
                     value={localCostComponents.invoicePriceCode ?? ""}
-                    options={kodeIncoterm}
+                    options={incotermCodes.options}
                     onChange={(value) =>
                       updateCostComponents("invoicePriceCode", value)
                     }
@@ -170,7 +170,7 @@ export default function ModalCostComponents({
                       child={
                         <InputSelect
                           value={localCostComponents.insuranceCode ?? "DN"}
-                          options={kodeAsuransiOption}
+                          options={insuranceCodes.options}
                           onChange={(value) =>
                             updateCostComponents("insuranceCode", value)
                           }

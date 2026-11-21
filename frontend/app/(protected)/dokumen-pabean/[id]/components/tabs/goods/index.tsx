@@ -7,7 +7,7 @@ import InputWrapper from "@/app/components/inputs/input-wrapper";
 import ModalUserConfirmation from "@/app/components/modalUserConfirmation";
 import { Trash, SquareArrowOutUpRight, Plus } from "lucide-react";
 import { NormalButton } from "@/app/components/buttons";
-import { GoodsItemType } from "@/app/types";
+import { GoodsItemType } from "@/app/types/draft";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("id-ID", {
@@ -17,9 +17,8 @@ function formatCurrency(value: number) {
 }
 
 export default function GoodsTab() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const data = draft!;
   const transaction = data.transactions;
   const goods = data.goods;
 
@@ -48,12 +47,12 @@ export default function GoodsTab() {
   const hasWeightMismatch =
     !isGoodsEmpty && totalWeightGoods > transactionGrossWeight;
 
-  function handleOpenBarangModal(barang?: GoodsItemType[][number]) {
+  function handleOpenAddItemModal(barang?: GoodsItemType[][number]) {
     setSelectedItem(barang ?? null);
     setIsModalOpen(true);
   }
 
-  function handleCloseGoodsModal() {
+  function handleCloseAddItemModal() {
     setIsModalOpen(false);
     setSelectedItem(null);
   }
@@ -63,7 +62,9 @@ export default function GoodsTab() {
       .filter((item) => item.series !== series)
       .map((item, index) => ({ ...item, series: index + 1 }));
 
-    updateDocumentData({ goods: nextItem });
+    updateDraftData({ goods: nextItem });
+
+    markSectionDirty("goods");
     setItemToDelete(null);
   }
 
@@ -87,7 +88,7 @@ export default function GoodsTab() {
       <InputWrapper
         title="Barang"
         headerChildren={
-          <NormalButton onClick={() => handleOpenBarangModal()}>
+          <NormalButton onClick={() => handleOpenAddItemModal()}>
             <Plus size={16} /> Tambah
           </NormalButton>
         }
@@ -162,7 +163,7 @@ export default function GoodsTab() {
                       <div className="flex items-center justify-end gap-1">
                         <button
                           type="button"
-                          onClick={() => handleOpenBarangModal(item)}
+                          onClick={() => handleOpenAddItemModal(item)}
                           title="Buka barang"
                           aria-label="Buka barang"
                           className="inline-flex size-8 items-center justify-center rounded-lg text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
@@ -203,7 +204,7 @@ export default function GoodsTab() {
         {isModalOpen && (
           <ModalAddItem
             key={selectedItem?.series ?? "new-barang"}
-            onCloseModal={handleCloseGoodsModal}
+            onCloseModal={handleCloseAddItemModal}
             itemToEdit={selectedItem}
           />
         )}

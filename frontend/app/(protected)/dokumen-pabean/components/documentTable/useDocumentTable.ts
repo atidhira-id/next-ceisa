@@ -4,7 +4,7 @@ import {
   getDrafts,
   deleteDraft,
   DraftResponse,
-} from "@/services/draft.service";
+} from "@/app/services/draft.service";
 
 export type SortKey = "createdAt" | "updatedAt";
 export type SortDirection = "asc" | "desc";
@@ -15,9 +15,9 @@ export function useDocumentTable() {
   const [error, setError] = useState("");
   const [draftToDelete, setDraftToDelete] = useState<string | null>(null);
 
-  const [nomorAjuFilter, setNomorAjuFilter] = useState("");
-  const [kodeDokumenFilter, setKodeDokumenFilter] = useState("");
-  const [jenisEntitasFilter, setJenisEntitasFilter] = useState("");
+  const [ajuNumberFilter, setAjuNumberFilter] = useState("");
+  const [documentCodeFilter, setDocumentCodeFilter] = useState("");
+  const [entityTypeFilter, setEntityTypeFilter] = useState("");
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -118,15 +118,15 @@ export function useDocumentTable() {
       (draft) =>
         draft.ajuNumber
           .toLowerCase()
-          .includes(nomorAjuFilter.trim().toLowerCase()) &&
+          .includes(ajuNumberFilter.trim().toLowerCase()) &&
         draft.documentType
           .toLowerCase()
-          .includes(kodeDokumenFilter.trim().toLowerCase()) &&
+          .includes(documentCodeFilter.trim().toLowerCase()) &&
         draft.entityType
           .toLowerCase()
-          .includes(jenisEntitasFilter.trim().toLowerCase()),
+          .includes(entityTypeFilter.trim().toLowerCase()),
     );
-  }, [drafts, nomorAjuFilter, kodeDokumenFilter, jenisEntitasFilter]);
+  }, [drafts, ajuNumberFilter, documentCodeFilter, entityTypeFilter]);
 
   const sortedDrafts = useMemo(() => {
     return [...filteredDrafts].sort((draftA, draftB) => {
@@ -173,12 +173,12 @@ export function useDocumentTable() {
     draftToDelete,
     setDraftToDelete,
 
-    nomorAjuFilter,
-    setNomorAjuFilter,
-    kodeDokumenFilter,
-    setKodeDokumenFilter,
-    jenisEntitasFilter,
-    setJenisEntitasFilter,
+    nomorAjuFilter: ajuNumberFilter,
+    setNomorAjuFilter: setAjuNumberFilter,
+    kodeDokumenFilter: documentCodeFilter,
+    setKodeDokumenFilter: setDocumentCodeFilter,
+    jenisEntitasFilter: entityTypeFilter,
+    setJenisEntitasFilter: setEntityTypeFilter,
 
     page,
     setPage,

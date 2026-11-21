@@ -1,10 +1,21 @@
 "use client";
-import type { DocumentTab } from "@/app/types";
-import { tabs } from "@/app/constants/tabs";
+import type { Tab } from "@/app/types/tab";
+
+const tabs: Tab[] = [
+  "Header",
+  "Entitas",
+  "Dokumen",
+  "Pengangkut",
+  "Kemasan & Peti Kemas",
+  "Transaksi",
+  "Barang",
+  "Pungutan",
+  "Pernyataan",
+];
 
 type DocumentTabsProps = {
-  activeTab: DocumentTab;
-  onTabChange: (tab: DocumentTab) => void;
+  activeTab: Tab;
+  onTabChange: (tab: Tab) => void;
 };
 
 export function DocumentTabs({ activeTab, onTabChange }: DocumentTabsProps) {

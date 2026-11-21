@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import DocumentHeader from "@/app/(protected)/dokumen-pabean/components/documentHeader";
-import ModalNewDocument from "@/app/(protected)/dokumen-pabean/components/modalNewDocument";
+import ModalNewDraft from "@/app/(protected)/dokumen-pabean/components/modalNewDraft";
 import DocumentTable from "@/app/(protected)/dokumen-pabean/components/documentTable";
 
 export default function DokumenPabeanPage() {
@@ -13,7 +13,7 @@ export default function DokumenPabeanPage() {
       <DocumentTable />
 
       {isModalOpen && (
-        <ModalNewDocument onCloseModal={() => setIsModalOpen(false)} />
+        <ModalNewDraft onCloseModal={() => setIsModalOpen(false)} />
       )}
     </div>
   );

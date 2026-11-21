@@ -1,9 +1,9 @@
 "use client";
-import type { GoodsItemType } from "@/app/types";
+import type { GoodsItemType } from "@/app/types/draft";
 import InputNormal from "@/app/components/inputs/input-normal";
 import InputSelect from "@/app/components/inputs/input-select";
-import { cbuOptions } from "@/app/constants/options/barangOptions";
-import { required } from "@/lib/validation";
+import { required } from "@/app/lib/validation";
+import { useOptions } from "@/app/hooks/useOptions";
 
 type FormProps = {
   item: GoodsItemType;
@@ -11,12 +11,13 @@ type FormProps = {
 };
 
 export default function Form_87046094({ item, updateSpecs }: FormProps) {
+  const cbu = useOptions("CBU");
   return (
     <div className="flex flex-col gap-3">
       <InputSelect
         labelPosition="left"
         label="CBU"
-        options={cbuOptions}
+        options={cbu.options}
         value={item.specifications?.cbu ?? ""}
         onChange={(value) => updateSpecs("cbu", value)}
         rules={[required()]}

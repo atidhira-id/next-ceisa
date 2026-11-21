@@ -2,31 +2,56 @@ import { useDraft } from "@/app/providers/draftProvider";
 import InputWrapper from "@/app/components/inputs/input-wrapper";
 import InputSelect from "@/app/components/inputs/input-select";
 import InputTextArea from "@/app/components/inputs/input-textarea";
-import { kodeNegaraOptions } from "@/app/constants/options/entitasOptions";
-import { required } from "@/lib/validation";
-import { SupplierType } from "@/app/types";
-import InputNormal from "@/app/components/inputs/input-normal";
+import { required } from "@/app/lib/validation";
+import { SupplierType } from "@/app/types/draft";
+import { useSuppliers } from "@/app/hooks/useSupplier";
+import { useOptions } from "@/app/hooks/useOptions";
 
 export default function FormSender() {
-  const { draft: documentData, updateDraftData: updateDocumentData } =
-    useDraft();
-  const data = documentData!;
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
+  const { suppliers, supplierOptions } = useSuppliers();
+
+  const data = draft!;
   const entities = data.entities;
   const sender = entities.sender;
 
+  const countryCodes = useOptions("COUNTRY");
+
   function updateSender(field: keyof SupplierType, value: string) {
-    updateDocumentData({
+    updateDraftData({
       entities: { ...entities, sender: { ...sender, [field]: value } },
     });
+
+    markSectionDirty("entities");
+  }
+
+  function selectSupplier(supplierName: string) {
+    const supplier = suppliers.find((item) => item.name === supplierName);
+    if (!supplier) return;
+
+    updateDraftData({
+      entities: {
+        ...entities,
+        sender: {
+          ...sender,
+          name: supplier.name,
+          address: supplier.address,
+          countryCode: supplier.countryCode,
+        },
+      },
+    });
+
+    markSectionDirty("entities");
   }
 
   return (
     <InputWrapper title="Pengirim">
       {/* Nama */}
-      <InputNormal
-        title="Nama"
+      <InputSelect
+        label="Nama"
         value={sender.name ?? ""}
-        onChange={(value) => updateSender("name", value)}
+        options={supplierOptions}
+        onChange={(value) => selectSupplier(value)}
         rules={[required()]}
       />
 
@@ -42,7 +67,7 @@ export default function FormSender() {
       <InputSelect
         label="Negara"
         value={sender.countryCode ?? ""}
-        options={kodeNegaraOptions}
+        options={countryCodes.options}
         onChange={(value) => updateSender("countryCode", value)}
         rules={[required()]}
       />

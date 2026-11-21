@@ -1,6 +1,6 @@
 import { useId } from "react";
-import { OptionType } from "@/app/types";
-import { Rule, useFieldError } from "@/lib/validation";
+import { OptionType } from "@/app/types/draft";
+import { Rule, useFieldError } from "@/app/lib/validation";
 import Error from "./error";
 
 type RadioProps = {
