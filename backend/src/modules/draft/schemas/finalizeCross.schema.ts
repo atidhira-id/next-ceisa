@@ -12,7 +12,7 @@ type FinalizeData = {
     series: number;
     documents?: {
       documentNumber: string;
-      documentSequence: number;
+      documentSequence?: number;
     }[];
   }[];
 };

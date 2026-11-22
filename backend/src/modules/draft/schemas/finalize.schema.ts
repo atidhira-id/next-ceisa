@@ -1,23 +1,23 @@
 import { z } from "zod";
 
-import { headerSchema } from "./header.schema";
-import { entitiesSchema } from "./entities.schema";
-import { documentsSchema } from "./documents.schema";
-import { packageItemSchema } from "./packages.schema";
-import { containerItemSchema } from "./containers.schema";
-import { transportSchema } from "./transport.schema";
-import { transactionsSchema } from "./transaction.schema";
-import { goodsSchema } from "./goods.schema";
-import { declarationsSchema } from "./declarations.schema";
+import { headerFinalSchema } from "./sectionHeader.schema";
+import { entitiesFinalSchema } from "./sectionEntities.schema";
+import { documentsFinalSchema } from "./sectionDocuments.schema";
+import { packagesFinalSchema } from "./sectionPackages.schema";
+import { containersFinalSchema } from "./sectionContainers.schema";
+import { transportFinalSchema } from "./sectionTransport.schema";
+import { transactionFinalSchema } from "./sectionTransaction.schema";
+import { goodsFinalSchema } from "./sectionGoods.schema";
+import { declarationsFinalSchema } from "./sectionDeclarations.schema";
 
 export const finalizeSchema = z.object({
-  header: headerSchema,
-  entities: entitiesSchema,
-  documents: documentsSchema,
-  packages: packageItemSchema,
-  containers: containerItemSchema,
-  transport: transportSchema,
-  transactions: transactionsSchema,
-  goods: goodsSchema,
-  declarations: declarationsSchema,
+  header: headerFinalSchema,
+  entities: entitiesFinalSchema,
+  documents: documentsFinalSchema,
+  packages: packagesFinalSchema,
+  containers: containersFinalSchema,
+  transport: transportFinalSchema,
+  transactions: transactionFinalSchema,
+  goods: goodsFinalSchema,
+  declarations: declarationsFinalSchema,
 });

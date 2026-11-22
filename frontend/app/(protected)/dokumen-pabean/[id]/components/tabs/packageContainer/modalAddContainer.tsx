@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useOptions } from "@/app/hooks/useOptions";
 import { useDraft } from "@/app/providers/draftProvider";
-import { saveDraft, validateItem } from "@/app/services/draft.service";
 import { type ContainerItemType } from "@/app/types/draft";
 import { kontainerName, required } from "@/app/lib/validation";
 
@@ -14,6 +13,7 @@ import {
   ModalHeader,
   ModalWrapper,
 } from "@/app/components/modal";
+import { useSaveDraftItem } from "@/app/hooks/useSaveSectionItem";
 
 const initialContainer: ContainerItemType = {
   series: 1,
@@ -36,6 +36,17 @@ export default function ModalAddContainer({
   const data = draft!;
   const containers = data.containers;
 
+  const { handleSave, isSaving, validationErrors } =
+    useSaveDraftItem<ContainerItemType>({
+      draftId: draft!.id,
+      section: "containers",
+      items: containers,
+      onUpdate: (updatedContainers) => {
+        updateDraftData({ containers: updatedContainers });
+      },
+      onClose: onCloseModal,
+    });
+
   const containerTypes = useOptions("CONTAINER_TYPE");
   const containerSizes = useOptions("CONTAINER_SIZE");
   const cargoTypes = useOptions("CARGO_TYPE");
@@ -46,48 +57,6 @@ export default function ModalAddContainer({
   const [newContainer, setNewContainer] = useState<ContainerItemType>(
     container ?? { ...initialContainer, series: series },
   );
-
-  const [isValidating, setIsValidating] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<
-    { field: string; message: string }[]
-  >([]);
-
-  async function handleSave() {
-    try {
-      setIsValidating(true);
-      setValidationErrors([]);
-
-      const result = await validateItem("container", newContainer);
-      if (!result.valid) {
-        setValidationErrors(result.errors);
-        return;
-      }
-
-      const containerList = container
-        ? containers.map((item) =>
-            item.series === series ? newContainer : item,
-          )
-        : [...containers, newContainer];
-
-      await saveDraft(draft!.id, "containers", containerList);
-
-      updateDraftData({ containers: containerList });
-
-      onCloseModal();
-    } catch (error) {
-      setValidationErrors([
-        {
-          field: "",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Gagal memvalidasi package.",
-        },
-      ]);
-    } finally {
-      setIsValidating(false);
-    }
-  }
 
   return (
     <ModalWrapper className="w-full max-w-md">
@@ -147,24 +116,28 @@ export default function ModalAddContainer({
           }
           rules={[required()]}
         />
+
         {validationErrors.length > 0 && (
           <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
             {validationErrors.map((error, index) => (
-              <p key={index}>{error.message}</p>
+              <p key={index}>
+                {error.path.length > 0 ? `${error.path.join(".")}: ` : ""}
+                {error.message}
+              </p>
             ))}
           </div>
         )}
       </ModalContent>
       <ModalFooter
-        textYes={isValidating ? "Memvalidasi..." : "Simpan"}
+        textYes={isSaving ? "Menyimpan..." : "Simpan"}
         disabled={
           !newContainer.containerNumber ||
           !newContainer.containerSizeCode ||
           !newContainer.containerCategoryCode ||
           !newContainer.containerTypeCode ||
-          isValidating
+          isSaving
         }
-        handleYes={handleSave}
+        handleYes={() => handleSave(newContainer)}
         handleNo={onCloseModal}
       />
     </ModalWrapper>

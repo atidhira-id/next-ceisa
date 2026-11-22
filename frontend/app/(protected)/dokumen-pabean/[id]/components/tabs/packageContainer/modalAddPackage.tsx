@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { useOptions } from "@/app/hooks/useOptions";
 import { useDraft } from "@/app/providers/draftProvider";
-import { saveDraft, validateItem } from "@/app/services/draft.service";
+import { useOptions } from "@/app/hooks/useOptions";
+import { useSaveDraftItem } from "@/app/hooks/useSaveSectionItem";
 import { type PackageItemType } from "@/app/types/draft";
 import { required, min } from "@/app/lib/validation";
 
@@ -37,6 +37,17 @@ export default function ModalAddPackage({
   const data = draft!;
   const packages = data.packages;
 
+  const { handleSave, isSaving, validationErrors } =
+    useSaveDraftItem<PackageItemType>({
+      draftId: draft!.id,
+      section: "packages",
+      items: packages,
+      onUpdate: (updatedPackages) => {
+        updateDraftData({ packages: updatedPackages });
+      },
+      onClose: onCloseModal,
+    });
+
   const packageTypes = useOptions("PACKAGE_TYPE");
 
   const series =
@@ -45,46 +56,6 @@ export default function ModalAddPackage({
   const [newPackage, setNewPackage] = useState<PackageItemType>(
     pack ?? { ...initialPackage, series: series },
   );
-
-  const [isValidating, setIsValidating] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<
-    { field: string; message: string }[]
-  >([]);
-
-  async function handleSave() {
-    try {
-      setIsValidating(true);
-      setValidationErrors([]);
-
-      const result = await validateItem("package", newPackage);
-      if (!result.valid) {
-        setValidationErrors(result.errors);
-        return;
-      }
-
-      const packageList = pack
-        ? packages.map((item) => (item.series === series ? newPackage : item))
-        : [...packages, newPackage];
-
-      await saveDraft(draft!.id, "packages", packageList);
-
-      updateDraftData({ packages: packageList });
-
-      onCloseModal();
-    } catch (error) {
-      setValidationErrors([
-        {
-          field: "",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Gagal memvalidasi package.",
-        },
-      ]);
-    } finally {
-      setIsValidating(false);
-    }
-  }
 
   return (
     <ModalWrapper className="w-full max-w-md">
@@ -129,21 +100,24 @@ export default function ModalAddPackage({
         {validationErrors.length > 0 && (
           <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
             {validationErrors.map((error, index) => (
-              <p key={index}>{error.message}</p>
+              <p key={index}>
+                {error.path.length > 0 ? `${error.path.join(".")}: ` : ""}
+                {error.message}
+              </p>
             ))}
           </div>
         )}
       </ModalContent>
 
       <ModalFooter
-        textYes={isValidating ? "Memvalidasi..." : "Simpan"}
+        textYes={isSaving ? "Menyimpan..." : "Simpan"}
         disabled={
           !newPackage.quantity ||
           !newPackage.packageCode ||
           !newPackage.brand ||
-          isValidating
+          isSaving
         }
-        handleYes={handleSave}
+        handleYes={() => handleSave(newPackage)}
         handleNo={onCloseModal}
       ></ModalFooter>
     </ModalWrapper>

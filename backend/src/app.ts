@@ -8,6 +8,7 @@ import supplierRoutes from "./modules/supplier/supplier.routes";
 import optionsRoutes from "./modules/options/options.routes";
 import hsCodeRoutes from "./modules/hsCode/hsCode.routes";
 import goodsTypeRoutes from "./modules/goodsType/goodsType.routes";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
 
@@ -37,5 +38,7 @@ app.use("/api/supplier", supplierRoutes);
 app.use("/api/options", optionsRoutes);
 app.use("/api/hs-codes", hsCodeRoutes);
 app.use("/api/goods-types", goodsTypeRoutes);
+
+app.use(errorHandler);
 
 export default app;

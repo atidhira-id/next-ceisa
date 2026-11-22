@@ -133,7 +133,7 @@ export type CostComponents = {
 };
 
 export type GoodsItemType = {
-  series?: number;
+  series: number;
   hsCode?: string;
   specifications?: Record<string, string | null>;
   itemCode?: string;
@@ -155,7 +155,7 @@ export type GoodsItemType = {
   reason?: string;
   differenceStatement?: string;
 
-  documents?: GoodsDocumentType[];
+  documents: GoodsDocumentType[];
 
   importDutyPercentage?: number;
   importDutyPayment?: string;

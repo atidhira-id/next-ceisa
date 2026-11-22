@@ -7,7 +7,7 @@ import { DeclarationsType } from "@/app/types/draft";
 import { FileText } from "lucide-react";
 
 export default function DeclarationTab() {
-  const { draft, updateDraftData } = useDraft();
+  const { draft, updateDraftData, markSectionDirty } = useDraft();
   const data = draft!;
   const declaration = data.declarations;
 
@@ -15,6 +15,8 @@ export default function DeclarationTab() {
     updateDraftData({
       declarations: { ...data.declarations, [field]: value },
     });
+
+    markSectionDirty("declarations");
   }
 
   return (

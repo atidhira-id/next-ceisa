@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useDraft } from "@/app/providers/draftProvider";
+import { useSaveDraftItem } from "@/app/hooks/useSaveSectionItem";
 import type { GoodsItemType } from "@/app/types/draft";
 
 import FormItemDetail from "./formItemDetail";
@@ -12,7 +13,6 @@ import {
   ModalHeader,
   ModalWrapper,
 } from "@/app/components/modal";
-import { saveDraft, validateItem } from "@/app/services/draft.service";
 
 type ModalAddItemProps = {
   onCloseModal: () => void;
@@ -27,8 +27,19 @@ export default function ModalAddItem({
   const data = draft!;
   const goods = data.goods;
 
-  const initialItem: GoodsItemType = {};
+  const { handleSave, isSaving, validationErrors } =
+    useSaveDraftItem<GoodsItemType>({
+      draftId: draft!.id,
+      section: "goods",
+      items: goods,
+      onUpdate: (updatedGoods) => {
+        updateDraftData({ goods: updatedGoods });
+      },
+      onClose: onCloseModal,
+    });
+
   const series = data.goods.length + 1;
+  const initialItem: GoodsItemType = { series, documents: [] };
   const existingGoodsInvoicePrices = data.goods
     .filter((item) => item.series !== itemToEdit?.series)
     .reduce((total, item) => total + (item.invoicePrice ?? 0), 0);
@@ -58,46 +69,6 @@ export default function ModalAddItem({
       ...item,
       specifications: { ...item.specifications, [field]: value },
     });
-  }
-
-  const [isValidating, setIsValidating] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<
-    { field: string; message: string }[]
-  >([]);
-
-  async function handleSave() {
-    try {
-      console.log(item);
-      setIsValidating(true);
-      setValidationErrors([]);
-
-      const result = await validateItem("goods", item);
-      if (!result.valid) {
-        setValidationErrors(result.errors);
-        return;
-      }
-
-      const goodsList = itemToEdit
-        ? goods.map((i) => (i.series === series ? item : i))
-        : [...goods, item];
-      await saveDraft(draft!.id, "goods", goodsList);
-
-      updateDraftData({ goods: goodsList });
-
-      onCloseModal();
-    } catch (error) {
-      setValidationErrors([
-        {
-          field: "",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Gagal memvalidasi dokumen.",
-        },
-      ]);
-    } finally {
-      setIsValidating(false);
-    }
   }
 
   return (
@@ -132,7 +103,10 @@ export default function ModalAddItem({
         {validationErrors.length > 0 && (
           <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
             {validationErrors.map((error, index) => (
-              <p key={index}>{error.message}</p>
+              <p key={index}>
+                {error.path.length > 0 ? `${error.path.join(".")}: ` : ""}
+                {error.message}
+              </p>
             ))}
           </div>
         )}
@@ -140,9 +114,9 @@ export default function ModalAddItem({
 
       {/* Footer */}
       <ModalFooter
-        textYes={isValidating ? "Memvalidasi..." : "Simpan"}
-        disabled={isValidating}
-        handleYes={handleSave}
+        textYes={isSaving ? "Menyimpan..." : "Simpan"}
+        disabled={isSaving}
+        handleYes={() => handleSave(item)}
         handleNo={onCloseModal}
       >
         <p className="hidden text-xs text-slate-500 sm:block">

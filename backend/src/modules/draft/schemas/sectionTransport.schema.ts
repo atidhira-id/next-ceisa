@@ -1,6 +1,25 @@
 import { z } from "zod";
 
 export const transportSchema = z.object({
+  customsSealTypeCode: z.string().optional(),
+  customsSealNumber: z.string().optional(),
+  customsSealDate: z.string().optional(),
+
+  positionNumber1: z.string().optional(),
+  positionNumber2: z.string().optional(),
+  positionNumber3: z.string().optional(),
+
+  transportModeCode: z.string().optional(),
+  conveyanceName: z.string().optional(),
+  voyageNumber: z.string().optional(),
+  flagCode: z.string().optional(),
+  estimatedArrivalDate: z.string().optional(),
+  loadingPortCode: z.string().optional(),
+  transitPortCode: z.string().optional(),
+  storagePlaceCode: z.string().optional(),
+});
+
+export const transportFinalSchema = transportSchema.extend({
   customsSealTypeCode: z.string().min(1),
   customsSealNumber: z
     .string()

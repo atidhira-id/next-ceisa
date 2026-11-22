@@ -2,12 +2,12 @@ import { Router } from "express";
 import { requireAuth } from "../../middlewares/requireAuth";
 
 import {
-  listDrafts,
-  showDraft,
-  createNewDraft,
-  saveDraftSection,
-  removeDraft,
-  validateItemHandler,
+  getDraftsHandler,
+  getDraftByIdHandler,
+  createDraftHandler,
+  saveDraftSectionHandler,
+  saveItemHandler,
+  deleteDraftHandler,
   finalizeDraftHandler,
 } from "./draft.controller";
 
@@ -15,14 +15,13 @@ const router = Router();
 
 router.use(requireAuth);
 
-router.get("/", listDrafts);
-router.post("/", createNewDraft);
+router.get("/", getDraftsHandler);
+router.get("/:id", getDraftByIdHandler);
 
-router.get("/:id", showDraft);
-router.patch("/:id/:section", saveDraftSection);
-router.delete("/:id", removeDraft);
-router.post("/:id/finalize", requireAuth, finalizeDraftHandler);
-
-router.post("/validate-item/:itemType", requireAuth, validateItemHandler);
+router.post("/", createDraftHandler);
+router.patch("/:id/:section", saveDraftSectionHandler);
+router.patch("/:id/:section/item", saveItemHandler);
+router.delete("/:id", deleteDraftHandler);
+router.post("/:id/finalize", finalizeDraftHandler);
 
 export default router;

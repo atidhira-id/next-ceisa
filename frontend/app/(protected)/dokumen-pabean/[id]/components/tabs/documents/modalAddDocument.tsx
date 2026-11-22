@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useDraft } from "@/app/providers/draftProvider";
 import { useOptions } from "@/app/hooks/useOptions";
-import { saveDraft, validateItem } from "@/app/services/draft.service";
+import { useSaveDraftItem } from "@/app/hooks/useSaveSectionItem";
 import { type DocumentItemType } from "@/app/types/draft";
 
 import InputNormal from "@/app/components/inputs/input-normal";
@@ -37,6 +37,17 @@ export default function ModalAddDocumentItem({
   const { draft, updateDraftData } = useDraft();
   const documents = draft!.documents;
 
+  const { handleSave, isSaving, validationErrors } =
+    useSaveDraftItem<DocumentItemType>({
+      draftId: draft!.id,
+      section: "documents",
+      items: documents,
+      onUpdate: (updatedDocuments) => {
+        updateDraftData({ documents: updatedDocuments });
+      },
+      onClose: onCloseModal,
+    });
+
   const documentTypes = useOptions("DOCUMENT_TYPE");
   const facilitiesCode = useOptions("DOCUMENT_FACILITY");
 
@@ -51,46 +62,6 @@ export default function ModalAddDocumentItem({
     !newDocument.documentDate.trim() ||
     (newDocument.documentCode === "861" && !newDocument.facilityCode?.trim()) ||
     (newDocument.documentCode === "888" && !newDocument.permissionCode?.trim());
-
-  const [isValidating, setIsValidating] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<
-    { field: string; message: string }[]
-  >([]);
-
-  async function handleSave() {
-    try {
-      setIsValidating(true);
-      setValidationErrors([]);
-
-      const result = await validateItem("document", newDocument);
-
-      if (!result.valid) {
-        setValidationErrors(result.errors);
-        return;
-      }
-
-      const documentList = document
-        ? documents.map((item) => (item.series === series ? newDocument : item))
-        : [...documents, newDocument];
-      await saveDraft(draft!.id, "documents", documentList);
-
-      updateDraftData({ documents: documentList });
-
-      onCloseModal();
-    } catch (error) {
-      setValidationErrors([
-        {
-          field: "",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Gagal memvalidasi dokumen.",
-        },
-      ]);
-    } finally {
-      setIsValidating(false);
-    }
-  }
 
   return (
     <ModalWrapper className="w-full max-w-md">
@@ -162,16 +133,19 @@ export default function ModalAddDocumentItem({
         {validationErrors.length > 0 && (
           <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
             {validationErrors.map((error, index) => (
-              <p key={index}>{error.message}</p>
+              <p key={index}>
+                {error.path.length > 0 ? `${error.path.join(".")}: ` : ""}
+                {error.message}
+              </p>
             ))}
           </div>
         )}
       </ModalContent>
 
       <ModalFooter
-        textYes={isValidating ? "Memvalidasi..." : "Simpan"}
-        disabled={isSaveDisabled || isValidating}
-        handleYes={handleSave}
+        textYes={isSaving ? "Menyimpan..." : "Simpan"}
+        disabled={isSaveDisabled || isSaving}
+        handleYes={() => handleSave(newDocument)}
         handleNo={onCloseModal}
       />
     </ModalWrapper>

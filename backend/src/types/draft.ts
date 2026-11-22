@@ -161,7 +161,6 @@ export type GoodsItemType = {
 
   documents?: GoodsDocumentType[];
 
-  importDutyRateType?: string;
   importDutyPercentage?: number;
   importDutyPayment?: string;
   vatPercentage?: number;

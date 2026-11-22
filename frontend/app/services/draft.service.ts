@@ -33,6 +33,12 @@ export type Draft = {
   updatedAt: string;
 };
 
+export type DraftItemSection =
+  | "documents"
+  | "packages"
+  | "containers"
+  | "goods";
+
 export type ApiResponse<T> = {
   message: string;
   data: T;
@@ -71,24 +77,19 @@ export async function saveDraft(
   });
 }
 
-export async function deleteDraft(id: string) {
-  return api<ApiResponse<null>>(`/api/drafts/${id}`, {
-    method: "DELETE",
+export async function saveSectionItem(
+  id: string,
+  section: DraftItemSection,
+  data: unknown,
+): Promise<void> {
+  await api(`/api/drafts/${id}/${section}/item`, {
+    method: "PATCH",
+    body: JSON.stringify({ data }),
   });
 }
 
-export type ItemValidationResult = {
-  valid: boolean;
-  message?: string;
-  errors: {
-    field: string;
-    message: string;
-  }[];
-};
-
-export async function validateItem<T>(itemType: string, data: T) {
-  return api<ItemValidationResult>(`/api/drafts/validate-item/${itemType}`, {
-    method: "POST",
-    body: JSON.stringify(data),
+export async function deleteDraft(id: string) {
+  return api<ApiResponse<null>>(`/api/drafts/${id}`, {
+    method: "DELETE",
   });
 }
